@@ -126,7 +126,7 @@
 		<!-- mybatis spring -->
 		<!-- spring security -->
 		<!-- lucy filter -->
-		
+		<!-- log4j -->
 		    
 	</dependencies>
     <build>
