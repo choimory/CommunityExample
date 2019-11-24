@@ -33,8 +33,8 @@
 			<nav
 				class="navbar navbar-expand-lg navbar-dark bg-dark col-xl-12 px-5">
 
-				<div class="ce_logo pl-xl-5 ml-xl-5">
-					<a class="navbar-brand" href="/communityexample/"> <img
+				<div class="ce_logo ml-xl-5 pl-xl-5">
+					<a class="navbar-brand" href="/communityexample/test"> <img
 						src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1200px-Bootstrap_logo.svg.png"
 						width="30" height="30" class="d-inline-block align-top" alt="">
 						Bootstrap
@@ -81,7 +81,7 @@
 
 					<div class="ce_info pr-xl-5 mr-xl-5">
 						<c:choose>
-							<c:when test="${id ne null}">
+							<c:when test="${id eq null}">
 								<a
 									class="far fa-envelope fa-lg text-light ml-lg-3 ml-xl-5  mr-1"
 									href=""></a>
