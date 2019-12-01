@@ -3,71 +3,70 @@
 
 
 
-<%@ include file="test_header.jsp"%>
+
+<%@ include file="include/header.jsp"%>
 <div class="container bg-white col-lg-8 p-4">
 
+
 	<!-- start of content -->
-	<div class="board_info mb-5">
-		<span class="h3 mr-2">게시판 명</span> <span class="ce_bookmark"> <c:choose>
-				<c:when test="${title eq null}">
-					<i class="fas fa-bookmark fa-2x"></i>
-				</c:when>
-				<c:otherwise>
-					<i class="far fa-bookmark fa-2x"></i>
-				</c:otherwise>
-			</c:choose>
-		</span> <span class="blockquote-footer">게시판 설명</span>
-	</div>
+	<div class="card border-secondary">
+		<div class="card-body text-center">
 
-	<div class="board_category">
-		<button type="button" class="btn btn-info mb-1">Info</button>
-		<button type="button" class="btn btn-info mb-1">Info</button>
-		<button type="button" class="btn btn-info mb-1">Info</button>
-		<button type="button" class="btn btn-info mb-1">Info</button>
-		<button type="button" class="btn btn-info mb-1">Info</button>
-	</div>
+			<div class="ce_admin_ban_title">
+				<h3 class="pb-5 mb-5">
+					<small>카테고리/게시판/글분류 생성</small>
+				</h3>
+			</div>
 
-	<div class="board my-2">
-		<table class="table">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">First</th>
-					<th scope="col">Last</th>
-					<th scope="col">Handle</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach begin="1" end="20" varStatus="var">
-					<tr>
-						<th scope="row">${var.count}</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
+			<div class="ce_alert">
+				<c:choose>
+					<c:when test="">
+					</c:when>
+					<c:otherwise>
+						<div class="alert alert-warning alert-dismissible fade show"
+							role="alert">
+							<strong>Holy guacamole!</strong> You should check in on some of
+							those fields below.
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</div>
 
-	<div class="board_form"></div>
+			<div class="ce_form text-left">
+				<form action="" method="" enctype="multipart/form-data">
+					<div class="form-group">
+						<label>게시판 카테고리</label> <input type="text" class="form-control">
+						<small class="text-muted">영어로 작성해주세요. 예] 유머(Humor),연예(Entertainment), 스포츠(Sports)</small>
+					</div>
+					<div class="form-group">
+						<label>게시판</label> <input type="text" class="form-control">
+						<small class="text-muted">영어로 작성해주세요. 예] 야구(Baseball), 아이돌(idol)</small>
+					</div>
+					<div class="form-group">
+						<label>글분류</label> <input type="text" class="form-control">
+						<small class="text-muted">예] 잡담, 질문, 그외</small>
+					</div>
+					
 
-	<div class="board_pagination">
-		<nav aria-label="Page navigation example">
-			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="#"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
-				<li class="page-item"><a class="page-link" href="#">1</a></li>
-				<li class="page-item"><a class="page-link" href="#">2</a></li>
-				<li class="page-item"><a class="page-link" href="#">3</a></li>
-				<li class="page-item"><a class="page-link" href="#"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
-			</ul>
-		</nav>
+					<div class="ce_btn row mt-5">
+						<div class="col">
+							<button type="submit" class="btn btn-success btn-block">확인</button>
+						</div>
+						<div class="col">
+							<button type="button" class="btn btn-danger btn-block"
+								onclick="location.href='/communityexample/main'">취소</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
 	</div>
 	<!-- end of content -->
 
 </div>
-<%@ include file="test_footer.jsp"%>
+<%@ include file="include/footer.jsp"%>

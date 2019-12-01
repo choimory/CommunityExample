@@ -4,6 +4,8 @@
     
 <!-- start of footer -->
 		<div class="footer row col-xs-12">
+		
+		
 			<div
 				class="jumbotron jumbotron-fluid bg-dark col-xl-12 text-white-50 py-2 m-0">
 				<div class="container">
@@ -17,7 +19,9 @@
 					<p class="text-muted">Contact : choimory@naver.com</p>
 				</div>
 			</div>
-		</div>
+			
+			
+		</div>		
 	</div>
 </body>
 

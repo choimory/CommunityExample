@@ -7,7 +7,8 @@
 
 <!-- start of content -->
 <div class="container bg-white col-lg-8 p-4">
-	<div class="row my-3">
+
+	<div class="row my-3">	
 		<div class="col-lg-6 col-md-12">
 			<table class="table">
 				<thead class="thead-dark">
@@ -24,6 +25,8 @@
 				</tbody>
 			</table>
 		</div>
+		
+		
 		<div class="col-lg-6 col-md-12">
 			<table class="table mb-lg-0">
 				<thead class="thead-light">
@@ -53,7 +56,7 @@
 					</c:forEach>
 				</tbody>
 			</table>
-		</div>
+		</div>		
 	</div>
 
 
@@ -74,6 +77,8 @@
 				</tbody>
 			</table>
 		</div>
+		
+		
 		<div class="col-lg-6 col-md-12">
 			<table class="table mb-lg-0">
 				<thead class="thead-light">
@@ -89,10 +94,8 @@
 					</c:forEach>
 				</tbody>
 			</table>
-		</div>
-	</div>
-	
-	
+		</div>		
+	</div>	
 </div>
 <!-- end of content -->
 

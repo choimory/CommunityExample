@@ -7,7 +7,7 @@
 <div class="container bg-white col-lg-8 p-4">
 
 	<!-- start of content -->
-	content
+		content
 	<!-- end of content -->
 
 </div>

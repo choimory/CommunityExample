@@ -12,9 +12,10 @@
 			name님의 회원정보</span>
 	</div>
 
+
 	<div class="row">
 		<div class="col-md-6">
-			<div class="card">
+			<div class="card mb-4">
 				<div class="card-header">기본정보</div>
 				<div class="card-body">
 					<blockquote class="blockquote mb-0">
@@ -27,8 +28,9 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="col-md-6">
-			<div class="card">
+			<div class="card mb-4">
 				<div class="card-header">Quote</div>
 				<div class="card-body">
 					<blockquote class="blockquote mb-0">
@@ -41,6 +43,12 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div class="ce_btn mt-5 text-right">
+			<button type="submit" class="btn btn-success">비밀번호 변경</button>
+			<button type="button" class="btn btn-danger"
+				onclick="location.href='/communityexample/main'">탈퇴하기</button>
 	</div>
 	<!-- end of content -->
 

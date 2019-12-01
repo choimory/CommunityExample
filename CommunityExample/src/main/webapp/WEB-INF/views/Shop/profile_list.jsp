@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 
 
 
@@ -9,13 +9,11 @@
 
 	<!-- start of content -->
 	<div class="ce_shop_list_title mb-5">
-		<span class="h3 mr-2">아이콘</span> <span class="ce_btn float-right"><button
-				type="button" class="btn btn-light btn-sm mx-1">최신순</button>
-			<button type="button" class="btn btn-light btn-sm mx-1">업로드</button></span>
-		<span class="blockquote-footer">게시판 설명</span>
+		<span class="h3 mr-2">프로필</span> <span class="ce_btn float-right"><button type="button" class="btn btn-light btn-sm mx-1">최신순</button><button type="button" class="btn btn-light btn-sm mx-1">업로드</button></span> <span
+			class="blockquote-footer">게시판 설명</span>
 	</div>
-
-
+	
+	
 	<div class="ce_shop_list_form text-center">
 		<form>
 			<div class="form-row">
@@ -43,9 +41,9 @@
 			</div>
 		</form>
 	</div>
-
-
-	<div class="ce_shop_list_icon mb-5">
+	
+	
+	<div class="ce_shop_list_profile mb-5">
 		<div class="card-columns">
 			<div class="card">
 				<img src="..." class="card-img-top" alt="...">

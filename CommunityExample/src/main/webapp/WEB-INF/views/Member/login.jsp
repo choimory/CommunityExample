@@ -15,8 +15,8 @@
 				</h3>
 			</div>
 			
-			<div class="form">forms</div>
 			
+			<div class="form">forms</div>			
 		</div>
 	</div>
 	<!-- end of content -->
