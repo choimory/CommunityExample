@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.ce_textbox {
+	display: block;
+	padding: 9.5px;
+	margin: 3%;
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+	background-color: #f5f5f5;
+}
+
+.ce_textbox:hover {
+	background-color: white;
+}
