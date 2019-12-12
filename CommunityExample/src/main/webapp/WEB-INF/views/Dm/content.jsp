@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 
 
@@ -9,15 +9,21 @@
 
 	<!-- start of content -->
 	<div class="ce_dm_info mb-5">
-		<span class="h3 mr-2">쪽지</span> <span class="blockquote-footer">게시판
-			설명</span>
+		<a class="text-decoration-none text-dark" href="/communityexample/dm"><span
+			class="h3 mr-2">쪽지</span> <span class="text-info"><i
+				class="far fa-envelope-open fa-2x"></i></span></a> <span
+			class="blockquote-footer">${mNickname}님의 메시지 관리 페이지입니다</span>
 	</div>
 
 	<div class="ce_dm_content mb-5 pb-5">
 		<table class="table">
 			<thead class="thead-dark">
 				<tr>
-					<th scope="col" colspan="2">제목</th>
+					<th scope="col" colspan="2">국가는 법률이 정하는 바에 의하여 재외국민을 보호할 의무를
+						진다. 선거와 국민투표의 공정한 관리 및 정당에 관한 사무를 처리하기 위하여 선거관리위원회를 둔다. 국회의 정기회는
+						법률이 정하는 바에 의하여 매년 1회 집회되며, 국회의 임시회는 대통령 또는 국회재적의원 4분의 1 이상의 요구에
+						의하여 집회된다. 국회의 회의는 공개한다. 다만, 출석의원 과반수의 찬성이 있거나 의장이 국가의 안전보장을 위하여
+						필요하다고 인정할 때에는 공개하지 아니할 수 있다.</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,50 +39,53 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<div class="ce_board_article py-3 mb-3">글내용을 이렇게
-							쫘아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아악
-						</div>
+						<div class="ce_board_article py-3 mb-3">국가는 법률이 정하는 바에 의하여
+							재외국민을 보호할 의무를 진다. 선거와 국민투표의 공정한 관리 및 정당에 관한 사무를 처리하기 위하여 선거관리위원회를
+							둔다. 국회의 정기회는 법률이 정하는 바에 의하여 매년 1회 집회되며, 국회의 임시회는 대통령 또는 국회재적의원
+							4분의 1 이상의 요구에 의하여 집회된다. 국회의 회의는 공개한다. 다만, 출석의원 과반수의 찬성이 있거나 의장이
+							국가의 안전보장을 위하여 필요하다고 인정할 때에는 공개하지 아니할 수 있다.</div>
 					</td>
 				</tr>
 				<tr>
-					<td class="text-right" colspan="2"><i
-						class="fas fa-paperclip fa-2x mx-2"></i> <i
-						class="fas fa-share-alt fa-2x mx-2"></i> <i
-						class="far fa-flag fa-2x mx-2"></i></td>
+					<td class="text-right" colspan="2"><a href=""
+						class="text-body text-decoration-none"><i
+							class="fas fa-paperclip fa-2x mx-2"></i></a><a href=""
+						class="text-body text-decoration-none"> <i
+							class="fas fa-share-alt fa-2x mx-2"></i></a><a href=""
+						class="text-body text-decoration-none"> <i
+							class="far fa-flag fa-2x mx-2"></i></a></td>
 				</tr>
 				<tr>
-					<td class="text-right" colspan="2"><i
-						class="fas fa-reply fa-2x mx-2"></i> <i
-						class="far fa-trash-alt fa-2x mx-2"></i></td>
+					<td class="text-right" colspan="2"><a href=""
+						class="text-body text-decoration-none"><i
+							class="fas fa-reply fa-2x mx-2"></i></a> <a href=""
+						class="text-body text-decoration-none"><i
+							class="far fa-trash-alt fa-2x mx-2"></i></a></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 
 
-	<div class="ce_dm_info mb-5">
-		<span class="h3 mr-2">쪽지</span> <span class="blockquote-footer">게시판
-			설명</span>
-	</div>
-
-
-	<div class="ce_dm_list">
-		<table class="table">
+	<div class="ce_dm_list my-2 table-responsive text-nowrap">
+		<table class="table table-hover text-center">
 			<thead class="thead-dark">
 				<tr>
-					<th scope="col">#</th>
-					<th scope="col">First</th>
-					<th scope="col">Last</th>
-					<th scope="col">Handle</th>
+					<th scope="col">보낸사람</th>
+					<th scope="col">받는사람</th>
+					<th scope="col">제목</th>
+					<th scope="col">발신일</th>
+					<th scope="col">수신일</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach begin="1" end="20" varStatus="var">
 					<tr>
-						<th scope="row">${var.count}</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
+						<td><a href="" class="text-decoration-none text-body">{dSender}</a></td>
+						<td><a href="" class="text-decoration-none text-body">{dReceiver}</a></td>
+						<td><a href="" class="text-body">{dTitle}</a></td>
+						<td>{dReceiveDate}</td>
+						<td>{dSendDate}</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -84,20 +93,28 @@
 	</div>
 
 
-	<div class="ce_dm_form text-center">
-		<form>
+	<div class="ce_dm_list_search text-center">
+		<form action="/communityexample/dm/search">
 			<div class="form-row">
 				<div class="form-group col-xl-2">
-					<select id="inputState" class="form-control">
-						<option selected>제목+내용</option>
-						<option>...</option>
+					<select id="inputState" class="form-control" name="target">
+						<option>제목+내용</option>
+						<option>발신자</option>
+						<option>제목</option>
+						<option>내용</option>
 					</select>
 				</div>
 				<div class="form-group col-xl-8">
-					<input type="text" class="form-control" placeholder="검색">
+					<input type="text" class="form-control" placeholder="검색"
+						name="query">
 				</div>
-				<div class="form-group col-xl-1"><button type="submit" class="btn btn-info">검색</button></div>
-				<div class="form-group col-xl-1"><button type="button" class="btn btn-info">작성</button></div>
+				<div class="form-group col-xl-1">
+					<button type="submit" class="btn btn-info">검색</button>
+				</div>
+				<div class="form-group col-xl-1">
+					<button type="button" class="btn btn-info"
+						onclick="location.href=''">작성</button>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -117,7 +134,7 @@
 				</a></li>
 			</ul>
 		</nav>
-	</div>	
+	</div>
 	<!-- end of content -->
 
 </div>

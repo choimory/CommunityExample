@@ -11,8 +11,8 @@
 					<p class="lead">Copyright (c) CommunityExample All Right
 						Reserved.</p>
 					<p class="text-muted">
-						<a href="" class="text-muted">사용기술</a> | <a href=""
-							class="text-muted">개인정보취급방침</a> | <a href="" class="text-muted">이용약관</a>
+						<a href="" class="text-muted">WBS</a> | <a href=""
+							class="text-muted">사용기술</a> | <a href="" class="text-muted">아키텍처</a>
 					</p>
 					<p class="text-muted">Contact : choimory@naver.com</p>
 				</div>

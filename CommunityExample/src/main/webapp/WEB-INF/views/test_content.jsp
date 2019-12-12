@@ -4,17 +4,16 @@
 
 
 
-<%@ include file="include/header.jsp"%>
+<%@ include file="test_header.jsp"%>
 <div class="container bg-white col-lg-8 p-4">
 
 
-	<!-- start of content -->
-	<div class="card border-secondary">
+	<!-- start of content --><div class="card border-secondary">
 		<div class="card-body text-center">
 
-			<div class="ce_admin_ban_title">
+			<div class="title">
 				<h3 class="pb-5 mb-5">
-					<small>카테고리/게시판/글분류 생성</small>
+					<small>Email로 전송된 인증번호를 입력해주세요</small>
 				</h3>
 			</div>
 
@@ -36,21 +35,21 @@
 				</c:choose>
 			</div>
 
-			<div class="ce_form text-left">
+			<div class="ce_form">
 				<form action="" method="" enctype="multipart/form-data">
 					<div class="form-group">
-						<label>게시판 카테고리</label> <input type="text" class="form-control">
-						<small class="text-muted">영어로 작성해주세요. 예] 유머(Humor),연예(Entertainment), 스포츠(Sports)</small>
+						<label>인증번호</label> <div class="input-group mb-3">
+							<input type="text" class="form-control"
+								aria-label="Recipient's username"
+								aria-describedby="button-addon2">
+							<div class="input-group-append">
+								<button class="btn btn-outline-info" type="button"
+									id="button-addon2">인증번호 재발송</button>
+							</div>
+						</div>
+						<small class="form-text text-muted">메일을 수신받지 못했을시엔 잠시 기다려주시거나, 스팸메일함을 확인해주세요</small>
 					</div>
-					<div class="form-group">
-						<label>게시판</label> <input type="text" class="form-control">
-						<small class="text-muted">영어로 작성해주세요. 예] 야구(Baseball), 아이돌(idol)</small>
-					</div>
-					<div class="form-group">
-						<label>글분류</label> <input type="text" class="form-control">
-						<small class="text-muted">예] 잡담, 질문, 그외</small>
-					</div>
-					
+
 
 					<div class="ce_btn row mt-5">
 						<div class="col">
@@ -68,5 +67,6 @@
 	</div>
 	<!-- end of content -->
 
+
 </div>
-<%@ include file="include/footer.jsp"%>
+<%@ include file="test_footer.jsp"%>

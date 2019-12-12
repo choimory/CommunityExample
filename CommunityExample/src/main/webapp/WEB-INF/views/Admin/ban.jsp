@@ -35,15 +35,14 @@
 			</div>
 
 			<div class="ce_form">
-				<form action="" method="" enctype="multipart/form-data">
+				<form action="/communityexample/admin/ban" method="post">
 					<div class="form-group">
-						<label>닉네임</label> <input type="text" class="form-control">
+						<label>닉네임</label> 
+						<input type="text" class="form-control text-center" name="mNickname">
 					</div>
 					<div class="form-group">
-						<label>정지기간</label>
-						<select class="form-control">
-							<option>10일</option>
-						</select>
+						<label>이용정지 종료날짜</label>
+						<input type="date" class="form-control text-center" name="mEndToBan">
 					</div>
 					
 

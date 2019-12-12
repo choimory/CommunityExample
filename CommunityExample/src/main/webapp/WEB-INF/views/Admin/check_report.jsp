@@ -13,34 +13,30 @@
 	</div>
 
 
-	<div class="ce_admin_report_content">
-		<table class="table">
+	<div class="ce_admin_report_content table-responsive text-nowrap">
+		<table class="table text-center">
 			<thead class="thead-light">
 				<tr>
-					<th scope="col">#</th>
-					<th scope="col">First</th>
-					<th scope="col">Last</th>
-					<th scope="col">Handle</th>
+					<th scope="col">게시판</th>
+					<th scope="col">제목</th>
+					<th scope="col">글쓴이</th>
+					<th scope="col">조회수</th>
+					<th scope="col">추천수</th>
+					<th scope="col">신고수</th>
+					<th scope="col">블라인드</th>
+					<th scope="col">이용정지</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<th scope="row">1</th>
+					<td scope="row"><a class="text-dark" href="/communityexample/${board_id}">{board_id}</a></td>
+					<td><a class="text-decoration-none" href="/communityexample/${board_id}/${board_index}">MarkMarkMarkMarkMarkMarkMarkMark</a></td>
+					<td>Mark</td>
+					<td>Mark</td>
+					<td>Mark</td>
 					<td>Mark</td>
 					<td><button type="button" class="btn btn-warning">블라인드</button></td>
 					<td><button type="button" class="btn btn-danger">이용정지</button></td>
-				</tr>
-				<tr>
-					<th scope="row">2</th>
-					<td>Jacob</td>
-					<td>Thornton</td>
-					<td>@fat</td>
-				</tr>
-				<tr>
-					<th scope="row">3</th>
-					<td>Larry</td>
-					<td>the Bird</td>
-					<td>@twitter</td>
 				</tr>
 			</tbody>
 		</table>
@@ -51,13 +47,15 @@
 		<form>
 			<div class="form-row">
 				<div class="form-group col-xl-2">
-					<select id="inputState" class="form-control">
-						<option selected>제목+내용</option>
-						<option>...</option>
+					<select id="inputState" class="form-control" name="target">
+						<option value="both">제목+내용</option>
+						<option value="title">제목</option>
+						<option value="nickname">글쓴이</option>
+						<option value="content">내용</option>
 					</select>
 				</div>
 				<div class="form-group col-xl-9">
-					<input type="text" class="form-control" placeholder="검색">
+					<input type="text" class="form-control" placeholder="검색" name="query">
 				</div>
 				<div class="form-group col-xl-1">
 					<button type="submit" class="btn btn-dark">검색</button>

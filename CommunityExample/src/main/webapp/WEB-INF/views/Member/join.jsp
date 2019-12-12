@@ -36,13 +36,13 @@
 			</div>
 
 			<div class="ce_form text-left">
-				<form action="" method="post" enctype="multipart/form-data">
+				<form action="" method="post">
 					<div class="ce_id form-group">
 						<label>ID</label>
 						<div class="input-group mb-3">
 							<input type="text" class="form-control"
 								aria-label="Recipient's username"
-								aria-describedby="button-addon2">
+								aria-describedby="button-addon2" name="mId">
 							<div class="input-group-append">
 								<button class="btn btn-outline-info" type="button"
 									id="button-addon2">중복확인</button>
@@ -51,11 +51,11 @@
 					</div>
 
 					<div class="ce_pw form-group">
-						<label>비밀번호</label> <input type="password" class="form-control">
+						<label>비밀번호</label> <input type="password" class="form-control" name="mPw">
 					</div>
 
 					<div class="ce_pw_confirm form-group">
-						<label>비밀번호 확인</label> <input type="password" class="form-control">
+						<label>비밀번호 확인</label> <input type="password" class="form-control" name="mPw2">
 					</div>
 
 					<div class="ce_nickname form-group">
@@ -63,7 +63,7 @@
 						<div class="input-group mb-3">
 							<input type="text" class="form-control"
 								aria-label="Recipient's username"
-								aria-describedby="button-addon2">
+								aria-describedby="button-addon2" name="mNickname">
 							<div class="input-group-append">
 								<button class="btn btn-outline-info" type="button"
 									id="button-addon2">중복확인</button>
@@ -77,7 +77,7 @@
 							<input type="text" class="form-control"
 								placeholder="예) email@example.com"
 								aria-label="Recipient's username"
-								aria-describedby="button-addon2">
+								aria-describedby="button-addon2" name="mEmail">
 							<div class="input-group-append">
 								<button class="btn btn-outline-info" type="button"
 									id="button-addon2">중복확인</button>

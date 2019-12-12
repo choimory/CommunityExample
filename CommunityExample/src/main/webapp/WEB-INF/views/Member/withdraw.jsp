@@ -14,12 +14,9 @@
 			</div>
 
 			<div class="ce_form">
-				<form action="" method="" enctype="multipart/form-part">
+				<form action="/communityexample/withdraw" method="post">
 					<div class="form-group">
-						<label>비밀번호</label> <input type="password" class="form-control">
-					</div>
-					<div class="form-group">
-						<label>비밀번호 확인</label> <input type="password" class="form-control">
+						<label>비밀번호</label> <input type="password" class="form-control" name="mPw">
 					</div>
 					<div class="alert-danger py-1 my-1 mt-5">모든 데이터를 소멸하고 서비스를
 						탈퇴하는것에 동의합니다</div>
@@ -36,7 +33,7 @@
 						</div>
 						<div class="col">
 							<button type="button" class="btn btn-danger btn-block"
-								onclick="location.href='/communityexample/main'">취소</button>
+								onclick="location.href='/communityexample/member_info'">취소</button>
 						</div>
 					</div>
 				</form>

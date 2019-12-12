@@ -32,15 +32,15 @@
 			</div>
 
 			<div class="ce_form">
-				<form action="" method="" enctype="multipart/form-data">
+				<form action="/communityexample/modify_info" method="post">
 					<div class="ce_pw_now">
-						<label>현재 비밀번호</label><input type="password" class="form-control">
+						<label>현재 비밀번호</label><input type="password" class="form-control" name="mPw">
 					</div>
 					<div class="ce_pw">
-						<label>변경할 비밀번호</label><input type="password" class="form-control">
+						<label>변경할 비밀번호</label><input type="password" class="form-control" name="changePw">
 					</div>
 					<div class="ce_pw_confirm">
-						<label>변경할 비밀번호 확인</label><input type="password" class="form-control">
+						<label>변경할 비밀번호 확인</label><input type="password" class="form-control" name="changePw2">
 					</div>
 					
 					<div class="ce_btn row mt-5">
@@ -49,7 +49,7 @@
 						</div>
 						<div class="col">
 							<button type="button" class="btn btn-danger btn-block"
-								onclick="location.href='/communityexample/main'">취소</button>
+								onclick="location.href='/communityexample/member_info'">취소</button>
 						</div>
 					</div>
 				</form>

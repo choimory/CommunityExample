@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+
+
 
 
 <%@ include file="../include/header.jsp"%>
 <div class="container bg-white col-lg-8 p-4">
+
 
 	<!-- start of content -->
 	<div class="card border-secondary">
@@ -11,7 +14,7 @@
 
 			<div class="title">
 				<h3 class="pb-5 mb-5">
-					<small>계정찾기</small>
+					<small>Email로 전송된 인증번호를 입력해주세요</small>
 				</h3>
 			</div>
 
@@ -34,11 +37,18 @@
 			</div>
 
 			<div class="ce_form">
-				<form action="/communityexample/find_account" method="post">
+				<form action="/communityexample/auth" method="post">
 					<div class="form-group">
-						<label>Email</label> <input type="text" class="form-control" name="mEmail">
-						<small class="form-text text-muted">가입시 입력하신 Email로
-							임시비밀번호가 발송됩니다</small>
+						<label>인증번호</label> <div class="input-group mb-3">
+							<input type="text" class="form-control"
+								aria-label="Recipient's username"
+								aria-describedby="button-addon2" name="auth_key">
+							<div class="input-group-append">
+								<button class="btn btn-outline-info" type="button"
+									id="button-addon2">인증번호 재발송</button>
+							</div>
+						</div>
+						<small class="form-text text-muted">메일을 수신받지 못했을시엔 잠시 기다려주시거나, 스팸메일함을 확인해주세요</small>
 					</div>
 
 

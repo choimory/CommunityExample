@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 
 
@@ -9,92 +9,44 @@
 
 
 	<!-- start of content -->
-	<div class="ce_shop_main_title mb-5">
-		<span class="h3 mr-2">아이콘</span> <span class="ce_btn float-right"><button type="button" class="btn btn-light btn-sm mx-1">자세히</button><button type="button" class="btn btn-light btn-sm mx-1">업로드</button></span> <span
-			class="blockquote-footer">게시판 설명</span>
+	<div class="ce_shop_main_title mb-5 pb-5">
+		<span class="h3 mr-2"><a href="/communityexample/shop"
+			class="text-dark text-decoration-none">상점<i
+				class="fas fa-store-alt mx-1 text-warning"></i></a></span> <span
+			class="ce_btn float-right"><button type="button"
+				class="btn btn-light btn-sm mx-1"
+				onclick="location.href='/communityexample/shop/icon'">아이콘</button>
+			<button type="button" class="btn btn-light btn-sm mx-1"
+				onclick="location.href='/communityexample/shop/profile'">프로필</button>
+			<button type="button" class="btn btn-light btn-sm mx-1"
+				onclick="location.href='/communityexample/shop/write'">업로드</button></span>
+		<span class="blockquote-footer">게시판 설명</span>
 	</div>
 
 
 	<div class="shop_main_icon my-5">
-		<div class="card-columns">
-			<div class="card">
-				<img src="..." class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title">Card title that wraps to a new line</h5>
-					<p class="card-text">This is a longer card with supporting text
-						below as a natural lead-in to additional content. This content is
-						a little bit longer.</p>
-				</div>
+		<h4 class="font-weight-bold my-3">최근 인기있는 아이콘</h4>
+
+		<c:forEach begin="1" end="3">
+			<div class="card-deck my-3">
+				<c:forEach begin="1" end="4">
+					<div class="card">
+						<a href="/communityexample/shop/${sindex}"><img src="http://placehold.it/250x250" class="card-img-top"
+							alt="..."></a>
+						<div class="card-body">
+							<h5 class="card-title"><a class="text-dark" href="/communityexample/shop/${sindex}">Card title</a></h5>
+							<p class="card-text">This is a wider card with supporting
+								text below as a natural lead-in to additional content. This
+								content is a little bit longer.</p>
+						</div>
+						<div class="card-footer">
+							<small class="text-muted">Last updated 3 mins ago</small>
+						</div>
+					</div>
+				</c:forEach>
 			</div>
-			<div class="card p-3">
-				<blockquote class="blockquote mb-0 card-body">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Integer posuere erat a ante.</p>
-					<footer class="blockquote-footer">
-						<small class="text-muted"> Someone famous in <cite
-							title="Source Title">Source Title</cite>
-						</small>
-					</footer>
-				</blockquote>
-			</div>
-			<div class="card">
-				<img src="..." class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This card has supporting text below as a
-						natural lead-in to additional content.</p>
-					<p class="card-text">
-						<small class="text-muted">Last updated 3 mins ago</small>
-					</p>
-				</div>
-			</div>
-			<div class="card bg-primary text-white text-center p-3">
-				<blockquote class="blockquote mb-0">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Integer posuere erat.</p>
-					<footer class="blockquote-footer text-white">
-						<small> Someone famous in <cite title="Source Title">Source
-								Title</cite>
-						</small>
-					</footer>
-				</blockquote>
-			</div>
-			<div class="card text-center">
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This card has a regular title and short
-						paragraphy of text below it.</p>
-					<p class="card-text">
-						<small class="text-muted">Last updated 3 mins ago</small>
-					</p>
-				</div>
-			</div>
-			<div class="card">
-				<img src="..." class="card-img-top" alt="...">
-			</div>
-			<div class="card p-3 text-right">
-				<blockquote class="blockquote mb-0">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Integer posuere erat a ante.</p>
-					<footer class="blockquote-footer">
-						<small class="text-muted"> Someone famous in <cite
-							title="Source Title">Source Title</cite>
-						</small>
-					</footer>
-				</blockquote>
-			</div>
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This is another card with title and
-						supporting text below. This card has some additional content to
-						make it slightly taller overall.</p>
-					<p class="card-text">
-						<small class="text-muted">Last updated 3 mins ago</small>
-					</p>
-				</div>
-			</div>
-		</div>
+		</c:forEach>
+		
 	</div>
 
 
@@ -103,97 +55,30 @@
 	</div>
 
 
-	<hr>
+	<hr class="mb-5 pb-5">
 
 
-
-
-	<div class="ce_shop_main_title">
-		<span class="h3 mr-2">프로필</span> <span class="ce_btn float-right"><button type="button" class="btn btn-light btn-sm mx-1">자세히</button><button type="button" class="btn btn-light btn-sm mx-1">업로드</button></span> <span
-			class="blockquote-footer">게시판 설명</span>
-	</div>
-	
-	
-	<div class="ce_shop_main_icon my-5">
-		<div class="card-columns">
-			<div class="card">
-				<img src="..." class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title">Card title that wraps to a new line</h5>
-					<p class="card-text">This is a longer card with supporting text
-						below as a natural lead-in to additional content. This content is
-						a little bit longer.</p>
-				</div>
+	<div class="shop_main_icon my-5">
+		<h4 class="font-weight-bold my-3">최근 인기있는 프로필</h4>
+		<c:forEach begin="1" end="3">
+			<div class="card-deck my-3">
+				<c:forEach begin="1" end="4">
+					<div class="card">
+						<a href="/communityexample/shop/${sindex}"><img src="http://placehold.it/250x250" class="card-img-top"
+							alt="..."></a>
+						<div class="card-body">
+							<h5 class="card-title"><a class="text-dark" href="/communityexample/shop/${sindex}">Card title</a></h5>
+							<p class="card-text">This is a wider card with supporting
+								text below as a natural lead-in to additional content. This
+								content is a little bit longer.</p>
+						</div>
+						<div class="card-footer">
+							<small class="text-muted">Last updated 3 mins ago</small>
+						</div>
+					</div>
+				</c:forEach>
 			</div>
-			<div class="card p-3">
-				<blockquote class="blockquote mb-0 card-body">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Integer posuere erat a ante.</p>
-					<footer class="blockquote-footer">
-						<small class="text-muted"> Someone famous in <cite
-							title="Source Title">Source Title</cite>
-						</small>
-					</footer>
-				</blockquote>
-			</div>
-			<div class="card">
-				<img src="..." class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This card has supporting text below as a
-						natural lead-in to additional content.</p>
-					<p class="card-text">
-						<small class="text-muted">Last updated 3 mins ago</small>
-					</p>
-				</div>
-			</div>
-			<div class="card bg-primary text-white text-center p-3">
-				<blockquote class="blockquote mb-0">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Integer posuere erat.</p>
-					<footer class="blockquote-footer text-white">
-						<small> Someone famous in <cite title="Source Title">Source
-								Title</cite>
-						</small>
-					</footer>
-				</blockquote>
-			</div>
-			<div class="card text-center">
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This card has a regular title and short
-						paragraphy of text below it.</p>
-					<p class="card-text">
-						<small class="text-muted">Last updated 3 mins ago</small>
-					</p>
-				</div>
-			</div>
-			<div class="card">
-				<img src="..." class="card-img-top" alt="...">
-			</div>
-			<div class="card p-3 text-right">
-				<blockquote class="blockquote mb-0">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Integer posuere erat a ante.</p>
-					<footer class="blockquote-footer">
-						<small class="text-muted"> Someone famous in <cite
-							title="Source Title">Source Title</cite>
-						</small>
-					</footer>
-				</blockquote>
-			</div>
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This is another card with title and
-						supporting text below. This card has some additional content to
-						make it slightly taller overall.</p>
-					<p class="card-text">
-						<small class="text-muted">Last updated 3 mins ago</small>
-					</p>
-				</div>
-			</div>
-		</div>
+		</c:forEach>
 	</div>
 
 

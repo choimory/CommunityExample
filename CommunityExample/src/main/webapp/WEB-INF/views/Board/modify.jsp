@@ -29,22 +29,21 @@
 
 
 	<div class="ce_board_write_form">
-		<form action="/communityexample/${bId}/write" method="post">
+		<form action="/communityexample/${bId}/modify" method="post">
 			<div class="row my-2">
 				<div class="col-xl-2 mb-2">
 					<select class="form-control" name="bCategory">
 						<option selected value="잡담">잡담</option>
 						<option value="질문">질문</option>
-						<option>...</option>
-					</select>
+						<option>...</option></select>
 				</div>
 				<div class="form-group col-xl-10">
-					<input type="text" class="form-control" placeholder="제목" name="bTitle">
+					<input type="text" class="form-control" placeholder="제목" name="bTitle" value="${bTitle}">
 				</div>
 			</div>
 			<div class="form-group my-2">
 				<textarea class="form-control" id="exampleFormControlTextarea1"
-					rows="10" placeholder="내용" name="bContent"></textarea>
+					rows="10" placeholder="내용" name="bContent" value="${bContent}"></textarea>
 			</div>
 			<div class="form-group my-2">
 				<input type="file" class="form-control-file">

@@ -13,8 +13,11 @@
 					<p class="lead">Copyright (c) CommunityExample All Right
 						Reserved.</p>
 					<p class="text-muted">
-						<a href="" class="text-muted">사용기술</a> | <a href=""
-							class="text-muted">개인정보취급방침</a> | <a href="" class="text-muted">이용약관</a>
+						<a href="/communityexample/wbs" class="text-muted">개발일정</a> | <a href="/communityexample/document"
+							class="text-muted">산출물</a> | <a href="/communityexample/skill"
+							class="text-muted">사용기술</a> | <a href="/communityexample/architecture"
+							class="text-muted">아키텍처</a> | <a href="/communityexample/member_data"
+							class="text-muted">개인정보취급방침</a> | <a href="/communityexample/rule" class="text-muted">이용약관</a>
 					</p>
 					<p class="text-muted">Contact : choimory@naver.com</p>
 				</div>
