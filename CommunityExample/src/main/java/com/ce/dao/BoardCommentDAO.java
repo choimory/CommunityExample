@@ -1,5 +1,5 @@
 package com.ce.dao;
 
-public class BoardCommentDAO {
+public interface BoardCommentDAO {
 
 }

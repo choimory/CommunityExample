@@ -1,15 +1,25 @@
 package com.ce.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.ce.dto.MemberAuthDTO;
+import com.ce.dto.MemberDTO;
 import com.ce.service.MemberService;
 
 @Controller
+//@SessionAttributes({"memberDto"})
 public class MemberController {
 	private MemberService memberService;
+	private final int SUCCESS = 1;
+	private final int FAIL = -1;
 
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
@@ -17,114 +27,129 @@ public class MemberController {
 
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String joinForm(Model model) {
-		String view = null;
+		String view = "Member/join";
 
 		model.addAttribute("title", "회원가입");
-		view = "Member/join";
 		return view;
 	}
 
 	@RequestMapping(value = "/idcheck")
-	public String idCheck(Model model) {
-		String view = null;
+	public String idCheck(Model model, String mId) {
+		String view = ""; // TODO ajax
+		int result = 0;
 
-		// TODO 받은 id로 검색해서 데이터 유무 확인
-
-		view = ""; // TODO ajax
+//		result=memberService.idCheck(mId);
+//		if(result<SUCCESS) {
+//		}
+		
 		model.addAttribute("title", "");
+		model.addAttribute("result", result);
 		return view;
 	}
 
 	@RequestMapping(value = "/emailcheck")
-	public String emailCheck(Model model) {
-		String view = null;
+	public String emailCheck(Model model, String mEmail) {
+		String view = ""; // TODO ajax
+		int result = 0;
 
-		// TODO 받은 email로 검색해서 데이터 유무 확인
+//		result=memberService.emailCheck(mEmail);		
+//		if(result<SUCCESS) {
+//		}
 
-		view = ""; // TODO ajax
+		
 		model.addAttribute("title", "");
 		return view;
 	}
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String join(Model model) {
-		String view = null;
+	public String join(Model model, MemberDTO memberDto) {
+		String view = "redirect:/main";
+		int result = 0;
 
-		// TODO 받은 데이터로 row 작성
+//		memberDto=memberService.join(memberDto);		
+		if (memberDto == null) {
 
-		model.addAttribute("title", "");
-		view = "";
+		}
+
+//		model.addAttribute("memberDto", memberDto);
 		return view;
 	}
 
 	@RequestMapping(value = "/find_account", method = RequestMethod.GET)
 	public String findAccountForm(Model model) {
-		String view = null;
+		String view = "Member/find_account";
 
 		model.addAttribute("title", "계정찾기");
-		view = "Member/find_account";
 		return view;
 	}
 
 	@RequestMapping(value = "/find_account", method = RequestMethod.POST)
-	public String findAccount(Model model) {
-		String view = null;
+	public String findAccount(Model model, String mEmail) {
+		String view = ""; // TODO 결과안내 폼으로 변경
+		int result = 0;
 
-		// TODO 받은 email에 해당하는 회원 비밀번호 변경한뒤 id와 임시비밀번호 이메일전송
+//		result=memberService.findAccount(mEmail);
+//		if(result<SUCCESS) {
+//		}
 
+		
 		model.addAttribute("title", "");
-		view = ""; // TODO 결과안내 폼으로 변경
 		return view;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginForm(Model model) {
-		String view = null;
+		String view = "Member/login";
 
 		model.addAttribute("title", "로그인");
-		view = "Member/login";
 		return view;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(Model model) {
-		String view = null;
+	public String login(Model model, MemberDTO memberDto, HttpServletRequest req) {
+		String view = "redirect:/"; // TODO 이전에 접속중이던 페이지로 리다이렉트
+		String beforeUrl = req.getHeader("referer");
 
-		// TODO 아이디로 검색한뒤 해당아이디의 비밀번호와 입력값 일치시 로그인, 아닐시 실패
+//		memberDto=memberService.login(memberDto);
 
 		model.addAttribute("title", "");
-		view = ""; // TODO 이전에 접속중이던 페이지로 리다이렉트
+		model.addAttribute("memberDto", memberDto);
 		return view;
 	}
 
 	@RequestMapping(value = "/member_info")
-	public String memberInfo(Model model) {
-		String view = null;
+	public String memberInfo(Model model, HttpServletRequest req) {
+		String view = "Member/member_info";
+		MemberDTO memberDto = (MemberDTO) req.getAttribute("memberDto");
+		Map<String, Object> memberInfoMap = null;
 
-		// TODO 세션의 id에 해당하는 회원 정보들 가져오기
+//		memberInfoMap=memberService.memberInfo(memberDto.getmId());
+//		if(result<SUCCESS) {
+//		}
+
 
 		model.addAttribute("title", "회원정보");
-		view = "Member/member_info";
+		model.addAttribute("memberInfoMap", memberInfoMap);
 		return view;
 	}
 
 	@RequestMapping(value = "/modify_info", method = RequestMethod.GET)
 	public String modifyInfoForm(Model model) {
-		String view = null;
+		String view = "Member/modify_info";
 
 		model.addAttribute("title", "회원정보 수정");
-		view = "Member/modify_info";
 		return view;
 	}
 
 	@RequestMapping(value = "/modify_info", method = RequestMethod.POST)
-	public String modifyInfo(Model model) {
-		String view = null;
+	public String modifyInfo(Model model, MemberDTO memberDto) {
+		String view = "redirect:/member_info"; 
+		int result = 0;
 
-		// TODO 입력한 값으로 해당회원 정보수정
+//		result=memberService.modifyInfo(memberDto);
+//		if(result<SUCCESS) {
+//		}
 
-		model.addAttribute("title", "");
-		view = "Member/member_info"; // TODO 리다이렉트로 변경할것
 		return view;
 	}
 
@@ -138,30 +163,26 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/withdraw", method = RequestMethod.POST)
-	public String withdraw(Model model) {
-		String view = null;
+	public String withdraw(Model model, MemberDTO memberDto) {
+		String view = "redirect:/main"; //"Member/auth";  
+		int result = 0;
 
-		// TODO 해당 회원에 관련된 기본정보 삭제
+//		result=memberService.withdraw(memberDto);
+//		if(result<SUCCESS) {
+//		}
 
-		model.addAttribute("title", "");
-		view = "Main/main"; // TODO 리다이렉트로 변경할것
-		return view;
-	}
-
-	@RequestMapping(value = "/auth", method = RequestMethod.GET)
-	public String authForm(Model model) {
-		String view = null;
-
-		view = "Member/auth";
-		return view;
-	}
-
-	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	public String auth(Model model) {
-		String view = null;
-
-		view = "";
 		model.addAttribute("title", "");
 		return view;
 	}
+	/*
+	 * @RequestMapping(value = "/auth", method = RequestMethod.GET) public String
+	 * authForm(Model model) { String view = null;
+	 * 
+	 * view = "Member/auth"; return view; }
+	 * 
+	 * @RequestMapping(value = "/auth", method = RequestMethod.POST) public String
+	 * auth(Model model, MemberAuthDTO memberAuthDto) { String view = null;
+	 * 
+	 * view = ""; model.addAttribute("title", ""); return view; }
+	 */
 }

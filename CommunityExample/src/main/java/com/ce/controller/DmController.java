@@ -1,10 +1,18 @@
 package com.ce.controller;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ce.component.PageHelper;
+import com.ce.component.SearchHelper;
+import com.ce.dto.DmDTO;
+import com.ce.dto.MemberDTO;
 import com.ce.service.DmService;
 
 @Controller
@@ -16,74 +24,73 @@ public class DmController {
 		this.dmService = dmService;
 	}
 
-	
-	
-	@RequestMapping(value= {"", "/", "/list"})
-	public String list(Model model) {
-		String view=null;
-		
-		// TODO send컬럼에 해당 id와 page를 이용한 검색한 결과 가져오기
-		
-		view="Dm/list";
-		model.addAttribute("title", "");
+	@RequestMapping(value = { "", "/", "/list" })
+	public String list(Model model, String mId, String mNickname, PageHelper pageHelper) {
+		String view = "Dm/list";
+		List<DmDTO> dmDtoList = null;
+
+//		dmDtoList=dmService.list(mId, dmDto, pageHelper);
+
+		model.addAttribute("title", mNickname + "님의 쪽지목록");
+		model.addAttribute("dmDtoList", dmDtoList);
 		return view;
 	}
-	
-	
-	@RequestMapping(value="/{dmidx}")
-	public String content(Model model, @PathVariable("dmidx") int dmIdx) {
-		String view=null;
-		
-		// TODO idx의 컬럼값들 가져와서 뿌리기, idx에 int가 아닌 값 들어올시 생기는 문제 수정할것
-		
-		view="Dm/content";
-		model.addAttribute("title", "");
+
+	@RequestMapping(value = "/{dmIdx}")
+	public String content(Model model, @PathVariable("dmIdx") String stringDmIdx) {
+		String view = "Dm/content";
+		DmDTO dmDto = null;
+
+//		dmDto=dmService.content(dmIdx);
+//		if(dmDto==null) {
+//			view="redirect:/dm/list";
+//		}
+
+//		model.addAttribute("title", dmDto.getDmTitle());
+		model.addAttribute("dmDto", dmDto);
 		return view;
 	}
-	
-	
-	@RequestMapping(value="/write", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String writeForm(Model model) {
-		String view=null;
-		
-		view="Dm/write";
-		model.addAttribute("title", "");
+		String view = "Dm/write";
+
+		model.addAttribute("title", "쪽지 보내기");
 		return view;
 	}
-	
-	
-	@RequestMapping(value="",method = RequestMethod.POST)
-	public String write(Model model) {
-		String view=null;
-		
-		// TODO 입력된 값으로 row등록
-		
-		view="Dm/list";
-		model.addAttribute("title", "");
+
+	@RequestMapping(value = "/write", method = RequestMethod.POST)
+	public String write(Model model, MemberDTO memberDto, DmDTO dmDto) {
+		String view = "redirect:/dm/list";
+		int result = 0;
+
+//		result=dmService.write(dmDto);
+
+		model.addAttribute("result", result);
 		return view;
 	}
-	
-	
-	@RequestMapping(value="/search")
-	public String search(Model model) {
-		String view=null;
+
+	@RequestMapping(value = "/search")
+	public String search(Model model, String mId, DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
+		String view = "Dm/list";
+		List<DmDTO> dmDtoList = null;
+
+//		dmDtoList=dmService.search(dmDto, searchHelper, pageHelper);
 		
-		// TODO query와 target과 page를 이용해 검색한 결과 뿌리기
-		
-		view="Dm/list";		// TODO 리다이렉트로 변경
-		model.addAttribute("title", "");
+		model.addAttribute("title", "검색결과");
+		model.addAttribute("dmDtoList", dmDtoList);
 		return view;
 	}
-	
-	
-	@RequestMapping(value="/delete")
-	public String delete(Model model) {
-		String view=null;
-		
-		// TODO 해당 idx의 row 지우기
-		
-		view="Dm/list";		// TODO 리다이렉트로 변경
+
+	@RequestMapping(value = "/delete")
+	public String delete(Model model, int dmIdx) {
+		String view = "redirect:/dm/list";
+		int result = 0;
+
+//		result=dmService.delete(dmIdx);
+
 		model.addAttribute("title", "");
+		model.addAttribute("result", result);
 		return view;
 	}
 }

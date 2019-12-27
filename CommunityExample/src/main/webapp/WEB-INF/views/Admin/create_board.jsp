@@ -1,5 +1,6 @@
-	<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 
 
@@ -37,18 +38,33 @@
 			<div class="ce_form text-left">
 				<form action="/communityexample/admin/create_board" method="post">
 					<div class="form-group">
-						<label>게시판 타입</label> <input type="text" class="form-control" name="bType">
-						<small class="text-muted">영어로 작성해주세요. 예] 유머(Humor),연예(Entertainment), 스포츠(Sports)</small>
+						<label>게시판 타입(한글)</label> <input type="text" class="form-control"
+							name="bTypeKor"> <small class="text-muted"> 예]
+							유머,연예, 스포츠</small>
 					</div>
 					<div class="form-group">
-						<label>게시판 명</label> <input type="text" class="form-control" name="bName">
-						<small class="text-muted">영어로 작성해주세요. 예] 야구(Baseball), 아이돌(idol)</small>
+						<label>게시판 타입(영문)</label> <input type="text" class="form-control"
+							name="bType"> <small class="text-muted"> 예]
+							Humor,Entertainment, Sports</small>
+					</div>
+					<hr class="my-3">
+					<div class="form-group">
+						<label>게시판 명(한글)</label> <input type="text" class="form-control"
+							name="bIdKor"> <small class="text-muted">예] 야구,
+							아이돌</small>
 					</div>
 					<div class="form-group">
-						<label>게시판 카테고리</label> <input type="text" class="form-control" name="bCategory">
-						<small class="text-muted">예] 잡담, 질문, 그외</small>
+						<label>게시판 명(영문)</label> <input type="text" class="form-control"
+							name="bId"> <small class="text-muted"> 예]
+							Baseball, idol</small>
 					</div>
-					
+					<hr class="my-3">
+					<div class="form-group">
+						<label>게시물 카테고리</label> <input type="text" class="form-control"
+							name="bCategory"> <small class="text-muted">예]
+							잡담, 질문, 그외</small>
+					</div>
+
 
 					<div class="ce_btn row mt-5">
 						<div class="col">
