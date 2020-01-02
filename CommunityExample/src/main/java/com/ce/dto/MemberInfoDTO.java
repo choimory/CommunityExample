@@ -7,10 +7,10 @@ public class MemberInfoDTO {
 	private int mExp;
 	private int mPoint;
 	private int mEquipItem;
-	private Timestamp mRegDate;
-	private Timestamp mLoginDate;
+	private String mRegDate;
+	private String mLoginDate;
 	private boolean mBan;
-	private Timestamp mEndToBan;
+	private String mEndToBan;
 	private String mAdmin;
 
 	public String getmId() {
@@ -45,19 +45,19 @@ public class MemberInfoDTO {
 		this.mEquipItem = mEquipItem;
 	}
 
-	public Timestamp getmRegDate() {
+	public String getmRegDate() {
 		return mRegDate;
 	}
 
-	public void setmRegDate(Timestamp mRegDate) {
+	public void setmRegDate(String mRegDate) {
 		this.mRegDate = mRegDate;
 	}
 
-	public Timestamp getmLoginDate() {
+	public String getmLoginDate() {
 		return mLoginDate;
 	}
 
-	public void setmLoginDate(Timestamp mLoginDate) {
+	public void setmLoginDate(String mLoginDate) {
 		this.mLoginDate = mLoginDate;
 	}
 
@@ -69,11 +69,11 @@ public class MemberInfoDTO {
 		this.mBan = mBan;
 	}
 
-	public Timestamp getmEndToBan() {
+	public String getmEndToBan() {
 		return mEndToBan;
 	}
 
-	public void setmEndToBan(Timestamp mEndToBan) {
+	public void setmEndToBan(String mEndToBan) {
 		this.mEndToBan = mEndToBan;
 	}
 

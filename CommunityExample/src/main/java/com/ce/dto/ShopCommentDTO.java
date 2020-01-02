@@ -11,7 +11,7 @@ public class ShopCommentDTO {
 	private String mId;
 	private String mNickname;
 	private String scContent;
-	private Timestamp scRegDate;
+	private String scRegDate;
 	private int scGroup;
 	private int scStep;
 	private int scIndent;
@@ -67,11 +67,11 @@ public class ShopCommentDTO {
 		this.scContent = scContent;
 	}
 
-	public Timestamp getScRegDate() {
+	public String getScRegDate() {
 		return scRegDate;
 	}
 
-	public void setScRegDate(Timestamp scRegDate) {
+	public void setScRegDate(String scRegDate) {
 		this.scRegDate = scRegDate;
 	}
 

@@ -12,7 +12,7 @@ public class BoardCommentDTO {
 	private String mId;
 	private String mNickname;
 	private String bcContent;
-	private Timestamp bcRegDate;
+	private String bcRegDate;
 	private int bcGroup;
 	private int bcStep;
 	private int bcIndent;
@@ -92,11 +92,11 @@ public class BoardCommentDTO {
 		this.bcContent = bcContent;
 	}
 
-	public Timestamp getBcRegDate() {
+	public String getBcRegDate() {
 		return bcRegDate;
 	}
 
-	public void setBcRegDate(Timestamp bcRegDate) {
+	public void setBcRegDate(String bcRegDate) {
 		this.bcRegDate = bcRegDate;
 	}
 

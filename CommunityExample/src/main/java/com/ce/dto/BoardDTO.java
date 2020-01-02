@@ -13,7 +13,7 @@ public class BoardDTO {
 	private String mId;
 	private String mNickname;
 	private String bContent;
-	private Timestamp bRegDate;
+	private String bRegDate;
 	private BoardInfoDTO boardInfoDto;
 	private PageHelper pageHelper;
 	private SearchHelper searchHelper;
@@ -109,11 +109,11 @@ public class BoardDTO {
 		this.bContent = bContent;
 	}
 
-	public Timestamp getbRegDate() {
+	public String getbRegDate() {
 		return bRegDate;
 	}
 
-	public void setbRegDate(Timestamp bRegDate) {
+	public void setbRegDate(String bRegDate) {
 		this.bRegDate = bRegDate;
 	}
 

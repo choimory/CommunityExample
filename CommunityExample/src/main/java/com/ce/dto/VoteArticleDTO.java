@@ -5,16 +5,15 @@ public class VoteArticleDTO {
 	private String bType;
 	private String bId;
 	private int bIdx;
-	private boolean vote;
+	private int vUpDown;
 	
 	
-
-	public boolean isVote() {
-		return vote;
+	public int getvUpDown() {
+		return vUpDown;
 	}
 
-	public void setVote(boolean vote) {
-		this.vote = vote;
+	public void setvUpDown(int vUpDown) {
+		this.vUpDown = vUpDown;
 	}
 
 	public String getmId() {

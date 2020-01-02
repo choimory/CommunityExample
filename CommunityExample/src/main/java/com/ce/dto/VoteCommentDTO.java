@@ -5,6 +5,15 @@ public class VoteCommentDTO {
 	private String bType;
 	private String bId;
 	private String bcIdx;
+	private int vUpDown;
+
+	public int getvUpDown() {
+		return vUpDown;
+	}
+
+	public void setvUpDown(int vUpDown) {
+		this.vUpDown = vUpDown;
+	}
 
 	public String getmId() {
 		return mId;

@@ -15,7 +15,7 @@ public class ShopDTO {
 	private String sContent;
 	private String sFileName;
 	private int sPrice;
-	private Timestamp sRegDate;
+	private String sRegDate;
 	private ShopInfoDTO shopInfoDto;
 	private PageHelper pageHelper;
 	private SearchHelper searchHelper;
@@ -109,11 +109,11 @@ public class ShopDTO {
 		this.sPrice = sPrice;
 	}
 
-	public Timestamp getsRegDate() {
+	public String getsRegDate() {
 		return sRegDate;
 	}
 
-	public void setsRegDate(Timestamp sRegDate) {
+	public void setsRegDate(String sRegDate) {
 		this.sRegDate = sRegDate;
 	}
 

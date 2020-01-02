@@ -5,6 +5,7 @@ private String mId;
 private String bType;
 private String bId;
 private int bIdx;
+
 public String getmId() {
 	return mId;
 }
