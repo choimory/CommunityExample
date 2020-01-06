@@ -18,6 +18,18 @@ public class AdminServiceImpl implements AdminService{
 	private BoardDAO boardDao;
 	private ShopDAO shopDao;
 	
+	public void setMemberDao(MemberDAO memberDao) {
+		this.memberDao = memberDao;
+	}
+
+	public void setBoardDao(BoardDAO boardDao) {
+		this.boardDao = boardDao;
+	}
+
+	public void setShopDao(ShopDAO shopDao) {
+		this.shopDao = shopDao;
+	}
+
 	@Override
 	public int ban(MemberDTO memberDto, MemberInfoDTO memberInfoDto) {
 		int result=0;

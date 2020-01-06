@@ -1,6 +1,9 @@
 package com.ce.dto;
 
-public class MemberItemDTO {
+import java.io.Serializable;
+
+public class MemberItemDTO implements Serializable {
+	private static final long serialVersionUID = 1072502445302846250L;
 	private String mId;
 	private int sIdx;
 	private ShopDTO sDTO;

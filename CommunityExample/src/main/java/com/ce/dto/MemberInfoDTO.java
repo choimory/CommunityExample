@@ -1,16 +1,15 @@
 package com.ce.dto;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
-public class MemberInfoDTO {
+public class MemberInfoDTO implements Serializable {
+	private static final long serialVersionUID = -4133063279364651457L;
 	private String mId;
 	private int mExp;
 	private int mPoint;
 	private int mEquipItem;
 	private String mRegDate;
 	private String mLoginDate;
-	private boolean mBan;
-	private String mEndToBan;
 	private String mAdmin;
 
 	public String getmId() {
@@ -61,21 +60,7 @@ public class MemberInfoDTO {
 		this.mLoginDate = mLoginDate;
 	}
 
-	public boolean ismBan() {
-		return mBan;
-	}
 
-	public void setmBan(boolean mBan) {
-		this.mBan = mBan;
-	}
-
-	public String getmEndToBan() {
-		return mEndToBan;
-	}
-
-	public void setmEndToBan(String mEndToBan) {
-		this.mEndToBan = mEndToBan;
-	}
 
 	public String getmAdmin() {
 		return mAdmin;

@@ -1,10 +1,13 @@
 package com.ce.dto;
 
-public class CartDTO {
-	private String mId;
-	private int cartIdx;
+import java.io.Serializable;
+
+public class CartDTO implements Serializable {
+	private static final long serialVersionUID = -7064459111441251745L;
+	private int cIdx;
 	private int sIdx;
 	private int cartCnt;
+	private String mId;
 	private ShopDTO shopDto;
 
 	public String getmId() {
@@ -15,12 +18,12 @@ public class CartDTO {
 		this.mId = mId;
 	}
 
-	public int getCartIdx() {
-		return cartIdx;
+	public int getcIdx() {
+		return cIdx;
 	}
 
-	public void setCartIdx(int cartIdx) {
-		this.cartIdx = cartIdx;
+	public void setcIdx(int cIdx) {
+		this.cIdx = cIdx;
 	}
 
 	public int getsIdx() {

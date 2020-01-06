@@ -1,14 +1,14 @@
 package com.ce.dto;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 
-public class BoardCommentDTO {
+public class BoardCommentDTO implements Serializable {
+	private static final long serialVersionUID = -5000076885322699817L;
 	private int bcIdx;
 	private int bIdx;
-	private String bId;
 	private String mId;
 	private String mNickname;
 	private String bcContent;
@@ -17,8 +17,8 @@ public class BoardCommentDTO {
 	private int bcStep;
 	private int bcIndent;
 	private BoardCommentInfoDTO boardCommentInfoDto;
-	private PageHelper pageHelper;
 	private BoardTypeDTO boardTypeDto;
+	private PageHelper pageHelper;
 
 	public BoardTypeDTO getBoardTypeDto() {
 		return boardTypeDto;
@@ -66,14 +66,6 @@ public class BoardCommentDTO {
 
 	public void setbIdx(int bIdx) {
 		this.bIdx = bIdx;
-	}
-
-	public String getbId() {
-		return bId;
-	}
-
-	public void setbId(String bId) {
-		this.bId = bId;
 	}
 
 	public String getmNickname() {

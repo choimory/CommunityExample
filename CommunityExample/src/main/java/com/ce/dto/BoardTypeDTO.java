@@ -1,19 +1,21 @@
 package com.ce.dto;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class BoardTypeDTO {
+public class BoardTypeDTO implements Serializable {
+	private static final long serialVersionUID = -8141888733747346504L;
 	private String bId;
 	private String bType;
+	private String bCategory;
 	private String bIdKor;
 	private String bTypeKor;
-	private List<String> bCategory;
 
-	public List<String> getbCategory() {
+
+	public String getbCategory() {
 		return bCategory;
 	}
 
-	public void setbCategory(List<String> bCategory) {
+	public void setbCategory(String bCategory) {
 		this.bCategory = bCategory;
 	}
 

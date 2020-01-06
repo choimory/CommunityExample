@@ -8,6 +8,7 @@ import com.ce.component.SearchHelper;
 import com.ce.dto.BoardCommentDTO;
 import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardInfoDTO;
+import com.ce.dto.BoardTypeDTO;
 import com.ce.dto.BookmarkBoardDTO;
 import com.ce.dto.BookmarkArticleDTO;
 import com.ce.dto.VoteCommentDTO;
@@ -27,11 +28,11 @@ public interface BoardService {
 	  public BoardDTO modify(BoardDTO boardDto, BoardInfoDTO boardInfoDto); //bid를 이용해 알맞은 테이블 검색 후 bidx의 해당row 컬럼값 변경
 	  public int delete(BoardDTO boardDto); //bid를 이용해 알맞은 테이블 검색 후 bidx의 해당 row 삭제 
 	  public List<BoardDTO> search(BoardDTO boardDto, SearchHelper searchHelper, PageHelper pageHelper);//bid를 이용해 알맞은 테이블 검색 후 query와 target과 page를 이용해 select 
-	  public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, PageHelper pageHelper); //bid를 이용해 알맞은 테이블 검색 후 bidx와 page를 이용해 해당글의 댓글 가져오기
-	  public int writeComment(BoardCommentDTO boardCommentDto); //bid를 이용해 알맞은 테이블 검색 후  row insert
-	  public int modifyComment(BoardCommentDTO boardCommentDto); //bid를 이용해 알맞은 테이블 검색 후 해당 row 수정 , 수정된 댓글은 [댓글수정일자 : yyyy-mm-dd]가 꼬릿말로 붙도록 할것
-	  public int deleteComment(BoardCommentDTO boardCommentDto); //bid를 이용해 알맞은 테이블 검색 후 해당 row 수정 혹은 삭제, 수정으로 할거면 댓글내용을 [~~에 의해 삭제된 댓글입니다]로 내용을 변경
-	  public int replyComment(BoardCommentDTO boardCommentDto); //bid를 이용해 알맞은 테이블 검색후 bcidx와 연계한 답글row insert
+	  public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto, PageHelper pageHelper); //bid를 이용해 알맞은 테이블 검색 후 bidx와 page를 이용해 해당글의 댓글 가져오기
+	  public int writeComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색 후  row insert
+	  public int modifyComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색 후 해당 row 수정 , 수정된 댓글은 [댓글수정일자 : yyyy-mm-dd]가 꼬릿말로 붙도록 할것
+	  public int deleteComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색 후 해당 row 수정 혹은 삭제, 수정으로 할거면 댓글내용을 [~~에 의해 삭제된 댓글입니다]로 내용을 변경
+	  public int replyComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색후 bcidx와 연계한 답글row insert
 	  
 	  public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); //mid와 bid를 이용해 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
 	  public int bookmarkContent(BookmarkArticleDTO bookmarkArticleDto); //mid와 bid와 bidx를 이용해 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가

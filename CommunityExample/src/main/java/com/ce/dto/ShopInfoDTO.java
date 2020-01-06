@@ -1,14 +1,17 @@
 package com.ce.dto;
 
-public class ShopInfoDTO {
+import java.io.Serializable;
+
+public class ShopInfoDTO implements Serializable {
+	private static final long serialVersionUID = -7990166658045141486L;
 	private int sIdx;
-	private boolean sPermission;
-	private int sReportCnt;
-	private boolean sBlind;
 	private int sHit;
 	private int sUpvote;
 	private int sDownvote;
-	private int sCommentCnt;
+	private int sCommentNum;
+	private int sReportNum;
+	private int sPermission;
+	private int sBlind;
 
 	public int getsIdx() {
 		return sIdx;
@@ -16,30 +19,6 @@ public class ShopInfoDTO {
 
 	public void setsIdx(int sIdx) {
 		this.sIdx = sIdx;
-	}
-
-	public boolean issPermission() {
-		return sPermission;
-	}
-
-	public void setsPermission(boolean sPermission) {
-		this.sPermission = sPermission;
-	}
-
-	public int getsReportCnt() {
-		return sReportCnt;
-	}
-
-	public void setsReportCnt(int sReportCnt) {
-		this.sReportCnt = sReportCnt;
-	}
-
-	public boolean issBlind() {
-		return sBlind;
-	}
-
-	public void setsBlind(boolean sBlind) {
-		this.sBlind = sBlind;
 	}
 
 	public int getsHit() {
@@ -66,11 +45,36 @@ public class ShopInfoDTO {
 		this.sDownvote = sDownvote;
 	}
 
-	public int getsCommentCnt() {
-		return sCommentCnt;
+	public int getsCommentNum() {
+		return sCommentNum;
 	}
 
-	public void setsCommentCnt(int sCommentCnt) {
-		this.sCommentCnt = sCommentCnt;
+	public void setsCommentNum(int sCommentNum) {
+		this.sCommentNum = sCommentNum;
 	}
+
+	public int getsReportNum() {
+		return sReportNum;
+	}
+
+	public void setsReportNum(int sReportNum) {
+		this.sReportNum = sReportNum;
+	}
+
+	public int getsPermission() {
+		return sPermission;
+	}
+
+	public void setsPermission(int sPermission) {
+		this.sPermission = sPermission;
+	}
+
+	public int getsBlind() {
+		return sBlind;
+	}
+
+	public void setsBlind(int sBlind) {
+		this.sBlind = sBlind;
+	}
+
 }

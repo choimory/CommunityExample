@@ -1,13 +1,16 @@
 package com.ce.dto;
 
-public class ShopCommentInfoDTO {
+import java.io.Serializable;
+
+public class ShopCommentInfoDTO implements Serializable {
+	private static final long serialVersionUID = 8215236811570547116L;
 	private int scIdx;
 	private int sciUpvote;
 	private int sciDownvote;
-	private int sciReportCnt;
-	private boolean sciBlind;
-	private boolean sciNotice;
-	private boolean sciBest;
+	private int sciReportNum;
+	private int sciBlind;
+	private int sciNotice;
+	private int sciBest;
 
 	public int getScIdx() {
 		return scIdx;
@@ -33,36 +36,37 @@ public class ShopCommentInfoDTO {
 		this.sciDownvote = sciDownvote;
 	}
 
-	public int getSciReportCnt() {
-		return sciReportCnt;
+	public int getSciReportNum() {
+		return sciReportNum;
 	}
 
-	public void setSciReportCnt(int sciReportCnt) {
-		this.sciReportCnt = sciReportCnt;
+	public void setSciReportNum(int sciReportNum) {
+		this.sciReportNum = sciReportNum;
 	}
 
-	public boolean isSciBlind() {
+	public int getSciBlind() {
 		return sciBlind;
 	}
 
-	public void setSciBlind(boolean sciBlind) {
+	public void setSciBlind(int sciBlind) {
 		this.sciBlind = sciBlind;
 	}
 
-	public boolean isSciNotice() {
+	public int getSciNotice() {
 		return sciNotice;
 	}
 
-	public void setSciNotice(boolean sciNotice) {
+	public void setSciNotice(int sciNotice) {
 		this.sciNotice = sciNotice;
 	}
 
-	public boolean isSciBest() {
+	public int getSciBest() {
 		return sciBest;
 	}
 
-	public void setSciBest(boolean sciBest) {
+	public void setSciBest(int sciBest) {
 		this.sciBest = sciBest;
 	}
+
 
 }

@@ -1,34 +1,38 @@
 package com.ce.dto;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 
-public class BoardDTO {
+public class BoardDTO implements Serializable {
+	private static final long serialVersionUID = -4303597499989713862L;
 	private int bIdx;
 	private String bId;
 	private String bCategory;
 	private String bTitle;
+	private String bContent;
 	private String mId;
 	private String mNickname;
-	private String bContent;
 	private String bRegDate;
 	private BoardInfoDTO boardInfoDto;
+	private BoardTypeDTO boardTypeDto;
 	private PageHelper pageHelper;
 	private SearchHelper searchHelper;
-	private BoardTypeDTO boardTypeDto;
 
-	public BoardDTO() {}
+	public BoardDTO() {
+	}
+
 	public BoardDTO(String bId, PageHelper pageHelper) {
-		this.bId=bId;
-		this.pageHelper=pageHelper;
+		this.bId = bId;
+		this.pageHelper = pageHelper;
 	}
+
 	public BoardDTO(String bId, int bIdx) {
-		this.bId=bId;
-		this.bIdx=bIdx;
+		this.bId = bId;
+		this.bIdx = bIdx;
 	}
-	
+
 	public BoardTypeDTO getBoardTypeDto() {
 		return boardTypeDto;
 	}

@@ -1,11 +1,12 @@
 package com.ce.dto;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 
-public class ShopDTO {
+public class ShopDTO implements Serializable {
+	private static final long serialVersionUID = 7970067686010517268L;
 	private int sIdx;
 	private String sType;
 	private String sCategory;

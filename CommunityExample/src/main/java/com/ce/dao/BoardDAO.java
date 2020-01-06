@@ -17,9 +17,10 @@ public interface BoardDAO {
 	
 //	TODO
 //	게시판타입후 해당타입의 테이블을 분류하여 찾아들어가는 문제 해결해야함. 
-//	DynamicSQL을 쓸것이냐(모든 파라미터가 map으로 바뀌던가 DTO에 bType들어가야함) -> 1안
-//	BoardDAO에 테이블별 DAO메소드을 쓸것이냐(메소드가 많아짐, 유지보수 떨어짐) -> 3안
-//	DAO를 테이블별 DAO로 나누어 DAOImpl의 해당 메소드들만 오버라이드한뒤 if문으로 해당DAO메소드를 호출할것이냐(DAO클래스가 많아짐, 서비스에 DAO멤버변수가 많아짐, 장문의 if문 때문에 코드가 지저분해짐) -> 2안
+//  jdbcTemplate를 사용해 클래스에서 동적으로 query를 날릴것인가 -> 1안
+//	mybatis를 사용해 DynamicSQL로 query를 날릴것인가(모든 파라미터가 map으로 바뀌던가 DTO에 bType들어가야함) -> 2안
+//	DAO를 테이블별 DAO로 나누어 DAOImpl의 해당 메소드들만 오버라이드한뒤 if문으로 해당DAO메소드를 호출할것이냐(DAO클래스가 많아짐, 서비스에 DAO멤버변수가 많아짐, 장문의 if문 때문에 코드가 지저분해짐) -> 3안
+//	BoardDAO에 테이블별 DAO메소드을 쓸것이냐(메소드가 많아짐, 유지보수 떨어짐) -> 4안
 	
 	
 	public List<BoardDTO> reportList(); // report n개 이상인글 최신순 다섯개정도 가져오기 TODO 모든게시판에서 가져와야 하는 문제
@@ -36,11 +37,11 @@ public interface BoardDAO {
 	public List<BoardDTO> list(BoardDTO boardDto); //
 	public List<String> getBoardIdList(); // select bId from BoardType
 	public BoardDTO content(BoardDTO boardDto); //select all from btypeBoard join btypeBoardinfo where bIdx 
-	public List<BoardCommentDTO> commentList(BoardDTO boardDto); // select all from BoardTypeComment where bIdx
+	
 	public int write(BoardDTO boardDto); // insert
 	public int writeInfo(BoardDTO boardDto); //insert
 	public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); // insert
-	public BoardTypeDTO getBoardCategorys(BoardDTO boardDto); // select bCategory where bId
+	public BoardTypeDTO getBoardCategories(BoardDTO boardDto); // select bCategory where bId
 	public int modifyBoard(BoardDTO boardDto);//update board
 	public int modifyBoardInfo(BoardDTO boardDto); // update board info
 	public int modifyBoardFile(BoardDTO boardDto);//update boardfile
@@ -48,14 +49,7 @@ public interface BoardDAO {
 	public int deleteBoardInfo(BoardDTO boardDto);//delete boardinfo
 	public int deleteBoardFile(BoardDTO boardDto);//delete boardfile
 	public List<BoardDTO> search(BoardDTO boardDto);//select all from btypeboard where query target and page
-	public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto); //select all from bcomment where page
-	public int writeComment(BoardCommentDTO boardCommentDto); //insert comment
-	public int writeCommentInfo(BoardCommentDTO boardCommentDto); // insert comment info
-	public int modifyComment(BoardCommentDTO boardCommentDto); //update comment
-	public int modifyCommentInfo(BoardCommentDTO boardCommentDto); // update comment info
-	public int deleteComment(BoardCommentDTO boardCommentDto); // delete comment where bcidx
-	public int deleteCommentInfo(BoardCommentDTO boardCommentDto); // delete comment info where bcidx
-	public int replyComment(BoardCommentDTO boardCommentDto); // insert comment
+	
 	public int bookmarkArticle(BookmarkArticleDTO bookmarkArticleDto);//insert
 	public int checkVoteArticleAlready(VoteArticleDTO voteArticleDto); // count where mId, bId, bIdx
 	public int updateVoteNum(VoteArticleDTO voteArticleDto); //update vote(+1 or -1) where bIdx
@@ -63,10 +57,6 @@ public interface BoardDAO {
 	public int checkReportAlready(BoardDTO boardDto); //count where mId, bId, bIdx
 	public int updateReportNum(BoardDTO boardDto); // update reportnum +_1
 	public int writeReportArticle(BoardDTO boardDto);//insert
-	public int checkVoteCommentAlready(VoteCommentDTO voteCommentDto);//count where mId, bId, bcIdx
-	public int updateCommentVoteNum(VoteCommentDTO voteCommentDto); // update vote +_1 where bcIdx
-	public int writeVoteCommentInfo(VoteCommentDTO voteCommentDto); //insert
-	
 	
 	
 }

@@ -10,6 +10,12 @@ public class MainServiceImpl implements MainService{
 	private BoardDAO boardDao;
 	
 	
+
+	public void setBoardDao(BoardDAO boardDao) {
+		this.boardDao = boardDao;
+	}
+
+
 	@Override
 	public Map<String, List<BoardDTO>> main() {
 		Map<String, List<BoardDTO>> dtoListMap=null;

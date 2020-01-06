@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
+import com.ce.dao.BoardCommentDAO;
 import com.ce.dao.BoardDAO;
 import com.ce.dto.BoardCommentDTO;
 import com.ce.dto.BoardDTO;
@@ -18,8 +19,21 @@ import com.ce.dto.VoteCommentDTO;
 
 public class BoardServiceImpl implements BoardService {
 	private BoardDAO boardDao;
+	private BoardCommentDAO boardCommentDao;
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;
+
+	public void setBoardDao(BoardDAO boardDao) {
+		this.boardDao = boardDao;
+	}
+
+	public BoardCommentDAO getBoardCommentDao() {
+		return boardCommentDao;
+	}
+
+	public void setBoardCommentDao(BoardCommentDAO boardCommentDao) {
+		this.boardCommentDao = boardCommentDao;
+	}
 
 	private boolean isBoardIdExists(String bId) {
 		boolean result = false;
@@ -62,7 +76,7 @@ public class BoardServiceImpl implements BoardService {
 			// 3. bType에 해당되는 테이블에서 page를 이용해서 BoardDTO 20개 가져오기
 			boardDtoList = boardDao.list(boardDto);
 			// 4.해당게시판의 bCategory모음 가져오기
-			boardTypeDto = boardDao.getBoardCategorys(boardDto);
+			boardTypeDto = boardDao.getBoardCategories(boardDto);
 			// 5.해당게시판이 북마크된 게시판인지 확인
 			// 6.put
 			listMap = new HashMap<String, Object>();
@@ -90,9 +104,9 @@ public class BoardServiceImpl implements BoardService {
 				// 2.해당 bIdx의 boardDto 가져오기
 				boardDto = boardDao.content(boardDto);
 				// 3.해당 bIdx의 boardCommentDtoList가져오기
-				boardCommentDtoList = boardDao.commentList(boardDto);
+				boardCommentDtoList = boardCommentDao.commentList(boardDto);
 				// 4.해당게시판의 bCategory모음 가져오기
-				boardTypeDto = boardDao.getBoardCategorys(boardDto);
+				boardTypeDto = boardDao.getBoardCategories(boardDto);
 				// 5.해당게시판이 북마크된 게시판인지 확인
 				// 6.해당게시물이 북마크된 게시물인지 확인
 				// 7.put
@@ -216,17 +230,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, PageHelper pageHelper) {
+	public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto, PageHelper pageHelper) {
 		List<BoardCommentDTO> boardCommentDtoList = null;
-		BoardTypeDTO boardTypeDto = null;
 
 		// bId check
-		if (isBoardIdExists(boardCommentDto.getbId())) {
+		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
-			boardTypeDto = boardDao.getBoardType(boardCommentDto.getbId());
+			boardTypeDto = boardDao.getBoardType(boardTypeDto.getbId());
 			boardCommentDto.setBoardTypeDto(boardTypeDto);
 			// page를 이용해서 댓글 30개 가져오기
-			boardCommentDtoList = boardDao.comment(boardCommentDto);
+			boardCommentDtoList = boardCommentDao.comment(boardCommentDto);
 			// ajax
 		}
 
@@ -234,17 +247,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int writeComment(BoardCommentDTO boardCommentDto) {
+	public int writeComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		int result = 0;
 
 		// bId check
-		if (isBoardIdExists(boardCommentDto.getbId())) {
+		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
-			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardCommentDto.getbId()));
+			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardTypeDto.getbId()));
 			// 해당 댓글테이블에 insert
-			result = boardDao.writeComment(boardCommentDto);
+			result = boardCommentDao.writeComment(boardCommentDto);
 			if (result == SUCCESS) {
-				result = boardDao.writeCommentInfo(boardCommentDto);
+				result = boardCommentDao.writeCommentInfo(boardCommentDto);
 			}
 			// ajax 혹은 redirect content
 		}
@@ -253,17 +266,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int modifyComment(BoardCommentDTO boardCommentDto) {
+	public int modifyComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		int result = 0;
 
 		// bId check
-		if (isBoardIdExists(boardCommentDto.getbId())) {
+		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
-			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardCommentDto.getbId()));
+			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardTypeDto.getbId()));
 			// update
-			result = boardDao.modifyComment(boardCommentDto);
+			result = boardCommentDao.modifyComment(boardCommentDto);
 			if (result == SUCCESS) {
-				result = boardDao.modifyCommentInfo(boardCommentDto);
+				result = boardCommentDao.modifyCommentInfo(boardCommentDto);
 			}
 			// 수정된 댓글은 [댓글수정일자 : yyyy-mm-dd]가 꼬릿말로 붙도록 할것
 			// 이게 가능하려면 db에 수정여부를 저장한뒤 jstl을 이용해 프론트에서 조정해야?..
@@ -273,17 +286,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int deleteComment(BoardCommentDTO boardCommentDto) {
+	public int deleteComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto) {
 		int result = 0;
 
 		// bId check
-		if (isBoardIdExists(boardCommentDto.getbId())) {
+		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
 			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardCommentDto));
 			// delete bcIdx
-			result = boardDao.deleteComment(boardCommentDto);
+			result = boardCommentDao.deleteComment(boardCommentDto);
 			if (result == SUCCESS) {
-				boardDao.deleteCommentInfo(boardCommentDto);
+				boardCommentDao.deleteCommentInfo(boardCommentDto);
 			}
 
 		}
@@ -292,17 +305,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int replyComment(BoardCommentDTO boardCommentDto) {
+	public int replyComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto) {
 		int result = 0;
 
 		// bId check
-		if (isBoardIdExists(boardCommentDto.getbId())) {
+		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
 			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardCommentDto));
 			// insert
-			result = boardDao.replyComment(boardCommentDto);
+			result = boardCommentDao.replyComment(boardCommentDto);
 			if (result == SUCCESS) {
-				result = boardDao.writeCommentInfo(boardCommentDto);
+				result = boardCommentDao.writeCommentInfo(boardCommentDto);
 			}
 		}
 
@@ -411,12 +424,12 @@ public class BoardServiceImpl implements BoardService {
 			// get btype
 			voteCommentDto.setbType(boardDao.getbType(voteCommentDto.getbId()));
 			// vote comment에 해당 게시물의 해당댓글에 대한 추천 이력이 있는지
-			result = boardDao.checkVoteCommentAlready(voteCommentDto);
+			result = boardCommentDao.checkVoteCommentAlready(voteCommentDto);
 			if (result < 1) {
 				// update upvote
-				result = boardDao.updateCommentVoteNum(voteCommentDto);
+				result = boardCommentDao.updateCommentVoteNum(voteCommentDto);
 				// insert vote comment
-				result = boardDao.writeVoteCommentInfo(voteCommentDto);
+				result = boardCommentDao.writeVoteCommentInfo(voteCommentDto);
 			}
 		}
 
@@ -432,13 +445,13 @@ public class BoardServiceImpl implements BoardService {
 			// get btype
 			voteCommentDto.setbType(boardDao.getbType(voteCommentDto.getbId()));
 			// vote comment에 해당 게시물의 해당댓글에 대한 추천 이력이 있는지
-			result = boardDao.checkVoteCommentAlready(voteCommentDto);
+			result = boardCommentDao.checkVoteCommentAlready(voteCommentDto);
 			if (result < 1) {
 				// update upvote
-				result=boardDao.updateCommentVoteNum(voteCommentDto);
+				result=boardCommentDao.updateCommentVoteNum(voteCommentDto);
 				if(result==SUCCESS) {
 					// insert vote comment
-					result=boardDao.writeVoteCommentInfo(voteCommentDto);
+					result=boardCommentDao.writeVoteCommentInfo(voteCommentDto);
 				}
 			}
 		}

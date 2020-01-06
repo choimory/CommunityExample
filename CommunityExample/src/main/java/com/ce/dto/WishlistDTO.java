@@ -1,9 +1,12 @@
 package com.ce.dto;
 
-public class WishlistDTO {
-	private String mId;
+import java.io.Serializable;
+
+public class WishlistDTO implements Serializable {
+	private static final long serialVersionUID = 3037625566014920634L;
 	private int wIdx;
 	private int sIdx;
+	private String mId;
 	private ShopDTO shopDto;
 
 	public String getmId() {

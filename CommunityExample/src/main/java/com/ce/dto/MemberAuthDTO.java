@@ -1,9 +1,12 @@
 package com.ce.dto;
 
-public class MemberAuthDTO {
+import java.io.Serializable;
+
+public class MemberAuthDTO implements Serializable {
+	private static final long serialVersionUID = -742726652777184063L;
 	private String mId;
 	private String mAuth;
-	private boolean mAuthComplete;
+	private int mAuthComplete;
 
 	public String getmId() {
 		return mId;
@@ -21,12 +24,13 @@ public class MemberAuthDTO {
 		this.mAuth = mAuth;
 	}
 
-	public boolean ismAuthComplete() {
+	public int getmAuthComplete() {
 		return mAuthComplete;
 	}
 
-	public void setmAuthComplete(boolean mAuthComplete) {
+	public void setmAuthComplete(int mAuthComplete) {
 		this.mAuthComplete = mAuthComplete;
 	}
+
 
 }

@@ -13,6 +13,11 @@ public class DmServiceImpl implements DmService {
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;
 
+
+	public void setDmDao(DmDAO dmDao) {
+		this.dmDao = dmDao;
+	}
+
 	private int stringIdxToInteger(String index) {
 		int result = 0;
 		try {

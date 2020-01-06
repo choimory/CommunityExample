@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.ce.service.MemberService;
 @Controller
 //@SessionAttributes({"memberDto"})
 public class MemberController {
+	@Autowired
 	private MemberService memberService;
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;

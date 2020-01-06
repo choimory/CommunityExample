@@ -15,6 +15,11 @@ public class ShopServiceImpl implements ShopService{
 	final int SUCCESS=1;
 	final int FAIL=-1;
 	
+
+	public void setShopDao(ShopDAO shopDao) {
+		this.shopDao = shopDao;
+	}
+
 	private int stringIdxToInteger(String index) {
 		int result = 0;
 		try {

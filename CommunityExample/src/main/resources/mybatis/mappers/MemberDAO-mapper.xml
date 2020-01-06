@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ce.dao.MemberDAO">
+	<!-- DTO매핑(쿼리결과를 dto에 담아서 반환하기 위해 작성) -->
+	<resultMap type="memberDto" id="memberDto">
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="mPassword" column="PASSWORD"/>
+		<result property="mEmail" column="EMAIL"/>
+		<collection property="memberInfoDto" resultMap="memberInfoDto"/>
+	</resultMap>
+	<resultMap type="memberInfoDto" id="memberInfoDto">
+	</resultMap>
+	
+	
+	<!-- QUERY작성 -->
+	
+</mapper>

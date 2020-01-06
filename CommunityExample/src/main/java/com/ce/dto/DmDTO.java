@@ -1,11 +1,12 @@
 package com.ce.dto;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 
-public class DmDTO {
+public class DmDTO implements Serializable {
+	private static final long serialVersionUID = -7775720720583887484L;
 	private int dmIdx;
 	private String dmSenderId;
 	private String dmSenderNickname;

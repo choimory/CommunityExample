@@ -1,5 +1,5 @@
 package com.ce.dao;
 
-public interface AdminDAO {
 
+public interface AdminDAO {
 }

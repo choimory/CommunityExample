@@ -1,8 +1,8 @@
 package com.ce.controller;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +14,7 @@ import com.ce.component.SearchHelper;
 import com.ce.dto.BoardCommentDTO;
 import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardInfoDTO;
+import com.ce.dto.BoardTypeDTO;
 import com.ce.dto.BookmarkArticleDTO;
 import com.ce.dto.VoteCommentDTO;
 import com.ce.dto.VoteArticleDTO;
@@ -22,7 +23,7 @@ import com.ce.service.BoardService;
 
 @Controller
 public class BoardController {
-
+	@Autowired
 	private BoardService boardService;
 
 	public void setBoardService(BoardService boardService) {
@@ -139,11 +140,11 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/{bId}/{bIdx}/comment")
-	public String comment(Model model,BoardCommentDTO boardCommentDto, PageHelper pageHelper) {
+	public String comment(Model model,BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto, PageHelper pageHelper) {
 		String view=null;
 		List<BoardCommentDTO> boardCommentDtoList=null;
 		
-//		boardCommentDtoList=boardService.comment(boardCommentDto, pageHelper);
+//		boardCommentDtoList=boardService.comment(boardCommentDto, boardTypeDto, pageHelper);
 		
 		view="";//TODO ajax
 		model.addAttribute("title", "");
@@ -152,11 +153,11 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/{bId}/comment/write", method=RequestMethod.POST)
-	public String writeComment(Model model, BoardCommentDTO boardCommentDto) {
+	public String writeComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		String view=null;
 		int result=0;
 		
-//		result=boardService.writeComment(boardCommentDto);
+//		result=boardService.writeComment(boardCommentDto, boardTypeDto);
 		
 		view="Board/content";		// TODO 리다이렉트로 변경
 		model.addAttribute("title", "");
@@ -165,11 +166,11 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/{bId}/comment/modify", method=RequestMethod.POST)
-	public String modifyComment(Model model, BoardCommentDTO boardCommentDto) {
+	public String modifyComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		String view=null;
 		int result=0;
 		
-//		result=boardService.modifyComment(boardCommentDto);
+//		result=boardService.modifyComment(boardCommentDto, boardTypeDto);
 		
 		view="Board/content";		// TODO 리다이렉트로 변경
 		model.addAttribute("title", "");
@@ -178,11 +179,11 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/{bId}/comment/delete",method=RequestMethod.POST)
-	public String deleteComment(Model model,BoardCommentDTO boardCommentDto) {
+	public String deleteComment(Model model,BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto) {
 		String view=null;
 		int result=0;
 		
-//		result=boardService.deleteComment(boardCommentDto);
+//		result=boardService.deleteComment(boardCommentDto, boardTypeDto);
 		
 		view="Board/content";		// TODO 리다이렉트로 변경
 		model.addAttribute("title", "");
@@ -191,11 +192,11 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/{bId}/comment/reply")
-	public String replyComment(Model model, BoardCommentDTO boardCommentDto) {
+	public String replyComment(Model model, BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto) {
 		String view=null;
 		int result=0;
 		
-		result=boardService.replyComment(boardCommentDto);
+//		result=boardService.replyComment(boardCommentDto, boardTypeDto);
 		
 		// TODO 댓글 답글. 프론트에선 들여쓰기 최대 한칸만 적용
 		

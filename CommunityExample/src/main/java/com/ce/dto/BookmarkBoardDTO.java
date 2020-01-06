@@ -1,6 +1,9 @@
 package com.ce.dto;
 
-public class BookmarkBoardDTO {
+import java.io.Serializable;
+
+public class BookmarkBoardDTO implements Serializable {
+	private static final long serialVersionUID = -6031520007835587686L;
 	private String mId;
 	private String bType;
 	private String bId;

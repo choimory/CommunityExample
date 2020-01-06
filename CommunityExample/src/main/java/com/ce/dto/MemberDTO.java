@@ -1,11 +1,24 @@
 package com.ce.dto;
 
-public class MemberDTO {
+import java.io.Serializable;
+
+public class MemberDTO implements Serializable {
+	private static final long serialVersionUID = 7695195705679883936L;
 	private String mId;
-	private String mNickname;
 	private String mPassword;
+	private String mNickname;
 	private String mEmail;
 	private MemberInfoDTO memberInfoDto;
+	private MemberBanDTO memberBanDto;
+	
+
+	public MemberBanDTO getMemberBanDto() {
+		return memberBanDto;
+	}
+
+	public void setMemberBanDto(MemberBanDTO memberBanDto) {
+		this.memberBanDto = memberBanDto;
+	}
 
 	public String getmId() {
 		return mId;

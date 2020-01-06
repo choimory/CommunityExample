@@ -1,10 +1,13 @@
 package com.ce.dto;
 
-public class VoteCommentDTO {
+import java.io.Serializable;
+
+public class VoteCommentDTO implements Serializable {
+	private static final long serialVersionUID = -4747788034870824720L;
 	private String mId;
 	private String bType;
 	private String bId;
-	private String bcIdx;
+	private int bcIdx;
 	private int vUpDown;
 
 	public int getvUpDown() {
@@ -39,11 +42,11 @@ public class VoteCommentDTO {
 		this.bId = bId;
 	}
 
-	public String getBcIdx() {
+	public int getBcIdx() {
 		return bcIdx;
 	}
 
-	public void setBcIdx(String bcIdx) {
+	public void setBcIdx(int bcIdx) {
 		this.bcIdx = bcIdx;
 	}
 

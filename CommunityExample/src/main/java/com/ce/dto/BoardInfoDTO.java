@@ -1,15 +1,18 @@
 package com.ce.dto;
 
-public class BoardInfoDTO {
+import java.io.Serializable;
+
+public class BoardInfoDTO implements Serializable {
+	private static final long serialVersionUID = 6450534919628271431L;
 	private int bIdx;
 	private int bHit;
 	private int bUpvote;
 	private int bDownvote;
-	private int bCommentCnt;
-	private int bReportCnt;
-	private boolean bBlind;
-	private boolean bNotice;
-	private boolean bBest;
+	private int bCommentNum;
+	private int bReportNum;
+	private int bBlind;
+	private int bNotice;
+	private int bBest;
 
 	public int getbIdx() {
 		return bIdx;
@@ -43,43 +46,44 @@ public class BoardInfoDTO {
 		this.bDownvote = bDownvote;
 	}
 
-	public int getbCommentCnt() {
-		return bCommentCnt;
+	public int getbCommentNum() {
+		return bCommentNum;
 	}
 
-	public void setbCommentCnt(int bCommentCnt) {
-		this.bCommentCnt = bCommentCnt;
+	public void setbCommentNum(int bCommentNum) {
+		this.bCommentNum = bCommentNum;
 	}
 
-	public int getbReportCnt() {
-		return bReportCnt;
+	public int getbReportNum() {
+		return bReportNum;
 	}
 
-	public void setbReportCnt(int bReportCnt) {
-		this.bReportCnt = bReportCnt;
+	public void setbReportNum(int bReportNum) {
+		this.bReportNum = bReportNum;
 	}
 
-	public boolean isbBlind() {
+	public int getbBlind() {
 		return bBlind;
 	}
 
-	public void setbBlind(boolean bBlind) {
+	public void setbBlind(int bBlind) {
 		this.bBlind = bBlind;
 	}
 
-	public boolean isbNotice() {
+	public int getbNotice() {
 		return bNotice;
 	}
 
-	public void setbNotice(boolean bNotice) {
+	public void setbNotice(int bNotice) {
 		this.bNotice = bNotice;
 	}
 
-	public boolean isbBest() {
+	public int getbBest() {
 		return bBest;
 	}
 
-	public void setbBest(boolean bBest) {
+	public void setbBest(int bBest) {
 		this.bBest = bBest;
 	}
+
 }

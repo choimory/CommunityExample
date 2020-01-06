@@ -1,6 +1,9 @@
 package com.ce.dto;
 
-public class BoardFileDTO {
+import java.io.Serializable;
+
+public class BoardFileDTO implements Serializable {
+	private static final long serialVersionUID = 8660344123434609013L;
 	private int bfIdx;
 	private String bId;
 	private int bIdx;

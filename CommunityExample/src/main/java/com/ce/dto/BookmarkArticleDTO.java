@@ -1,6 +1,9 @@
 package com.ce.dto;
 
-public class BookmarkArticleDTO {
+import java.io.Serializable;
+
+public class BookmarkArticleDTO implements Serializable {
+	private static final long serialVersionUID = 1227100098226602298L;
 	private int baIdx;
 	private String mId;
 	private String bType;

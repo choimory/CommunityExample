@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ce.dao.DmDAO">
+	<resultMap type="dmDto" id="dmDto">
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<result property="" column=""/>
+		<collection property="pageHelper" resultMap=""></collection>
+		<collection property="searchHelper" resultMap=""></collection>	
+	</resultMap>
+	<resultMap type="pageHelper" id="pageHelper"></resultMap>
+	<resultMap type="searchHelper" id="searchHelper"></resultMap>
+</mapper>

@@ -1,11 +1,12 @@
 package com.ce.dto;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 
-public class ShopCommentDTO {
+public class ShopCommentDTO implements Serializable {
+	private static final long serialVersionUID = 9060615446736656036L;
 	private int scIdx;
 	private int sIdx;
 	private String mId;
@@ -17,7 +18,16 @@ public class ShopCommentDTO {
 	private int scIndent;
 	private ShopCommentInfoDTO shopCommentInfoDto;
 	private PageHelper pageHelper;
+	private SearchHelper searchHelper;
 	
+
+	public SearchHelper getSearchHelper() {
+		return searchHelper;
+	}
+
+	public void setSearchHelper(SearchHelper searchHelper) {
+		this.searchHelper = searchHelper;
+	}
 
 	public String getmId() {
 		return mId;

@@ -1,6 +1,9 @@
 package com.ce.dto;
 
-public class VoteArticleDTO {
+import java.io.Serializable;
+
+public class VoteArticleDTO implements Serializable {
+	private static final long serialVersionUID = -201453147170542071L;
 	private String mId;
 	private String bType;
 	private String bId;
