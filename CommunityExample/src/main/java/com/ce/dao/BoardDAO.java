@@ -41,7 +41,7 @@ public interface BoardDAO {
 	public int write(BoardDTO boardDto); // insert
 	public int writeInfo(BoardDTO boardDto); //insert
 	public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); // insert
-	public BoardTypeDTO getBoardCategories(BoardDTO boardDto); // select bCategory where bId
+	public List<String> getBoardCategories(BoardDTO boardDto); // select bCategory where bId
 	public int modifyBoard(BoardDTO boardDto);//update board
 	public int modifyBoardInfo(BoardDTO boardDto); // update board info
 	public int modifyBoardFile(BoardDTO boardDto);//update boardfile
@@ -57,6 +57,4 @@ public interface BoardDAO {
 	public int checkReportAlready(BoardDTO boardDto); //count where mId, bId, bIdx
 	public int updateReportNum(BoardDTO boardDto); // update reportnum +_1
 	public int writeReportArticle(BoardDTO boardDto);//insert
-	
-	
 }

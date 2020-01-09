@@ -19,5 +19,4 @@ public interface BoardCommentDAO {
 	public int checkVoteCommentAlready(VoteCommentDTO voteCommentDto);//count where mId, bId, bcIdx
 	public int updateCommentVoteNum(VoteCommentDTO voteCommentDto); // update vote +_1 where bcIdx
 	public int writeVoteCommentInfo(VoteCommentDTO voteCommentDto); //insert
-	
 }

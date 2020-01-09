@@ -94,7 +94,9 @@ public class ShopServiceImpl implements ShopService{
 		
 		//상점테이블에 row 등록
 		result=shopDao.write(shopDto);
-		
+		if(result==SUCCESS){
+			result=shopDao.writeInfo(shopDto);
+		}
 		return result;
 	}
 
@@ -103,7 +105,7 @@ public class ShopServiceImpl implements ShopService{
 		ShopDTO shopDto = null;
 		
 		//해당글 가져오기
-		shopDto=shopDao.getShopDTO(sIdx);
+		shopDto=shopDao.getShopDto(sIdx);
 		
 		return shopDto;
 	}
@@ -124,6 +126,7 @@ public class ShopServiceImpl implements ShopService{
 		
 		//row 삭제
 		result=shopDao.delete(sIdx);
+		result=shopDao.deleteInfo(sIdx);
 		
 		return result;
 	}
@@ -134,6 +137,7 @@ public class ShopServiceImpl implements ShopService{
 		
 		//sIndex와 연관짓는 댓글 row 등록
 		result=shopDao.writeComment(shopCommentDto);
+		result=shopDao.writeCommmentInfo(shopCommentDto);
 		
 		return result;
 	}
@@ -144,6 +148,7 @@ public class ShopServiceImpl implements ShopService{
 		
 		//해당 row 삭제
 		result=shopDao.deleteComment(scIdx);
+		result=shopDao.deleteCommentInfo(scIdx);
 		
 		return result;
 	}

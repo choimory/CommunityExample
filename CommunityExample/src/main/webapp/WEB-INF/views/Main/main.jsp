@@ -4,7 +4,7 @@
 
 
 <%@ include file="../include/header.jsp"%>
-<div class="container bg-white col-lg-8 p-4">
+<div class="container bg-white col-lg-8 p-4" style="font-size: 14px;">
 
 
 	<!-- start of content -->

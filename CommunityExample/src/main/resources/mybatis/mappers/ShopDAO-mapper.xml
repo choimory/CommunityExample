@@ -1,5 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-  <cache-ref namespace="com.ce.dao.ShopDAO"/>
+<mapper namespace="com.ce.dao.ShopDAO">
+	<resultMap type="shopDto" id="shopDto">
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="sType" column="SHOP_TYPE"/>
+		<result property="sCategory" column="SHOP_CATEGORY"/>
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="sTitle" column="SHOP_TITLE"/>
+		<result property="sContent" column="SHOP_CONTENT"/>
+		<result property="sFileName" column="SHOP_FILENAME"/>
+		<result property="sPrice" column="SHOP_PRICE"/>
+		<result property="sRegDate" column="SHOP_REGDATE"/>
+		<collection property="shopInfoDto" resultMap="shopInfoDto"/>
+	</resultMap>
+	<resultMap type="shopInfoDto" id="shopInfoDto">
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="sHit" column="SHOP_HIT"/>
+		<result property="sUpvote" column="SHOP_UPVOTE"/>
+		<result property="sDownvote" column="SHOP_DOWNVOTE"/>
+		<result property="sCommentNum" column="SHOP_COMMENTNUM"/>
+		<result property="sReportNum" column="SHOP_REPORTNUM"/>
+		<result property="sPermission" column="SHOP_PERMISSION"/>
+		<result property="sBlind" column="SHOP_BLIND"/>
+	</resultMap>
+	<resultMap type="shopCommentDto" id="shopCommentDto">
+		<result property="scIdx" column="S_COMMENT_INDEX"/>
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="scContent" column="S_COMMENT_CONTENT"/>
+		<result property="scRegDate" column="S_COMMENT_REGDATE"/>
+		<result property="scGroup" column="S_COMMENT_GROUP"/>
+		<result property="scStep" column="S_COMMENT_STEP"/>
+		<result property="scIndent" column="S_COMMENT_INDENT"/>
+		<collection property="shopCommentInfoDto" resultMap="shopCommentInfoDto"/>
+	</resultMap>
+	<resultMap type="shopCommentInfoDto" id="shopCommentInfoDto">
+		<result property="scIdx" column="S_COMMENT_INDEX"/>
+		<result property="sciUpvote" column="S_COMMENT_UPVOTE"/>
+		<result property="sciDownvote" column="S_COMMENT_DOWNVOTE"/>
+		<result property="sciReportNum" column="S_COMMENT_REPORTNUM"/>
+		<result property="sciBlind" column="S_COMMENT_BLIND"/>
+		<result property="sciNotice" column="S_COMMENT_NOTICE"/>
+		<result property="sciBest" column="S_COMMENT_BEST"/>
+	</resultMap>
+	<resultMap type="wishlistDto" id="wishlistDto">
+		<result property="wIdx" column="WISHLIST_INDEX"/>
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="mId" column="ID"/>
+		<collection property="shopDto" resultMap="shopDto"/>
+	</resultMap>
+	
+	<select id="waitingPermissionList" parameterType="com.ce.component.PageHelper" resultMap="shopDto">
+	</select>
+	<update id="permission" parameterType="int">
+	</update>
+	<select id="getWishlistDTO" parameterType="string" resultMap="wishlistDto">
+	</select>
+	
+	<!-- 얘 반환타입 어떻게 해야하는지 확인 -->
+	<select id="main" resultMap="shopDto"></select>
+	
+	<select id="iconList" parameterType="shopDto" resultMap="shopDto">
+	</select>
+	<select id="content" parameterType="int" resultMap="shopDto">
+	</select>
+	<select id="comment" parameterType="shopCommentDto" resultMap="shopCommentDto">
+	</select>
+	<insert id="write" parameterType="shopDto">
+	</insert>
+	<insert id="writeInfo" parameterType="shopDto">
+	</insert>
+	<select id="getShopDto" parameterType="int" resultMap="shopDto">
+	</select>
+	<update id="modify" parameterType="shopDto">
+	</update>
+	<delete id="delete" parameterType="int">
+	</delete>
+	<delete id="deleteInfo" parameterType="int">
+	</delete>
+	<insert id="writeComment" parameterType="shopCommentDto">
+	</insert>
+	<insert id="writeCommmentInfo" parameterType="shopCommentDto">
+	</insert>
+	<delete id="deleteComment" parameterType="int">
+	</delete>
+	<delete id="deleteCommentInfo" parameterType="int">
+	</delete>
+	<update id="modifyComment" parameterType="shopCommentDto">
+	</update>
+	<select id="search" parameterType="shopDto" resultMap="shopDto">
+	</select>
+	<select id="countReport" parameterType="shopDto" resultType="int">
+	</select>
+	<update id="increaseReport" parameterType="shopDto">
+	</update>
+	<insert id="writeReportInfo" parameterType="shopDto">
+	</insert>
+	<select id="countVoteArticle" parameterType="shopDto" resultType="int">
+	</select>
+	<update id="thumbsUpArticle" parameterType="shopDto">
+	</update>
+	<update id="thumbsDownArticle" parameterType="shopDto">
+	</update>
+	<insert id="writeVoteArticleInfo" parameterType="shopDto">
+	</insert>
+	<select id="countVoteComment" parameterType="shopCommentDto" resultType="int">
+	</select>
+	<update id="thumbsUpComment" parameterType="shopCommentDto">
+	</update>
+	<update id="thumbsDownComment" parameterType="shopCommentDto">
+	</update>
+	<insert id="writeVoteCommentInfo" parameterType="shopCommentDto">
+	</insert>
 </mapper>

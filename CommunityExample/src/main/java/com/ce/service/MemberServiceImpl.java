@@ -63,8 +63,9 @@ public class MemberServiceImpl implements MemberService {
 		if (result == FAIL) {
 			memberDto = null;
 		} else if (result == SUCCESS) {
+			result=memberDao.insertMemberInfo(memberDto);
 			// 3. insert한 memberDto 받아오기
-			memberDto = memberDao.getMemberDto(memberDto);
+			memberDto = memberDao.getMemberDto(memberDto.getmId());
 		}
 
 		return memberDto;

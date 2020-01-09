@@ -2,18 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ce.dao.DmDAO">
 	<resultMap type="dmDto" id="dmDto">
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<result property="" column=""/>
-		<collection property="pageHelper" resultMap=""></collection>
-		<collection property="searchHelper" resultMap=""></collection>	
+		<result property="dmIdx" column="DM_INDEX"/>
+		<result property="dmSenderId" column="DM_SENDER_ID"/>
+		<result property="dmSenderNickname" column="DM_SENDER_NICKNAME"/>
+		<result property="dmSendDate" column="DM_SENDDATE"/>
+		<result property="dmReceiverId" column="DM_RECEIVER_ID"/>
+		<result property="dmReceiverNickname" column="DM_RECEIVER_NICKNAME"/>
+		<result property="dmReceiveDate" column="DM_RECEIVEDATE"/>
+		<result property="dmTitle" column="DM_TITLE"/>
+		<result property="dmContent" column="DM_CONTENT"/>
 	</resultMap>
-	<resultMap type="pageHelper" id="pageHelper"></resultMap>
-	<resultMap type="searchHelper" id="searchHelper"></resultMap>
+	
+	<select id="list" parameterType="dmDto" resultMap="dmDto">
+	</select>
+	<select id="content" parameterType="int" resultMap="dmDto">
+	</select>
+	<update id="firstRead" parameterType="int">
+	</update>
+	<insert id="write" parameterType="dmDto">
+	</insert>
+	<select id="search" parameterType="dmDto" resultMap="dmDto">
+	</select>
+	<delete id="delete" parameterType="int">
+	</delete>
+	
 </mapper>

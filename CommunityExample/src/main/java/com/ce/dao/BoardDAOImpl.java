@@ -3,6 +3,7 @@ package com.ce.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.ce.component.PageHelper;
@@ -22,194 +23,416 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public List<BoardDTO> reportList() {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		List<BoardDTO> boardDtoList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardDtoList;
 	}
 
 	@Override
 	public List<BoardDTO> reportList(PageHelper pageHelper) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		List<BoardDTO> boardDtoList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardDtoList;
 	}
 
 	@Override
 	public List<BoardDTO> reportList(Map<String, Object> paramMap) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		List<BoardDTO> boardDtoList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardDtoList;
 	}
 
 	@Override
 	public int createBoard(BoardTypeDTO boardTypeDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int blind(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardType=boardDto.getBoardTypeDto().getbType();
+		String sql = "UPDATE "+boardType+" SET BOARD_BLIND=? WHERE BOARD_INDEX=?";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public BoardTypeDTO getBoardType(BoardTypeDTO boardTypeDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardTypeDto;
 	}
 
 	@Override
 	public BoardTypeDTO getBoardType(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		BoardTypeDTO boardTypeDto=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardTypeDto;
 	}
 
 	@Override
 	public BoardTypeDTO getBoardType(BoardCommentDTO boardCommentDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		BoardTypeDTO boardTypeDto=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardTypeDto;
 	}
 
 	@Override
 	public BoardTypeDTO getBoardType(String bId) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		BoardTypeDTO boardTypeDto=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardTypeDto;
 	}
 
 	@Override
 	public String getbType(String bId) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		String bType=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return bType;
 	}
 
 	@Override
 	public Map<String, List<BoardDTO>> main() {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		Map<String,List<BoardDTO>> resultMap=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return resultMap;
 	}
 
 	@Override
 	public List<BoardDTO> list(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		List<BoardDTO> boardDtoList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardDtoList;
 	}
 
 	@Override
 	public List<String> getBoardIdList() {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		List<String> boardIdList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardIdList;
 	}
 
 	@Override
 	public BoardDTO content(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardDto;
 	}
 
 	@Override
 	public int write(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int writeInfo(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
-	public BoardTypeDTO getBoardCategories(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getBoardCategories(BoardDTO boardDto) {
+		String boardId = null;
+		String sql = "";
+		List<String> boardCategoryList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardCategoryList;
 	}
 
 	@Override
 	public int modifyBoard(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int modifyBoardInfo(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int modifyBoardFile(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int deleteBoard(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int deleteBoardInfo(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result =0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int deleteBoardFile(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public List<BoardDTO> search(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String boardId = null;
+		String sql = "";
+		List<BoardDTO> boardDtoList=null;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return boardDtoList;
 	}
 
 	@Override
 	public int bookmarkArticle(BookmarkArticleDTO bookmarkArticleDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int checkVoteArticleAlready(VoteArticleDTO voteArticleDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int updateVoteNum(VoteArticleDTO voteArticleDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int writeVoteInfo(VoteArticleDTO voteArticleDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int checkReportAlready(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int updateReportNum(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int writeReportArticle(BoardDTO boardDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String boardId = null;
+		String sql = "";
+		int result=0;
+		
+		try {
+		} catch (DataAccessException e) {
+		}
+		
+		return result;
 	}
-	
+
 }

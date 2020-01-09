@@ -9,10 +9,11 @@ public interface MemberDAO {
 	public int ban(MemberDTO memberDto); //update ban, update endToban where mId
 	public int idCheck(String mId); // count where mId
 	public int emailCheck(String mEmail); // count where mEmail
-	public int join(MemberDTO memberDto); // insert memberDto
+	public int join(MemberDTO memberDto); // insert member values memberDto
+	public int insertMemberInfo(MemberDTO memberDto); // insert memberInfo values
 	public int findAccount(MemberDTO memberDto); // update password where mEmail
 	public String getPassword(String mId); // select mPw where mId
-	public MemberDTO getMemberDto(MemberDTO memberDto); // select all where mId
+//	public MemberDTO getMemberDto(MemberDTO memberDto); // select all where mId
 	public MemberDTO getMemberDto(String mId); // select all where mId
 	public MemberItemDTO getMemberItem(String mId); // select all where mId
 	public BookmarkBoardDTO getBookmarkBoardDTO(String mId); //select all where mId

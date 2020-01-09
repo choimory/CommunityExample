@@ -8,12 +8,122 @@
 		<result property="mNickname" column="NICKNAME"/>
 		<result property="mPassword" column="PASSWORD"/>
 		<result property="mEmail" column="EMAIL"/>
+		<collection property="memberBanDto" resultMap="memberBanDto"/>
 		<collection property="memberInfoDto" resultMap="memberInfoDto"/>
 	</resultMap>
-	<resultMap type="memberInfoDto" id="memberInfoDto">
+	<resultMap type="memberBanDto" id="memberBanDto">
+		<result property="mId" column="ID"/>
+		<result property="mBan" column="BAN"/>
+		<result property="mReason" column="REASON"/>
+		<result property="mEndToBan" column="ENDTOBAN"/>
 	</resultMap>
-	
-	
-	<!-- QUERY작성 -->
-	
+	<resultMap type="memberInfoDto" id="memberInfoDto">
+		<result property="mId" column="ID"/>
+		<result property="mExp" column="EXP"/>
+		<result property="mPoint" column="POINT"/>
+		<result property="mEquipItem" column="EQUIP_ITEM"/>
+		<result property="mRegDate" column="REGDATE"/>
+		<result property="mLoginDate" column="LOGINDATE"/>
+		<result property="mAdmin" column="ADMIN"/>
+	</resultMap>
+	<resultMap type="memberItemDto" id="memberItemDto">
+		<result property="mId" column="ID"/>
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<collection property="shopDto" resultMap="shopDto"/>
+	</resultMap>
+	<resultMap type="bookmarkBoardDto" id="bookmarkBoardDto">
+		<result property="mId" column="ID"/>
+		<result property="bType" column="BOARD_TYPE"/>
+		<result property="bId" column="BOARD_ID"/>
+	</resultMap>
+	<resultMap type="bookmarkArticleDto" id="bookmarkArticleDto">
+		<result property="baIdx" column="BOOKMARK_INDEX"/>
+		<result property="mId" column="ID"/>
+		<result property="bType" column="BOARD_TYPE"/>
+		<result property="bId" column="BOARD_ID"/>
+		<result property="bIdx" column="BOARD_INDEX"/>
+		<collection property="boardDto" resultMap="boardDto"/>
+	</resultMap>
+	<resultMap type="boardDto" id="boardDto">
+		<result property="bIdx" column="BOARD_INDEX"/>
+		<result property="bId" column="BOARD_ID"/>
+		<result property="bCategory" column="BOARD_CATEGORY"/>
+		<result property="bTitle" column="BOARD_TITLE"/>
+		<result property="bContent" column="BOARD_CONTENT"/>
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="bRegDate" column="BOARD_REGDATE"/>
+		<collection property="boardInfoDto" resultMap="boardInfoDto"/>
+		<collection property="boardTypeDto" resultMap="boardTypeDto"/>		
+	</resultMap>
+	<resultMap type="boardInfoDto" id="boardInfoDto">
+		<result property="bIdx" column="BOARD_INDEX"/>
+		<result property="bHit" column="BOARD_HIT"/>
+		<result property="bUpvote" column="BOARD_UPVOTE"/>
+		<result property="bDownvote" column="BOARD_DOWNVOTE"/>
+		<result property="bCommentNum" column="BOARD_COMMENTNUM"/>
+		<result property="bReportNum" column="BOARD_REPORTNUM"/>
+		<result property="bBlind" column="BOARD_BLIND"/>
+		<result property="bNotice" column="BOARD_NOTICE"/>
+		<result property="bBest" column="BOARD_BEST"/>
+	</resultMap>
+	<resultMap type="boardTypeDto" id="boardTypeDto">
+		<result property="bId" column="BOARD_ID"/>
+		<result property="bType" column="BOARD_TYPE"/>
+		<result property="bCategory" column="BOARD_CATEGORY"/>
+		<result property="bIdKor" column="BOARD_ID_KOR"/>
+		<result property="bTypeKor" column="BOARD_TYPE_KOR"/>
+	</resultMap>
+	<resultMap type="shopDto" id="shopDto">
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="sType" column="SHOP_TYPE"/>
+		<result property="sCategory" column="SHOP_CATEGORY"/>
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="sTitle" column="SHOP_TITLE"/>
+		<result property="sContent" column="SHOP_CONTENT"/>
+		<result property="sFileName" column="SHOP_FILENAME"/>
+		<result property="sPrice" column="SHOP_PRICE"/>
+		<result property="sRegDate" column="SHOP_REGDATE"/>
+		<collection property="shopInfoDto" resultMap="shopInfoDto"/>
+	</resultMap>
+	<resultMap type="shopInfoDto" id="shopInfoDto">
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="sHit" column="SHOP_HIT"/>
+		<result property="sUpvote" column="SHOP_UPVOTE"/>
+		<result property="sDownvote" column="SHOP_DOWNVOTE"/>
+		<result property="sCommentNum" column="SHOP_COMMENTNUM"/>
+		<result property="sReportNum" column="SHOP_REPORTNUM"/>
+		<result property="sPermission" column="SHOP_PERMISSION"/>
+		<result property="sBlind" column="SHOP_BLIND"/>
+	</resultMap>
+
+	<update id="ban" parameterType="memberDto">
+	</update>
+	<select id="idCheck" parameterType="string" resultType="int">
+	</select>
+	<select id="emailCheck" parameterType="string" resultType="int">
+	</select>
+	<insert id="join" parameterType="memberDto">
+	</insert>
+	<insert id="insertMemberInfo" parameterType="memberDto">
+	</insert>
+	<update id="findAccount" parameterType="memberDto">
+	</update>
+	<select id="getPassword" parameterType="string" resultType="string">
+	</select>
+	<select id="getMemberDto" parameterType="string" resultMap="memberDto">
+	</select>
+	<select id="getMemberItem" parameterType="string" resultMap="memberItemDto">
+	</select>
+	<select id="getBookmarkBoardDTO" parameterType="string" resultMap="bookmarkBoardDto">
+	</select>
+	<select id="getBookmarkArticleDTO" parameterType="string" resultMap="bookmarkArticleDto">
+	</select>
+	<update id="modifyInfo" parameterType="memberDto">
+	</update>
+	<delete id="deleteMember" parameterType="memberDto">
+	</delete>
+	<delete id="deleteMemberInfo" parameterType="memberDto">
+	</delete>
 </mapper>

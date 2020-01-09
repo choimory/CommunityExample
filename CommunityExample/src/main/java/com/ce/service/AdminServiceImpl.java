@@ -107,10 +107,11 @@ public class AdminServiceImpl implements AdminService{
 		Map<String, Object> dtoListMap = null;
 		List<BoardDTO> boardDtoList=null;
 		List<ShopDTO> shopDtoList=null;
+		PageHelper pageHelper=new PageHelper();
 		
 		//checkItem 최신글, checkReport 최신글 5개정도 가져오기
 		boardDtoList=boardDao.reportList(); // TODO 모든게시판을 탐색해야 하는 문제
-		shopDtoList=shopDao.waitingPermissionList();
+		shopDtoList=shopDao.waitingPermissionList(pageHelper);
 		dtoListMap.put("boardDtoList", boardDtoList);
 		dtoListMap.put("shopDtoList", shopDtoList);
 		

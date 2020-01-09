@@ -64,6 +64,7 @@ public class BoardServiceImpl implements BoardService {
 	public Map<String, Object> list(String bId, PageHelper pageHelper) {
 		Map<String, Object> listMap = null;
 		BoardTypeDTO boardTypeDto = null;
+		List<String> boardCategoryList=null;
 		List<BoardDTO> boardDtoList = null;
 		BoardDTO boardDto = null;
 
@@ -76,12 +77,12 @@ public class BoardServiceImpl implements BoardService {
 			// 3. bType에 해당되는 테이블에서 page를 이용해서 BoardDTO 20개 가져오기
 			boardDtoList = boardDao.list(boardDto);
 			// 4.해당게시판의 bCategory모음 가져오기
-			boardTypeDto = boardDao.getBoardCategories(boardDto);
+			boardCategoryList = boardDao.getBoardCategories(boardDto);
 			// 5.해당게시판이 북마크된 게시판인지 확인
 			// 6.put
 			listMap = new HashMap<String, Object>();
 			listMap.put("boardDtoList", boardDtoList);
-			listMap.put("boardTypeDto", boardTypeDto);
+			listMap.put("boardCategoryList", boardCategoryList);
 		}
 
 		return listMap;
@@ -90,6 +91,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Map<String, Object> content(String bId, String stringBoardIdx) {
 		Map<String, Object> contentMap = null;
+		List<String> boardCategoryList=null;
 		BoardDTO boardDto = null;
 		List<BoardCommentDTO> boardCommentDtoList = null;
 		BoardTypeDTO boardTypeDto = null;
@@ -106,14 +108,14 @@ public class BoardServiceImpl implements BoardService {
 				// 3.해당 bIdx의 boardCommentDtoList가져오기
 				boardCommentDtoList = boardCommentDao.commentList(boardDto);
 				// 4.해당게시판의 bCategory모음 가져오기
-				boardTypeDto = boardDao.getBoardCategories(boardDto);
+				boardCategoryList = boardDao.getBoardCategories(boardDto);
 				// 5.해당게시판이 북마크된 게시판인지 확인
 				// 6.해당게시물이 북마크된 게시물인지 확인
 				// 7.put
 				contentMap = new HashMap<String, Object>();
 				contentMap.put("boardDto", boardDto);
 				contentMap.put("boardCommentDtoList", boardCommentDtoList);
-
+				contentMap.put("boardCategoryList", boardCategoryList);
 			}
 		}
 
