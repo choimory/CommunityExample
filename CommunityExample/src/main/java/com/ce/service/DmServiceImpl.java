@@ -31,12 +31,15 @@ public class DmServiceImpl implements DmService {
 	@Override
 	public List<DmDTO> list(String mId,DmDTO dmDto, PageHelper pageHelper) {
 		List<DmDTO> dmDtoList = null;
+		
+		pageHelper.list();
+		pageHelper.pagination2(dmDao.getTotalRow(mId));
 		dmDto.setPageHelper(pageHelper);
 		dmDto.setDmReceiverId(mId);
 	
 		// dmReceiverId를 대상으로 page를 이용해 최신순 20개 select
 		dmDtoList = dmDao.list(dmDto);
-
+		
 		return dmDtoList;
 	}
 
@@ -48,7 +51,7 @@ public class DmServiceImpl implements DmService {
 		if (stringIdxToInteger(stringDmIdx) != FAIL) {
 			dmIdx=stringIdxToInteger(stringDmIdx);
 			dmDto = dmDao.content(dmIdx);
-			// receivedate값이 없을시 receivedate를 현재날짜로 수정
+			// receiveDate값이 없을시 receiveDate를 현재날짜로 수정
 			if (dmDto.getDmReceiveDate() == null) {
 				dmDao.firstRead(dmIdx);
 			}
@@ -58,17 +61,21 @@ public class DmServiceImpl implements DmService {
 	}
 
 	@Override
-	public int write(MemberDTO memberDto,DmDTO dmDto) {
+	public int write(DmDTO dmDto) {
 		int result = 0;
 
 		 result=dmDao.write(dmDto);
+		 if(result!=SUCCESS) {
+			 result=FAIL;
+		 }
 
 		return result;
 	}
 
 	@Override
-	public List<DmDTO> search(String mId, DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
-		dmDto.setDmReceiverId(mId);
+	public List<DmDTO> search(DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
+		pageHelper.list();
+		pageHelper.pagination2(dmDao.getTotalRow(dmDto.getDmReceiverId()));
 		dmDto.setSearchHelper(searchHelper);
 		dmDto.setPageHelper(pageHelper);
 		List<DmDTO> dmDtoList = null;
@@ -84,6 +91,9 @@ public class DmServiceImpl implements DmService {
 		int result = 0;
 
 		 result=dmDao.delete(dmIdx);
+		 if(result!=SUCCESS) {
+			 result=FAIL;
+		 }
 
 		return result;
 	}

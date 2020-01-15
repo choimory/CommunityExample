@@ -14,6 +14,8 @@ import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 import com.ce.dto.ShopCommentDTO;
 import com.ce.dto.ShopDTO;
+import com.ce.dto.ShopVoteArticleDTO;
+import com.ce.dto.ShopVoteCommentDTO;
 import com.ce.service.ShopService;
 
 @Controller
@@ -42,26 +44,26 @@ public class ShopController {
 		return view;
 	}
 
-	@RequestMapping(value = "/icon")
-	public String iconList(Model model, ShopDTO shopDto, PageHelper pageHelper) {
+	@RequestMapping(value = {"/list","/icon"})
+	public String list(Model model, ShopDTO shopDto, PageHelper pageHelper) {
 		String view = "Shop/list";
-		List<ShopDTO> iconDtoList = null;
+		List<ShopDTO> shopDtoList = null;
 
-//		iconDtoList=shopService.iconList(shopDto, pageHelper);
-//		if(iconDtoList==null) {	
+//		shopDtoList=shopService.list(shopDto, pageHelper);
+//		if(shopDtoList==null) {	
 //		}
 
 		model.addAttribute("title", "");
-		model.addAttribute("iconDtoList", iconDtoList);
+		model.addAttribute("shopDtoList", shopDtoList);
 		return view;
 	}
 
 	@RequestMapping(value = "/{sIdx}")
-	public String content(Model model, @PathVariable("sIdx")String stringShopIdx) {
+	public String content(Model model, @PathVariable("sIdx")String stringShopIdx, PageHelper pageHelper) {
 		String view = "Shop/content";
 		Map<String, Object> contentMap = null;
 
-//		contentMap=shopService.content(stringShopIdx);
+//		contentMap=shopService.content(stringShopIdx, pageHelper);
 //		if(contentMap==null) {			
 //		}
 		
@@ -264,11 +266,11 @@ public class ShopController {
 	}
 
 	@RequestMapping(value = "/thumbsUpContent")
-	public String thumbsUpContent(Model model, ShopDTO shopDto) {
+	public String thumbsUpContent(Model model, ShopVoteArticleDTO shopVoteArticleDto) {
 		String view = ""; // TODO ajax
 		int result = 0;
 
-//		result=shopService.thumbsUpContent(shopDto);
+//		result=shopService.thumbsUpContent(shopVoteArticleDto);
 //		if(result==FAIL) {
 //			
 //		}
@@ -278,11 +280,11 @@ public class ShopController {
 	}
 
 	@RequestMapping(value = "/thumbsDownContent")
-	public String thumbsDownContent(Model model, ShopDTO shopDto) {
+	public String thumbsDownContent(Model model, ShopVoteArticleDTO shopVoteArticleDto) {
 		String view = ""; // TODO ajax
 		int result = 0;
 
-//		result=shopService.thumbsDownContent(shopDto);
+//		result=shopService.thumbsDownContent(shopVoteArticleDto);
 //		if(result==FAIL) {
 //		
 //	}
@@ -292,11 +294,11 @@ public class ShopController {
 	}
 
 	@RequestMapping(value = "/thumbsUpComment")
-	public String thumbsUpComment(Model model, ShopCommentDTO shopCommentDto) {
+	public String thumbsUpComment(Model model, ShopVoteCommentDTO shopVoteCommentDto) {
 		String view = ""; // TODO ajax
 		int result = 0;
 
-//		result=shopService.thumbsUpComment(shopCommentDto);
+//		result=shopService.thumbsUpComment(shopVoteCommentDto);
 //		if(result==FAIL) {
 //		
 //	}
@@ -306,11 +308,11 @@ public class ShopController {
 	}
 
 	@RequestMapping(value = "/thumbsDownComment")
-	public String thumbsDownComment(Model model, ShopCommentDTO shopCommentDto) {
+	public String thumbsDownComment(Model model, ShopVoteCommentDTO shopVoteCommentDto) {
 		String view = ""; // TODO ajax
 		int result = 0;
 
-//		result=shopService.thumbsDownComment(shopCommentDto);
+//		result=shopService.thumbsDownComment(shopVoteCommentDto);
 //		if(result==FAIL) {
 //		
 //	}

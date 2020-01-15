@@ -15,7 +15,7 @@ import com.ce.dto.MemberDTO;
 public class MemberServiceImpl implements MemberService {
 	private MemberDAO memberDao;
 	private ShopDAO shopDao;
-	@Resource(name="hashHelper")
+	@Resource(name = "hashHelper")
 	private HashHelper hashHelper;
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;
@@ -38,6 +38,11 @@ public class MemberServiceImpl implements MemberService {
 
 		// 받은 id로 검색해서 데이터 유무 확인
 		result = memberDao.idCheck(mId);
+		if (result == 1) {
+			result = FAIL;
+		} else if (result == 0) {
+			result = SUCCESS;
+		}
 
 		return result;
 	}
@@ -48,6 +53,11 @@ public class MemberServiceImpl implements MemberService {
 
 		// 받은 email로 검색해서 데이터 유무 확인
 		result = memberDao.emailCheck(mEmail);
+		if (result == 1) {
+			result = FAIL;
+		} else if (result == 0) {
+			result =SUCCESS;
+		}
 
 		return result;
 	}
@@ -60,12 +70,12 @@ public class MemberServiceImpl implements MemberService {
 		memberDto.setmPassword(hashHelper.hashByBCrypt(memberDto.getmPassword()));
 		// 2.insert
 		result = memberDao.join(memberDto);
-		if (result == FAIL) {
-			memberDto = null;
-		} else if (result == SUCCESS) {
-			result=memberDao.insertMemberInfo(memberDto);
+		if (result == SUCCESS) {
+			result = memberDao.insertMemberInfo(memberDto.getmId());
 			// 3. insert한 memberDto 받아오기
 			memberDto = memberDao.getMemberDto(memberDto.getmId());
+		} else if (result != SUCCESS) {
+			memberDto = null;
 		}
 
 		return memberDto;
@@ -90,7 +100,7 @@ public class MemberServiceImpl implements MemberService {
 		result = memberDao.findAccount(memberDto);
 		// TODO 5.변경한 비밀번호 email로 전송
 
-		return result;
+		return randomPassword;
 	}
 
 	@Override
@@ -99,13 +109,13 @@ public class MemberServiceImpl implements MemberService {
 		String hashedPassword = null;
 
 		// 1.form에서 입력한 mId를 조건으로 db에서 pw만 가져오기
-		// TODO id로 검색한 결과가 없을때 hashedPassword에 반환될 값은??
-		hashedPassword = memberDao.getPassword(memberDto.getmId());
+		hashedPassword = memberDao.getPassword(memberDto.getmId()); // TODO id로 검색한 결과가 없을때 hashedPassword에 반환될 값은??
 		// 2.form에서 넘어온 pw와 db의 pw를 해싱컴포넌트에서 비교
 		if (!hashedPassword.equals("1이 실패시 저장될값")) {
 			result = hashHelper.matchByBCrypt(memberDto.getmPassword(), hashedPassword);
-			// 3.비밀번호 일치시 memberDto 가져오기
+			// 3.비밀번호 일치시 logindate수정, memberDto 가져오기
 			if (result) {
+				memberDao.login(memberDto.getmId());
 				memberDto = memberDao.getMemberDto(memberDto.getmId());
 			} else {
 				memberDto = null;
@@ -136,7 +146,10 @@ public class MemberServiceImpl implements MemberService {
 		int result = 0;
 
 		// 입력한 값으로 해당회원 정보수정
-//		result=memberDao.modifyInfo(memberDto);
+		result = memberDao.modify(memberDto);
+		if(result!=SUCCESS) {
+			result=FAIL;
+		}
 
 		return result;
 	}
@@ -147,16 +160,12 @@ public class MemberServiceImpl implements MemberService {
 		String hashedPassword = null;
 
 		// 1.mId를 조건으로 db에서 pw만 가져오기
-		// TODO 검색결과가 없을때 hashedPassword에 반환될 값은??
-		hashedPassword = memberDao.getPassword(memberDto.getmId());
+		hashedPassword = memberDao.getPassword(memberDto.getmId());	// TODO 검색결과가 없을때 hashedPassword에 반환될 값은??
 		// 2.입력한 pw와 db의 pw를 해싱컴포넌트에서 비교
 		if (!hashedPassword.equals("1의 결과가 없을때 저장될 값")) {
 			if (hashHelper.matchByBCrypt(memberDto.getmPassword(), hashedPassword)) {
 				// 3.해당 회원에 관련된 기본정보 삭제
-				result = memberDao.deleteMember(memberDto);
-				if (result == SUCCESS) {
-					memberDao.deleteMemberInfo(memberDto);
-				}
+				result = memberDao.deleteMember(memberDto.getmId());
 			}
 		}
 

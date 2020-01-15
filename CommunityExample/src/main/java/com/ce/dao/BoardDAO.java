@@ -23,38 +23,47 @@ public interface BoardDAO {
 //	BoardDAO에 테이블별 DAO메소드을 쓸것이냐(메소드가 많아짐, 유지보수 떨어짐) -> 4안
 	
 	
-	public List<BoardDTO> reportList(); // report n개 이상인글 최신순 다섯개정도 가져오기 TODO 모든게시판에서 가져와야 하는 문제
 	public List<BoardDTO> reportList(PageHelper pageHelper);//blind가 false인 글들중 report개수가 n개 이상인 글들을 page를 이용해 최신순 20개 select //TODO 모든게시판을 탐색해야 하는 문제->union
-	public List<BoardDTO> reportList(Map<String,Object> paramMap); // pagehelper와 minimumReportNum을 이용해 기준 신고수를 유동적으로 조절
 	public int createBoard(BoardTypeDTO boardTypeDto);
 	public int blind(BoardDTO boardDto);//해당 테이블의 bIdx글의 blind를 기존과 다르게 변경 
 	public BoardTypeDTO getBoardType(BoardTypeDTO boardTypeDto);//bId로 bType 탐색하여 어느테이블을 가야할지를 탐색
 	public BoardTypeDTO getBoardType(BoardDTO boardDto);//bId로 bType 탐색하여 어느테이블을 가야할지를 탐색
-	public BoardTypeDTO getBoardType(BoardCommentDTO boardCommentDto); //
 	public BoardTypeDTO getBoardType(String bId);//bId로 bType 탐색하여 어느테이블을 가야할지를 탐색
 	public String getbType(String bId);//
-	public Map<String,List<BoardDTO>> main(); // BEST게시판 9글, 나머지게시판 5글씩 최신순으로 가져오기
-	public List<BoardDTO> list(BoardDTO boardDto); //
+	public List<String> getBoardTypeList(); // SELECT distinct btype from boardType
+	public Map<String, List<String>> getBoardIdListByType(List<String> boardTypeList);
+	public Map<String,List<BoardDTO>> main(Map<String,Object> paramMap); // BEST게시판 9글, 나머지게시판 5글씩 최신순으로 가져오기
+	public List<BoardDTO> bestMain(List<String> boardTypeList);
+	public Map<String, List<BoardDTO>> otherMain(Map<String,List<String>> paramMap);
+	public List<List<BoardDTO>> humorMain(List<String> boardIdList);
+	public List<List<BoardDTO>> sportsMain(List<String> boardIdList);
+	public List<List<BoardDTO>> gameMain(List<String> boardIdList);
+	public List<List<BoardDTO>> entertainmentMain(List<String> boardIdList);
 	public List<String> getBoardIdList(); // select bId from BoardType
+	public List<BoardDTO> list(BoardDTO boardDto); //	
 	public BoardDTO content(BoardDTO boardDto); //select all from btypeBoard join btypeBoardinfo where bIdx 
-	
+	public int increaseHit(BoardDTO boardDto); //update board_hit
 	public int write(BoardDTO boardDto); // insert
 	public int writeInfo(BoardDTO boardDto); //insert
 	public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); // insert
+	public int unBookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); // delete
 	public List<String> getBoardCategories(BoardDTO boardDto); // select bCategory where bId
-	public int modifyBoard(BoardDTO boardDto);//update board
-	public int modifyBoardInfo(BoardDTO boardDto); // update board info
-	public int modifyBoardFile(BoardDTO boardDto);//update boardfile
-	public int deleteBoard(BoardDTO boardDto);//delete board
-	public int deleteBoardInfo(BoardDTO boardDto);//delete boardinfo
-	public int deleteBoardFile(BoardDTO boardDto);//delete boardfile
+	public int modify(BoardDTO boardDto);//update board
+	public int modifyFile(BoardDTO boardDto);//update boardfile
+	public int delete(BoardDTO boardDto);//delete board
+	public int deleteFile(BoardDTO boardDto);//delete boardfile
 	public List<BoardDTO> search(BoardDTO boardDto);//select all from btypeboard where query target and page
 	
 	public int bookmarkArticle(BookmarkArticleDTO bookmarkArticleDto);//insert
+	public int unBookmarkArticle(BookmarkArticleDTO bookmarkArticleDto);//delete
 	public int checkVoteArticleAlready(VoteArticleDTO voteArticleDto); // count where mId, bId, bIdx
-	public int updateVoteNum(VoteArticleDTO voteArticleDto); //update vote(+1 or -1) where bIdx
-	public int writeVoteInfo(VoteArticleDTO voteArticleDto);//insert
+	public int thumbsUpContent(VoteArticleDTO voteArticleDto); //update vote(+1 or -1) where bIdx
+	public int thumbsDownContent(VoteArticleDTO voteArticleDto); //update vote(+1 or -1) where bIdx
+	public int writeVoteArticle(VoteArticleDTO voteArticleDto);//insert
 	public int checkReportAlready(BoardDTO boardDto); //count where mId, bId, bIdx
-	public int updateReportNum(BoardDTO boardDto); // update reportnum +_1
+	public int increaseReport(BoardDTO boardDto); // update reportnum +_1
 	public int writeReportArticle(BoardDTO boardDto);//insert
+	
+	public int getTotalRow(BoardDTO boardDto); // select count(*) from [btypeboard] where bid
+	public int goBest(VoteArticleDTO voteArticleDto); // update set board_best=1 where bidx
 }

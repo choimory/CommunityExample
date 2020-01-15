@@ -10,12 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ce.component.PageHelper;
 import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardInfoDTO;
 import com.ce.dto.BoardTypeDTO;
+import com.ce.dto.MemberBanDTO;
 import com.ce.dto.MemberDTO;
 import com.ce.dto.MemberInfoDTO;
 import com.ce.dto.ShopDTO;
@@ -27,9 +27,25 @@ import com.ce.service.AdminService;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
+	private final int SUCCESS=1;
+	private final int FAIL=-1;
 
 	public void setAdminService(AdminService adminService) {
 		this.adminService = adminService;
+	}
+
+	@RequestMapping(value = {"","/","/main}"})
+	public String main(Model model) {
+		String view = "Admin/main";
+		Map<String, Object> dtoListMap = null;
+
+//		dtoListMap=adminService.main();
+//		if(dtoListMap==null) {
+//		}
+
+		model.addAttribute("title", "운영메뉴");
+		model.addAttribute("dtoListMap", dtoListMap);
+		return view;
 	}
 
 	@RequestMapping(value = "/ban", method = RequestMethod.GET)
@@ -41,35 +57,42 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/ban", method = RequestMethod.POST)
-	public String ban(Model model, MemberDTO memberDto, MemberInfoDTO memberInfoDto) {
+	public String ban(Model model, MemberBanDTO memberBanDto) {
 		String view = "Admin/ban";
 		int result = 0;
 
-//		result=adminService.ban(memberDto, memberInfoDto);
+//		result=adminService.ban(memberBanDto);
+//		if(result==FAIL) {
+//		}
 
-//		model.addAttribute("title", "회원 이용정지");
+		model.addAttribute("title", "회원 이용정지");
 		model.addAttribute("result", result);
 		return view;
 	}
 
-	@RequestMapping(value = "/check_report")
+	
+	@RequestMapping(value = "/check_report", method = RequestMethod.GET)
 	public String checkReport(Model model, PageHelper pageHelper) {
 		String view = "Admin/check_report";
 		List<BoardDTO> boardDtoList = null;
 
 //		boardDtoList=adminService.checkReport(pageHelper);
-
+//		if(boardDtoList==null) {			
+//		}
+		
 		model.addAttribute("title", "신고검토");
 		model.addAttribute("boardDtoList", boardDtoList);
 		return view;
 	}
 
-	@RequestMapping(value = "/check_item")
+	@RequestMapping(value = "/check_item", method = RequestMethod.GET)
 	public String checkItem(Model model, PageHelper pageHelper) {
 		String view = "Admin/check_item";
 		List<ShopDTO> shopDtoList = null;
 
 //		shopDtoList=adminService.checkItem(pageHelper);
+		if(shopDtoList==null) {
+		}
 
 		model.addAttribute("title", "판매검토");
 		model.addAttribute("shopDtoList", shopDtoList);
@@ -77,8 +100,8 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/permission", method = RequestMethod.POST)
-	public String permissionItem(Model model, int sIdx) {
-		String view = "redirect:/admin/check_item";
+	public String permissionItem(Model model, int sIdx, PageHelper pageHelper) {
+		String view = "redirect:/admin/check_item?page="+pageHelper.getPage();
 		int result = 0;
 
 //		result=adminService.permissionItem(sIdx);		
@@ -107,7 +130,7 @@ public class AdminController {
 		return view;
 	}
 
-	@RequestMapping(value = "/blind")
+	@RequestMapping(value = "/blind", method=RequestMethod.POST)
 	public String blind(Model model, BoardDTO boardDto, HttpServletRequest req) {
 		String view = "redirect:/admin/check_report"; // TODO 나중에 신고검토 게시판 외에서도 블라인드 기능 넣을시엔 req로 이전주소 알아내서 해당주소로 돌아갈수 있도록 변경
 		String beforeUrl = req.getHeader("referer");
@@ -116,18 +139,6 @@ public class AdminController {
 //		result=adminService.blind(boardDto);
 
 		model.addAttribute("result", result);
-		return view;
-	}
-
-	@RequestMapping(value = "/main")
-	public String main(Model model) {
-		String view = "Admin/main";
-		Map<String, Object> dtoListMap = null;
-
-//		dtoListMap=adminService.main();
-
-		model.addAttribute("title", "운영메뉴");
-		model.addAttribute("dtoListMap", dtoListMap);
 		return view;
 	}
 

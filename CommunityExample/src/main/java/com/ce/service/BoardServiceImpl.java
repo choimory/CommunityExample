@@ -60,11 +60,16 @@ public class BoardServiceImpl implements BoardService {
 		return result;
 	}
 
+	private void paging(PageHelper pageHelper, int totalRow) {
+		pageHelper.list();
+		pageHelper.pagination2(totalRow);
+	}
+
 	@Override
 	public Map<String, Object> list(String bId, PageHelper pageHelper) {
-		Map<String, Object> listMap = null;
+		Map<String, Object> returnMap = null;
 		BoardTypeDTO boardTypeDto = null;
-		List<String> boardCategoryList=null;
+		List<String> boardCategoryList = null;
 		List<BoardDTO> boardDtoList = null;
 		BoardDTO boardDto = null;
 
@@ -75,25 +80,30 @@ public class BoardServiceImpl implements BoardService {
 			boardTypeDto = boardDao.getBoardType(bId);
 			boardDto.setBoardTypeDto(boardTypeDto);
 			// 3. bType에 해당되는 테이블에서 page를 이용해서 BoardDTO 20개 가져오기
+			paging(pageHelper, boardDao.getTotalRow(boardDto));
+			boardDto.setPageHelper(pageHelper);
 			boardDtoList = boardDao.list(boardDto);
 			// 4.해당게시판의 bCategory모음 가져오기
 			boardCategoryList = boardDao.getBoardCategories(boardDto);
-			// 5.해당게시판이 북마크된 게시판인지 확인
+			// TODO 5.해당게시판이 북마크된 게시판인지 확인
 			// 6.put
-			listMap = new HashMap<String, Object>();
-			listMap.put("boardDtoList", boardDtoList);
-			listMap.put("boardCategoryList", boardCategoryList);
+			returnMap = new HashMap<String, Object>();
+			;
+			returnMap.put("boardDtoList", boardDtoList);
+			returnMap.put("boardCategoryList", boardCategoryList);
+			returnMap.put("pageHelper", pageHelper);
 		}
 
-		return listMap;
+		return returnMap;
 	}
 
 	@Override
-	public Map<String, Object> content(String bId, String stringBoardIdx) {
-		Map<String, Object> contentMap = null;
-		List<String> boardCategoryList=null;
+	public Map<String, Object> content(String bId, String stringBoardIdx, PageHelper pageHelper) {
+		Map<String, Object> returnMap = null;
+		List<String> boardCategoryList = null;
 		BoardDTO boardDto = null;
 		List<BoardCommentDTO> boardCommentDtoList = null;
+		List<BoardDTO> boardDtoList = null;
 		BoardTypeDTO boardTypeDto = null;
 		int bIdx = 0;
 
@@ -106,20 +116,31 @@ public class BoardServiceImpl implements BoardService {
 				// 2.해당 bIdx의 boardDto 가져오기
 				boardDto = boardDao.content(boardDto);
 				// 3.해당 bIdx의 boardCommentDtoList가져오기
-				boardCommentDtoList = boardCommentDao.commentList(boardDto);
+				// TODO 오래된순으로 SELECT한뒤 가장 마지막 페이지를 대상으로 가져오는 페이징 작업 필요
+				pageHelper.list();
+				boardDto.setPageHelper(pageHelper);
+				boardCommentDtoList = boardCommentDao.comment(boardDto);
 				// 4.해당게시판의 bCategory모음 가져오기
 				boardCategoryList = boardDao.getBoardCategories(boardDto);
-				// 5.해당게시판이 북마크된 게시판인지 확인
-				// 6.해당게시물이 북마크된 게시물인지 확인
+				// 5.글목록 가져오기
+				paging(pageHelper, boardDao.getTotalRow(boardDto));
+				boardDto.setPageHelper(pageHelper);
+				boardDtoList = boardDao.list(boardDto);
+				// TODO 5.해당게시판이 북마크된 게시판인지 확인
+				// TODO 6.해당게시물이 북마크된 게시물인지 확인
+				// HIT증가
+				boardDao.increaseHit(boardDto);
 				// 7.put
-				contentMap = new HashMap<String, Object>();
-				contentMap.put("boardDto", boardDto);
-				contentMap.put("boardCommentDtoList", boardCommentDtoList);
-				contentMap.put("boardCategoryList", boardCategoryList);
+				returnMap = new HashMap<String, Object>();
+				returnMap.put("boardDto", boardDto);
+				returnMap.put("boardCommentDtoList", boardCommentDtoList);
+				returnMap.put("boardCategoryList", boardCategoryList);
+				returnMap.put("boardDtoList", boardDtoList);
+				returnMap.put("pageHelper", pageHelper);
 			}
 		}
 
-		return contentMap;
+		return returnMap;
 	}
 
 	@Override
@@ -171,14 +192,9 @@ public class BoardServiceImpl implements BoardService {
 			boardTypeDto = boardDao.getBoardType(boardDto);
 			boardDto.setBoardTypeDto(boardTypeDto);
 			// update board
-			result = boardDao.modifyBoard(boardDto);
+			result = boardDao.modify(boardDto);
 			if (result == SUCCESS) {
-				// update board info
-				result = boardDao.modifyBoardInfo(boardDto);
-				if (result == SUCCESS) {
-					// update board file
-					result = boardDao.modifyBoardFile(boardDto);
-				}
+				result = boardDao.modifyFile(boardDto);
 			}
 		} else {
 			boardDto = null;
@@ -199,15 +215,8 @@ public class BoardServiceImpl implements BoardService {
 			boardDto.setBoardTypeDto(boardTypeDto);
 			if (result == SUCCESS) {
 				// delete board
-				result = boardDao.deleteBoard(boardDto);
-				if (result == SUCCESS) {
-					// delete board info
-					result = boardDao.deleteBoardInfo(boardDto);
-					if (result == SUCCESS) {
-						// delete board file
-						result = boardDao.deleteBoardFile(boardDto);
-					}
-				}
+				result = boardDao.delete(boardDto);
+				result = boardDao.deleteFile(boardDto);
 			}
 		}
 
@@ -224,7 +233,7 @@ public class BoardServiceImpl implements BoardService {
 			// get bType
 			boardTypeDto = boardDao.getBoardType(boardDto);
 			boardDto.setBoardTypeDto(boardTypeDto);
-			// select BoardDTO with query, target and page
+			// TODO select BoardDTO with query, target and page
 			boardDtoList = boardDao.search(boardDto);
 		}
 
@@ -232,7 +241,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto, PageHelper pageHelper) {
+	public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto,
+			PageHelper pageHelper) {
 		List<BoardCommentDTO> boardCommentDtoList = null;
 
 		// bId check
@@ -240,6 +250,10 @@ public class BoardServiceImpl implements BoardService {
 			// get bType
 			boardTypeDto = boardDao.getBoardType(boardTypeDto.getbId());
 			boardCommentDto.setBoardTypeDto(boardTypeDto);
+			// set Paging
+			pageHelper.list();
+			pageHelper.pagination2(boardCommentDao.getTotalRow(boardCommentDto));
+			boardCommentDto.setPageHelper(pageHelper);
 			// page를 이용해서 댓글 30개 가져오기
 			boardCommentDtoList = boardCommentDao.comment(boardCommentDto);
 			// ajax
@@ -256,6 +270,8 @@ public class BoardServiceImpl implements BoardService {
 		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
 			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardTypeDto.getbId()));
+			// bcdto의 bcgroup을 설정
+			boardCommentDto.setBcGroup(boardCommentDao.commentGrouping(boardCommentDto));
 			// 해당 댓글테이블에 insert
 			result = boardCommentDao.writeComment(boardCommentDto);
 			if (result == SUCCESS) {
@@ -277,29 +293,21 @@ public class BoardServiceImpl implements BoardService {
 			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardTypeDto.getbId()));
 			// update
 			result = boardCommentDao.modifyComment(boardCommentDto);
-			if (result == SUCCESS) {
-				result = boardCommentDao.modifyCommentInfo(boardCommentDto);
-			}
-			// 수정된 댓글은 [댓글수정일자 : yyyy-mm-dd]가 꼬릿말로 붙도록 할것
-			// 이게 가능하려면 db에 수정여부를 저장한뒤 jstl을 이용해 프론트에서 조정해야?..
 		}
 
 		return result;
 	}
 
 	@Override
-	public int deleteComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto) {
+	public int deleteComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		int result = 0;
 
 		// bId check
 		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
-			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardCommentDto));
+			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardTypeDto));
 			// delete bcIdx
 			result = boardCommentDao.deleteComment(boardCommentDto);
-			if (result == SUCCESS) {
-				boardCommentDao.deleteCommentInfo(boardCommentDto);
-			}
 
 		}
 
@@ -307,15 +315,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int replyComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto) {
+	public int replyComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		int result = 0;
 
 		// bId check
 		if (isBoardIdExists(boardTypeDto.getbId())) {
 			// get bType
-			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardCommentDto));
+			boardCommentDto.setBoardTypeDto(boardDao.getBoardType(boardTypeDto));
+			// TODO 서비스단에서 group step indent를 조정하던지 클라이언트단에서 자바스크립트로 조정해서 넘기던지
 			// insert
-			result = boardCommentDao.replyComment(boardCommentDto);
+			result = boardCommentDao.writeComment(boardCommentDto);
 			if (result == SUCCESS) {
 				result = boardCommentDao.writeCommentInfo(boardCommentDto);
 			}
@@ -330,8 +339,9 @@ public class BoardServiceImpl implements BoardService {
 
 		// 받은 bid에 해당되는 btype을 가져와서 set
 		bookmarkBoardDto.setbType(boardDao.getBoardType(bookmarkBoardDto.getbId()).getbType());
-		// insert
+		// TODO 게시판 북마크 insert or delete
 		result = boardDao.bookmarkBoard(bookmarkBoardDto);
+		result = boardDao.unBookmarkBoard(bookmarkBoardDto);
 
 		return result;
 	}
@@ -342,14 +352,15 @@ public class BoardServiceImpl implements BoardService {
 
 		// btype을 얻어와서 dto에 세팅후
 		bookmarkArticleDto.setbType(boardDao.getbType(bookmarkArticleDto.getbId()));
-		// insert
+		// TODO 글 북마크 insert or delete
 		result = boardDao.bookmarkArticle(bookmarkArticleDto);
+		result = boardDao.unBookmarkArticle(bookmarkArticleDto);
 
 		return result;
 	}
 
 	@Override
-	public int thumbsUpContent(VoteArticleDTO voteArticleDto) {
+	public int thumbsUpContent(VoteArticleDTO voteArticleDto, int upvote, int downvote) {
 		int result = 0;
 
 		// bid check
@@ -360,10 +371,14 @@ public class BoardServiceImpl implements BoardService {
 			result = boardDao.checkVoteArticleAlready(voteArticleDto);
 			if (result < 1) {
 				// update upvote
-				result = boardDao.updateVoteNum(voteArticleDto);
+				result = boardDao.thumbsUpContent(voteArticleDto);
+				// 추천수가 일정이상이면 BEST등록
+				if (upvote - downvote == 50) {
+					boardDao.goBest(voteArticleDto);
+				}
 				if (result == SUCCESS) {
 					// insert vote article
-					result = boardDao.writeVoteInfo(voteArticleDto);
+					result = boardDao.writeVoteArticle(voteArticleDto);
 				}
 			}
 		}
@@ -383,10 +398,10 @@ public class BoardServiceImpl implements BoardService {
 			result = boardDao.checkVoteArticleAlready(voteArticleDto);
 			if (result < 1) {
 				// update upvote
-				result = boardDao.updateVoteNum(voteArticleDto);
+				result = boardDao.thumbsDownContent(voteArticleDto);
 				if (result == SUCCESS) {
 					// insert vote article
-					result = boardDao.writeVoteInfo(voteArticleDto);
+					result = boardDao.writeVoteArticle(voteArticleDto);
 				}
 			}
 		}
@@ -402,11 +417,11 @@ public class BoardServiceImpl implements BoardService {
 		if (isBoardIdExists(boardDto.getbId())) {
 			// get btype
 			boardDto.setBoardTypeDto(boardDao.getBoardType(boardDto));
-			// report article에 해당 게시물 추천 이력이 있는지
+			// report article에 해당 게시물 신고 이력이 있는지
 			result = boardDao.checkReportAlready(boardDto);
 			if (result < 1) {
 				// update reportnum
-				result = boardDao.updateReportNum(boardDto);
+				result = boardDao.increaseReport(boardDto);
 				if (result == SUCCESS) {
 					// insert report article
 					result = boardDao.writeReportArticle(boardDto);
@@ -418,7 +433,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int thumbsUpComment(VoteCommentDTO voteCommentDto) {
+	public int thumbsUpComment(VoteCommentDTO voteCommentDto, int upvote, int downvote) {
 		int result = 0;
 
 		// bid check
@@ -429,9 +444,13 @@ public class BoardServiceImpl implements BoardService {
 			result = boardCommentDao.checkVoteCommentAlready(voteCommentDto);
 			if (result < 1) {
 				// update upvote
-				result = boardCommentDao.updateCommentVoteNum(voteCommentDto);
+				result = boardCommentDao.thumbsUpComment(voteCommentDto);
+				// 추천수가 일정이상이면 BEST등록
+				if (upvote - downvote == 50) {
+					boardCommentDao.goBest(voteCommentDto);
+				}
 				// insert vote comment
-				result = boardCommentDao.writeVoteCommentInfo(voteCommentDto);
+				result = boardCommentDao.writeVoteComment(voteCommentDto);
 			}
 		}
 
@@ -450,10 +469,10 @@ public class BoardServiceImpl implements BoardService {
 			result = boardCommentDao.checkVoteCommentAlready(voteCommentDto);
 			if (result < 1) {
 				// update upvote
-				result=boardCommentDao.updateCommentVoteNum(voteCommentDto);
-				if(result==SUCCESS) {
+				result = boardCommentDao.thumbsDownComment(voteCommentDto);
+				if (result == SUCCESS) {
 					// insert vote comment
-					result=boardCommentDao.writeVoteCommentInfo(voteCommentDto);
+					result = boardCommentDao.writeVoteComment(voteCommentDto);
 				}
 			}
 		}

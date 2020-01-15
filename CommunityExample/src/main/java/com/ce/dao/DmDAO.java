@@ -11,4 +11,7 @@ public interface DmDAO {
 	public int write(DmDTO dmDto); // insert
 	public List<DmDTO> search(DmDTO dmDto); // query와 target을 이용해 select
 	public int delete(int dmIdx); // delete
+	
+	public int getTotalRow(String receiverId);//select count(*) 혹은 row전용테이블 select
+	
 }

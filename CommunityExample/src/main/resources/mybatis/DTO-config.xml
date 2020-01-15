@@ -24,6 +24,8 @@
 		<typeAlias type="com.ce.dto.ShopCommentInfoDTO" alias="shopCommentInfoDto"/>
 		<typeAlias type="com.ce.dto.ShopDTO" alias="shopDto"/>
 		<typeAlias type="com.ce.dto.ShopInfoDTO" alias="shopInfoDto"/>
+		<typeAlias type="com.ce.dto.ShopVoteArticleDTO" alias="shopVoteArticleDto"/>
+		<typeAlias type="com.ce.dto.ShopVoteCommentDTO" alias="shopVoteCommentDto"/>
 		<typeAlias type="com.ce.dto.VoteArticleDTO" alias="voteArticleDto"/>
 		<typeAlias type="com.ce.dto.VoteCommentDTO" alias="voteCommentDto"/>
 		<typeAlias type="com.ce.dto.WishlistDTO" alias="wishlistDto"/>		

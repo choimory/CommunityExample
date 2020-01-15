@@ -48,12 +48,12 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/{bId}/{bIdx}")
-	public String content(Model model, @PathVariable("bId")String bId,@PathVariable("bIdx")String stringIdx) {
+	public String content(Model model, @PathVariable("bId")String bId,@PathVariable("bIdx")String stringIdx, PageHelper pageHelper) {
 		String view = null;
 		BoardDTO boardDto=null;
 		Map<String,Object> contentMap=null;
 
-//		contentMap=boardService.content(bId, stringBoardIdx);
+//		contentMap=boardService.content(bId, stringBoardIdx, pageHelper);
 //		if(contentMap==null) {
 //			return "redirect:main";
 //		}else {

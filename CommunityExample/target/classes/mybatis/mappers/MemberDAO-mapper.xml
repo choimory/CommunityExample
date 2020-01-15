@@ -98,32 +98,85 @@
 		<result property="sBlind" column="SHOP_BLIND"/>
 	</resultMap>
 
-	<update id="ban" parameterType="memberDto">
+	<insert id="ban" parameterType="memberBanDto">
+		INSERT 
+		INTO MEMBER_BAN (ID,BAN,REASON,ENDTOBAN)
+		VALUES (#{mId},1,#{mReason},#{mEndToBan})
+	</insert>
+	<update id="updateBan" parameterType="memberBanDto">
+		UPDATE MEMBER_BAN
+		SET ENDTOBAN=#{mEndToBan}
+		WHERE ID=#{mId}
 	</update>
+	<delete id="deleteBan" parameterType="memberBanDto">
+		DELETE 
+		FROM MEMBER_BAN
+		WHERE ID=#{mId}
+	</delete>
 	<select id="idCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE ID=#{mId}
 	</select>
 	<select id="emailCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE ID=#{mEmail}
 	</select>
 	<insert id="join" parameterType="memberDto">
+		INSERT
+		INTO MEMBER (ID,PASSWORD,NICKNAME,EMAIL)
+		VALUES (#{mId},#{mPassword},#{mNickname},#{mEmail})
 	</insert>
-	<insert id="insertMemberInfo" parameterType="memberDto">
+	<insert id="insertMemberInfo" parameterType="string">
+		INSERT
+		INTO MEMBER_INFO (ID,EXP,POINT,EQUIP_ITEM,REGDATE,LOGINDATE,ADMIN)
+		VALUES (#{mId},1,1,0,NOW(),NOW(),NULL)
 	</insert>
 	<update id="findAccount" parameterType="memberDto">
+		UPDATE MEMBER
+		SET PASSWORD=#{mPassword}
+		WHERE EMAIL=#{mEmail}
 	</update>
 	<select id="getPassword" parameterType="string" resultType="string">
+		SELECT PASSWORD
+		FROM MEMBER
+		WHERE ID=#{mId}
 	</select>
 	<select id="getMemberDto" parameterType="string" resultMap="memberDto">
+		SELECT *
+		FROM MEMBER
+		INNER JOIN MEMBER_INFO
+		ON MEMBER.ID=MEMBER_INFO.ID
+		WHERE MEMBER.ID=#{mId}
 	</select>
 	<select id="getMemberItem" parameterType="string" resultMap="memberItemDto">
+		SELECT *
+		FROM MEMBER_ITEM
+		WHERE ID=#{mId}
 	</select>
 	<select id="getBookmarkBoardDTO" parameterType="string" resultMap="bookmarkBoardDto">
+		SELECT *
+		FROM BOOKMARK_BOARD
+		WHERE ID=#{mId}
 	</select>
 	<select id="getBookmarkArticleDTO" parameterType="string" resultMap="bookmarkArticleDto">
+		SELECT *
+		FROM BOOKMARK_ARTICLE
+		WHERE ID=#{mId}
 	</select>
-	<update id="modifyInfo" parameterType="memberDto">
+	<update id="modify" parameterType="memberDto">
+		UPDATE MEMBER
+		SET PASSWORD=#{mPassword}, NICKNAME=#{mNickname}, EMAIL=#{mEmail}
 	</update>
 	<delete id="deleteMember" parameterType="memberDto">
+		DELETE 
+		FROM MEMBER
+		WHERE ID=#{mId}
 	</delete>
-	<delete id="deleteMemberInfo" parameterType="memberDto">
-	</delete>
+	<update id="login" parameterType="string">
+		UPDATE MEMBER_INFO
+		SET LOGINDATE=now()
+		WHERE ID=#{mId}
+	</update>
 </mapper>

@@ -8,7 +8,8 @@
 <div class="container bg-white col-lg-8 p-4">
 
 
-	<!-- start of content --><div class="card border-secondary">
+	<!-- start of content -->
+	<div class="card border-secondary">
 		<div class="card-body text-center">
 
 			<div class="title">

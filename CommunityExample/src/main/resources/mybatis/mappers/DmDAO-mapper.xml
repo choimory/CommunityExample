@@ -14,16 +14,39 @@
 	</resultMap>
 	
 	<select id="list" parameterType="dmDto" resultMap="dmDto">
+		SELECT *
+		FROM DM
+		WHERE DM_RECEIVER_ID = #{dmReceiverId}
+		LIMIT #{pageHelper.listFirst}, #{pageHelper.listLast}
 	</select>
 	<select id="content" parameterType="int" resultMap="dmDto">
+		SELECT *
+		FROM DM
+		WHERE DM_INDEX=#{dmIdx}
 	</select>
 	<update id="firstRead" parameterType="int">
+		UPDATE DM
+		SET DM_RECEIVEDATE=now()
+		WHERE DM_INDEX=#{dmIdx}		
 	</update>
 	<insert id="write" parameterType="dmDto">
+		INSERT 
+		INTO DM (DM_INDEX,DM_SENDER_ID,DM_SENDER_NICKNAME,DM_SENDDATE,DM_RECEIVER_ID,DM_RECEIVER_NICKNAME,DM_RECEIVEDATE,DM_TITLE,DM_CONTENT)
+		VALUES (0,#{dmSenderId},#{dmSenderNickname},NOW(),#{dmReceiverId},#{dmReceiverNickname},'NULL',#{dmTitle},#{dmContent})
 	</insert>
-	<select id="search" parameterType="dmDto" resultMap="dmDto">
-	</select>
-	<delete id="delete" parameterType="int">
-	</delete>
 	
+	<select id="search" parameterType="dmDto" resultMap="dmDto">
+		<!-- DYNAMIC SQL 필요-->
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		DELETE 
+		FROM DM
+		WHERE DM_INDEX=#{dmIdx}
+	</delete>	
+	<select id="getTotalRow" parameterType="string" resultType="int">
+		SELECT COUNT(*) 
+		FROM DM
+		WHERE DM_RECEIVER_ID=#{receiverId}
+	</select>
 </mapper>

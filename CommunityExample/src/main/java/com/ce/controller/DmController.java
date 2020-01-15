@@ -62,7 +62,7 @@ public class DmController {
 	}
 
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(Model model, MemberDTO memberDto, DmDTO dmDto) {
+	public String write(Model model, DmDTO dmDto) {
 		String view = "redirect:/dm/list";
 		int result = 0;
 
@@ -73,7 +73,7 @@ public class DmController {
 	}
 
 	@RequestMapping(value = "/search")
-	public String search(Model model, String mId, DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
+	public String search(Model model,DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
 		String view = "Dm/list";
 		List<DmDTO> dmDtoList = null;
 

@@ -41,7 +41,7 @@ public class MemberController {
 		int result = 0;
 
 //		result=memberService.idCheck(mId);
-//		if(result<SUCCESS) {
+//		if(result==FAIL) {
 //		}
 		
 		model.addAttribute("title", "");
@@ -52,26 +52,27 @@ public class MemberController {
 	@RequestMapping(value = "/emailcheck")
 	public String emailCheck(Model model, String mEmail) {
 		String view = ""; // TODO ajax
-		int result = 0;
+		int password=0;
 
-//		result=memberService.emailCheck(mEmail);		
-//		if(result<SUCCESS) {
+//		password=memberService.emailCheck(mEmail);		
+//		if(result==FAIL) {
 //		}
 
 		
 		model.addAttribute("title", "");
+		model.addAttribute("password", password);
 		return view;
 	}
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(Model model, MemberDTO memberDto) {
 		String view = "redirect:/main";
-		int result = 0;
 
 //		memberDto=memberService.join(memberDto);		
-		if (memberDto == null) {
-
-		}
+//		if (memberDto == null) {
+//			model.addAttribute("result", -1);
+//			return "redirect:/join";			
+//		}
 
 //		model.addAttribute("memberDto", memberDto);
 		return view;
@@ -87,15 +88,15 @@ public class MemberController {
 
 	@RequestMapping(value = "/find_account", method = RequestMethod.POST)
 	public String findAccount(Model model, String mEmail) {
-		String view = ""; // TODO 결과안내 폼으로 변경
+		String view = "Member/find_account"; 
 		int result = 0;
 
 //		result=memberService.findAccount(mEmail);
-//		if(result<SUCCESS) {
+//		if(result==FAIL) {
 //		}
-
 		
-		model.addAttribute("title", "");
+		model.addAttribute("title", "계정찾기 결과");
+		model.addAttribute("result", result);
 		return view;
 	}
 

@@ -19,7 +19,7 @@ public interface BoardService {
 	//1. BOARD_TYPE테이블에서 게시판명들 다 가져온다음 bid와 foreach로 대조해보고 일치하는게 있을시 boardExist는 true 아니면 false 
 	//2. bid와 page를 이용해 해당 테이블의 글들 select
 	
-	  public Map<String,Object> content(String bId, String stringBoardIdx); 
+	  public Map<String,Object> content(String bId, String stringBoardIdx, PageHelper pageHelper); 
 	//1. BOARD_TYPE테이블에서 게시판명들 다 가져온다음 bid와 foreach로 대조해보고 일치하는게 있을시 boardExist는 true 아니면 false 
 	//2. bid와 page를 이용해 해당 테이블의 글들 select
 	
@@ -36,9 +36,9 @@ public interface BoardService {
 	  
 	  public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); //mid와 bid를 이용해 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
 	  public int bookmarkContent(BookmarkArticleDTO bookmarkArticleDto); //mid와 bid와 bidx를 이용해 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
-	  public int thumbsUpContent(VoteArticleDTO voteArticleDto); //mid와 bid와  bidx를 이용해 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
+	  public int thumbsUpContent(VoteArticleDTO voteArticleDto, int upvote, int downvote); //mid와 bid와  bidx를 이용해 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
 	  public int thumbsDownContent(VoteArticleDTO voteArticleDto); //mid와 bid와 bidx를 이용해 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
 	  public int reportContent(BoardDTO boardDto); //mid와 bid와 bidx를 이용해 리포트 컬럼값을 번경
-	  public int thumbsUpComment(VoteCommentDTO voteCommentDto); //mid와 bid와 bcidx를 이용해 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
+	  public int thumbsUpComment(VoteCommentDTO voteCommentDto, int upvote, int downvote); //mid와 bid와 bcidx를 이용해 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
 	  public int thumbsDownComment(VoteCommentDTO voteCommentDto); //mid와 bid와 bcidx를 이용해 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
 }
