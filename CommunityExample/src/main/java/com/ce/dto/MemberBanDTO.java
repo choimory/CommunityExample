@@ -41,4 +41,10 @@ public class MemberBanDTO implements Serializable{
 		this.mEndToBan = mEndToBan;
 	}
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+mBan+", "+mReason+", "+mEndToBan);
+		return super.toString();
+	}
+
 }

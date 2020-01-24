@@ -5,13 +5,16 @@ import java.util.List;
 
 public class PageHelper {
 	private int displayNum;
-	private int page;
-	private int totalPage;
+	
 	private int listFirst;
 	private int listLast;
-	private List<Integer> pageGroup;
+
+	private int totalPage;
+	private int page;
 	private int groupFirst;
 	private int groupLast;
+	private List<Integer> pageGroup;
+	
 	private SearchHelper searchHelper;
 
 	public PageHelper() {
@@ -28,35 +31,46 @@ public class PageHelper {
 		list(displayNum, page, totalRow);
 	}
 
+	@Override
+	public String toString() {
+		System.out.println(displayNum + ", " + page + ", " + totalPage + ", " + listFirst + ", " + listLast + ", "
+				+ groupFirst + ", " + groupLast);
+		if (searchHelper != null)
+			System.out.println(searchHelper.toString());
+		return super.toString();
+	}
+
+	public void paging(int totalRow) {
+		setTotalPage(totalRow);
+		list();
+		pagination2(totalRow);
+	}
+
 	public void setDisplayNum(int displayNum) {
-		final int DISPLAYNUM_MAXIMUM=100;
-		final int DISPLAYNUM_MINIMUM=20;
-		
+		final int DISPLAYNUM_MAXIMUM = 100;
+		final int DISPLAYNUM_MINIMUM = 20;
+
 		if (displayNum > DISPLAYNUM_MAXIMUM || displayNum < DISPLAYNUM_MINIMUM) {
 			this.displayNum = DISPLAYNUM_MINIMUM;
 		} else {
 			this.displayNum = displayNum;
 		}
-		
-		list();
 	}
 
 	public void setPage(int page) {
-		final int PAGE_MINIMUM=1;
-		
+		final int PAGE_MINIMUM = 1;
+
 		if (page < PAGE_MINIMUM) {
 			this.page = PAGE_MINIMUM;
 		} else {
 			this.page = page;
 		}
-		
-		list();
 	}
 
 	public void setPage(int page, int totalRow) {
-		final int PAGE_MINIMUM=1;
+		final int PAGE_MINIMUM = 1;
 		setTotalPage(totalRow);
-		
+
 		if (page < PAGE_MINIMUM) {
 			this.page = PAGE_MINIMUM;
 		} else if (page >= totalPage) {
@@ -67,9 +81,9 @@ public class PageHelper {
 	}
 
 	public void setPage(int page, int totalRow, int displayNum) {
-		final int PAGE_MINIMUM=1;
+		final int PAGE_MINIMUM = 1;
 		setTotalPage(totalRow, displayNum);
-		
+
 		if (page < PAGE_MINIMUM) {
 			this.page = PAGE_MINIMUM;
 		} else if (page >= totalPage) {
@@ -86,8 +100,14 @@ public class PageHelper {
 				totalPageDouble++;
 			}
 			this.totalPage = (int) totalPageDouble;
+			if (totalPage < page) {
+				page = totalPage;
+			}
 		} else {
 			this.totalPage = 1;
+			if (totalPage < page) {
+				page = totalPage;
+			}
 		}
 	}
 
@@ -106,7 +126,6 @@ public class PageHelper {
 	public int getDisplayNum() {
 		return displayNum;
 	}
-
 
 	public List<Integer> getPageGroup() {
 		return pageGroup;
@@ -132,7 +151,6 @@ public class PageHelper {
 		return totalPage;
 	}
 
-
 	public int getListFirst() {
 		return listFirst;
 	}
@@ -149,6 +167,14 @@ public class PageHelper {
 		this.listLast = listLast;
 	}
 
+	public int getGroupFirst() {
+		return groupFirst;
+	}
+
+	public int getGroupLast() {
+		return groupLast;
+	}
+
 	public void setGroupFirst(int groupFirst) {
 		this.groupFirst = groupFirst;
 	}
@@ -158,14 +184,14 @@ public class PageHelper {
 	}
 
 	public void list() {
-		listFirst = (page - 1) * displayNum + 1;
+		listFirst = (page - 1) * displayNum;
 		listLast = listFirst + (displayNum - 1);
 	}
 
 	public void list(int displayNum, int page, int totalRow) {
 		setDisplayNum(displayNum);
-		setPage(page, totalRow, displayNum);		
-		
+		setPage(page, totalRow, displayNum);
+
 		listFirst = (page - 1) * displayNum + 1;
 		listLast = listFirst + (displayNum - 1);
 	}
@@ -194,10 +220,10 @@ public class PageHelper {
 		}
 	}
 
-	public void pagination1(int totalRow, int displayNum,int page) {
+	public void pagination1(int totalRow, int displayNum, int page) {
 		this.pageGroup = new ArrayList<Integer>();
 		final int GROUP_RANGE = 3;
-		
+
 		setDisplayNum(displayNum);
 		setPage(page, totalRow, displayNum);
 		setTotalPage(totalRow, displayNum);
@@ -225,7 +251,7 @@ public class PageHelper {
 		this.pageGroup = new ArrayList<Integer>();
 		final int GROUP_RANGE_MINIMUM = 1;
 		double groupRange = page / 10;
-		
+
 		setTotalPage(totalRow);
 
 		// groupFirst구하기
@@ -256,7 +282,7 @@ public class PageHelper {
 		this.pageGroup = new ArrayList<Integer>();
 		final int GROUP_RANGE_MINIMUM = 1;
 		double groupRange = page / 10;
-		
+
 		setDisplayNum(displayNum);
 		setPage(page, totalRow, displayNum);
 		setTotalPage(totalRow, displayNum);

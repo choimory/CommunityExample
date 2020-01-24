@@ -11,7 +11,10 @@
 	<div class="ce_menu">
 		<p><a href="/communityexample/admin/ban">이용정지</a></p>
 		<p><a href="/communityexample/admin/check_item">판매허가 대기목록</a></p>
-		<p><a href="/comunittyexample/admin/check_report">신고수가 많은 게시물</a></p>
+		<p><a href="/communityexample/admin/check_report">신고수가 많은 게시물</a></p>
+		<p><a href="/communityexample/admin/create_board_type">게시판 분류 생성</a></p>
+		<p><a href="/communityexample/admin/create_board">게시판 생성</a></p>
+		<p><a href="/communityexample/admin/add_board_category">게시판 카테고리 추가</a></p>
 	</div>
 	<!-- end of content -->
 

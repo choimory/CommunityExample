@@ -8,6 +8,12 @@ public class ShopVoteArticleDTO implements Serializable {
 	private int sIdx;
 	private int svUpdown;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+sIdx+", "+svUpdown);
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

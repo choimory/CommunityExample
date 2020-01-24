@@ -21,6 +21,15 @@ public class ShopCommentDTO implements Serializable {
 	private SearchHelper searchHelper;
 	
 
+	@Override
+	public String toString() {
+		System.out.println(scIdx+", "+sIdx+", "+mId+", "+mNickname+", "+scContent+", "+scRegDate+", "+scGroup+", "+scStep+", "+scIdx);
+		if(shopCommentInfoDto!=null)System.out.println(shopCommentInfoDto.toString());
+		if(pageHelper!=null)System.out.println(pageHelper.toString());
+		if(searchHelper!=null)System.out.println(searchHelper.toString());
+		return super.toString();
+	}
+
 	public SearchHelper getSearchHelper() {
 		return searchHelper;
 	}

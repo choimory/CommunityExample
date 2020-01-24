@@ -12,6 +12,12 @@ public class ShopCommentInfoDTO implements Serializable {
 	private int sciNotice;
 	private int sciBest;
 
+	@Override
+	public String toString() {
+		System.out.println(scIdx+", "+sciUpvote+", "+sciDownvote+", "+sciReportNum+", "+sciBlind+", "+sciNotice+", "+sciBest);
+		return super.toString();
+	}
+
 	public int getScIdx() {
 		return scIdx;
 	}

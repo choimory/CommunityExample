@@ -6,17 +6,23 @@ public class BoardTypeDTO implements Serializable {
 	private static final long serialVersionUID = -8141888733747346504L;
 	private String bId;
 	private String bType;
-	private String bCategory;
 	private String bIdKor;
 	private String bTypeKor;
+	private String bIntroduce;
+	
 
-
-	public String getbCategory() {
-		return bCategory;
+	public String getbIntroduce() {
+		return bIntroduce;
 	}
 
-	public void setbCategory(String bCategory) {
-		this.bCategory = bCategory;
+	public void setbIntroduce(String bIntroduce) {
+		this.bIntroduce = bIntroduce;
+	}
+
+	@Override
+	public String toString() {
+		System.out.println(bId+", "+bType+", "+bIdKor+", "+bTypeKor+", "+bIntroduce);
+		return super.toString();
 	}
 
 	public String getbId() {

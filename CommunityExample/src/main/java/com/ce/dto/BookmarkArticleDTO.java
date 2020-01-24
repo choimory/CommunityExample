@@ -11,6 +11,13 @@ public class BookmarkArticleDTO implements Serializable {
 	private int bIdx;
 	private BoardDTO boardDto;
 
+	@Override
+	public String toString() {
+		System.out.println(baIdx+", "+mId+", "+bType+", "+bId+", "+bIdx);
+		if(boardDto!=null)System.out.println(boardDto.toString());
+		return super.toString();
+	}
+
 	public int getBaIdx() {
 		return baIdx;
 	}

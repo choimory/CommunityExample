@@ -8,6 +8,12 @@ public class BookmarkBoardDTO implements Serializable {
 	private String bType;
 	private String bId;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+bType+", "+bId);
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ce.component.PageHelper;
+import com.ce.dto.BoardCategoryDTO;
 import com.ce.dto.BoardCommentDTO;
 import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardTypeDTO;
@@ -22,13 +23,14 @@ public interface BoardDAO {
 //	DAO를 테이블별 DAO로 나누어 DAOImpl의 해당 메소드들만 오버라이드한뒤 if문으로 해당DAO메소드를 호출할것이냐(DAO클래스가 많아짐, 서비스에 DAO멤버변수가 많아짐, 장문의 if문 때문에 코드가 지저분해짐) -> 3안
 //	BoardDAO에 테이블별 DAO메소드을 쓸것이냐(메소드가 많아짐, 유지보수 떨어짐) -> 4안
 	
-	
+	public int getTotalRowReportList();
 	public List<BoardDTO> reportList(PageHelper pageHelper);//blind가 false인 글들중 report개수가 n개 이상인 글들을 page를 이용해 최신순 20개 select //TODO 모든게시판을 탐색해야 하는 문제->union
 	public int createBoard(BoardTypeDTO boardTypeDto);
 	public int blind(BoardDTO boardDto);//해당 테이블의 bIdx글의 blind를 기존과 다르게 변경 
 	public BoardTypeDTO getBoardType(BoardTypeDTO boardTypeDto);//bId로 bType 탐색하여 어느테이블을 가야할지를 탐색
 	public BoardTypeDTO getBoardType(BoardDTO boardDto);//bId로 bType 탐색하여 어느테이블을 가야할지를 탐색
 	public BoardTypeDTO getBoardType(String bId);//bId로 bType 탐색하여 어느테이블을 가야할지를 탐색
+	public String changeBoardTypeKorToEng(String boardTypeKor);
 	public String getbType(String bId);//
 	public List<String> getBoardTypeList(); // SELECT distinct btype from boardType
 	public Map<String, List<String>> getBoardIdListByType(List<String> boardTypeList);
@@ -44,10 +46,11 @@ public interface BoardDAO {
 	public BoardDTO content(BoardDTO boardDto); //select all from btypeBoard join btypeBoardinfo where bIdx 
 	public int increaseHit(BoardDTO boardDto); //update board_hit
 	public int write(BoardDTO boardDto); // insert
+	public int getLatestIndex(BoardDTO boardDto);
 	public int writeInfo(BoardDTO boardDto); //insert
 	public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); // insert
 	public int unBookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); // delete
-	public List<String> getBoardCategories(BoardDTO boardDto); // select bCategory where bId
+	public List<String> getBoardCategory(String bId); // select bCategory where bId
 	public int modify(BoardDTO boardDto);//update board
 	public int modifyFile(BoardDTO boardDto);//update boardfile
 	public int delete(BoardDTO boardDto);//delete board
@@ -66,4 +69,8 @@ public interface BoardDAO {
 	
 	public int getTotalRow(BoardDTO boardDto); // select count(*) from [btypeboard] where bid
 	public int goBest(VoteArticleDTO voteArticleDto); // update set board_best=1 where bidx
+	public List<String> getBoardIdKorList();
+	public String changeBoardIdKorToEng(String bIdKor);
+	public int addCategory(BoardCategoryDTO boardCategoryDto);
+
 }

@@ -13,6 +13,12 @@ public class ShopInfoDTO implements Serializable {
 	private int sPermission;
 	private int sBlind;
 
+	@Override
+	public String toString() {
+		System.out.println(sIdx+", "+sHit+", "+sUpvote+", "+sDownvote+", "+sCommentNum+", "+sReportNum+", "+sPermission+", "+sBlind);
+		return super.toString();
+	}
+
 	public int getsIdx() {
 		return sIdx;
 	}

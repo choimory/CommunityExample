@@ -18,9 +18,15 @@ public class DmDTO implements Serializable {
 	private String dmContent;
 	private PageHelper pageHelper;
 	private SearchHelper searchHelper;
-	
-	
-	
+
+	@Override
+	public String toString() {
+		System.out.println(dmIdx+", "+dmSenderId+", "+dmSenderNickname+", "+dmSendDate+", "+dmReceiverId+", "+dmReceiverNickname+", "+dmReceiveDate+", "+dmTitle+", "+dmContent);
+		if(pageHelper!=null)System.out.println(pageHelper.toString());
+		if(searchHelper!=null)System.out.println(searchHelper.toString());
+		return super.toString();
+	}
+
 	public PageHelper getPageHelper() {
 		return pageHelper;
 	}
@@ -44,7 +50,6 @@ public class DmDTO implements Serializable {
 	public void setDmIdx(int dmIdx) {
 		this.dmIdx = dmIdx;
 	}
-
 
 	public String getDmSendDate() {
 		return dmSendDate;

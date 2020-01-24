@@ -10,13 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.ce.dto.MemberAuthDTO;
 import com.ce.dto.MemberDTO;
 import com.ce.service.MemberService;
 
 @Controller
-//@SessionAttributes({"memberDto"})
+@SessionAttributes({"memberDto","bookmarkBoardDtoList","bookmarkArticleDtoList"})
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
@@ -28,10 +29,12 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String joinForm(Model model) {
+	public String joinForm(Model model, HttpServletRequest req) {
 		String view = "Member/join";
+		String beforeUrl=req.getHeader("referer");
 
 		model.addAttribute("title", "회원가입");
+		model.addAttribute("beforeUrl", beforeUrl);
 		return view;
 	}
 
@@ -57,7 +60,6 @@ public class MemberController {
 //		password=memberService.emailCheck(mEmail);		
 //		if(result==FAIL) {
 //		}
-
 		
 		model.addAttribute("title", "");
 		model.addAttribute("password", password);
@@ -68,13 +70,13 @@ public class MemberController {
 	public String join(Model model, MemberDTO memberDto) {
 		String view = "redirect:/main";
 
-//		memberDto=memberService.join(memberDto);		
+		memberDto=memberService.join(memberDto);		
 //		if (memberDto == null) {
 //			model.addAttribute("result", -1);
 //			return "redirect:/join";			
 //		}
 
-//		model.addAttribute("memberDto", memberDto);
+		model.addAttribute("memberDto", memberDto);
 		return view;
 	}
 
@@ -110,12 +112,11 @@ public class MemberController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(Model model, MemberDTO memberDto, HttpServletRequest req) {
-		String view = "redirect:/"; // TODO 이전에 접속중이던 페이지로 리다이렉트
+		String view = "redirect:/main"; // TODO 이전에 접속중이던 페이지로 리다이렉트
 		String beforeUrl = req.getHeader("referer");
 
-//		memberDto=memberService.login(memberDto);
+		memberDto=memberService.login(memberDto);
 
-		model.addAttribute("title", "");
 		model.addAttribute("memberDto", memberDto);
 		return view;
 	}
@@ -124,15 +125,15 @@ public class MemberController {
 	public String memberInfo(Model model, HttpServletRequest req) {
 		String view = "Member/member_info";
 		MemberDTO memberDto = (MemberDTO) req.getAttribute("memberDto");
-		Map<String, Object> memberInfoMap = null;
+		Map<String, Object> resultMap = null;
 
-//		memberInfoMap=memberService.memberInfo(memberDto.getmId());
+//		resultMap=memberService.memberInfo(memberDto.getmId());
 //		if(result<SUCCESS) {
 //		}
 
 
 		model.addAttribute("title", "회원정보");
-		model.addAttribute("memberInfoMap", memberInfoMap);
+		model.addAttribute("resultMap", resultMap);
 		return view;
 	}
 
@@ -170,11 +171,21 @@ public class MemberController {
 		String view = "redirect:/main"; //"Member/auth";  
 		int result = 0;
 
+		System.out.println(memberDto);
 //		result=memberService.withdraw(memberDto);
 //		if(result<SUCCESS) {
 //		}
 
 		model.addAttribute("title", "");
+		return view;
+	}
+	
+	@RequestMapping(value="/logout", method=RequestMethod.POST)
+	public String logout(SessionStatus session) {
+		String view="redirect:/main"; // TODO 추후 이전주소 리다이렉트로 변경
+		
+		session.setComplete();
+		
 		return view;
 	}
 	/*

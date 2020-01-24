@@ -7,18 +7,22 @@ import com.ce.component.PageHelper;
 import com.ce.dao.BoardDAO;
 import com.ce.dao.MemberDAO;
 import com.ce.dao.ShopDAO;
+import com.ce.dto.BoardCategoryDTO;
 import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardTypeDTO;
 import com.ce.dto.MemberBanDTO;
 import com.ce.dto.MemberDTO;
 import com.ce.dto.MemberInfoDTO;
 import com.ce.dto.ShopDTO;
+import com.ce.dto.ShopInfoDTO;
 
 public class AdminServiceImpl implements AdminService {
 	private MemberDAO memberDao;
 	private BoardDAO boardDao;
 	private ShopDAO shopDao;
-
+	private final int SUCCESS=1;
+	private final int FAIL=-1;
+	
 	public void setMemberDao(MemberDAO memberDao) {
 		this.memberDao = memberDao;
 	}
@@ -33,7 +37,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Map<String, List> main() {
-		Map<String, List> dtoListMap = new HashMap<String,List>();
+		Map<String, List> dtoListMap = new HashMap<String, List>();
 		List<BoardDTO> boardDtoList = null;
 		List<ShopDTO> shopDtoList = null;
 		PageHelper pageHelper = new PageHelper();
@@ -56,6 +60,7 @@ public class AdminServiceImpl implements AdminService {
 			result = memberDao.ban(memberBanDto);
 		} else if (memberBanDto.getmBan() == 0) {
 			// ban해제 메소드
+			result=memberDao.unBan(memberBanDto.getmId());
 		}
 
 		return result;
@@ -66,6 +71,7 @@ public class AdminServiceImpl implements AdminService {
 		List<BoardDTO> boardDtoList = null;
 
 		// blind가 false인 글들중 report개수가 n개 이상인 글들을 page를 이용해 최신순 20개 select
+		pageHelper.paging(boardDao.getTotalRowReportList());
 		boardDtoList = boardDao.reportList(pageHelper);
 
 		return boardDtoList;
@@ -76,29 +82,49 @@ public class AdminServiceImpl implements AdminService {
 		List<ShopDTO> shopDtoList = null;
 
 		// shop테이블의 permission이 false인 글들을 page를 이용해 최신순 20개 select select
-		shopDtoList=shopDao.waitingPermissionList(pageHelper);
+		pageHelper.paging(shopDao.getTotalRowWaitingPermission());
+		shopDtoList = shopDao.waitingPermissionList(pageHelper);
 
 		return shopDtoList;
 	}
 
 	@Override
-	public int permissionItem(int sIdx) {
+	public int permissionItem(int sIdx, int sPermission) {
 		int result = 0;
-
-		// 해당sIdx의 permission값을 true로 변경
-		result = shopDao.permission(sIdx);
+		ShopInfoDTO shopInfoDto=new ShopInfoDTO();
+		
+		
+		// 해당sIdx의 permission값을 변경
+		shopInfoDto.setsIdx(sIdx);
+		shopInfoDto.setsPermission(sPermission);
+		result = shopDao.permission(shopInfoDto);
 
 		return result;
 	}
 
 	@Override
-	public int createBoard(BoardTypeDTO boardTypeDto) {
-		int result = 0;
+	public List<String> createBoardGet() {
+		List<String> boardTypeKorList=null;
+		
+		//boardTypeList를 중복제거하고 가져와서 리턴
+		boardTypeKorList=boardDao.getBoardTypeList();
+		
+		return boardTypeKorList;
+	}
 
-		// 1. 중복되지 않은 bType입력시 BOARD_TYPE에 row insert, 해당 타입의 게시판,댓글게시판,파일게시판 생성
-		// 2. 1은 중복인데 bId는 중복이 아닐시 해당 bType에 속하는 새로운 게시판을 생성
-		// 3. 2은 중복인데 bCategory는 중복이 아닐시 해당게시판의 새로운 카테고리를 생성
-		boardDao.createBoard(boardTypeDto);
+	@Override
+	public int createBoardPost(BoardTypeDTO boardTypeDto) {
+		int result = 0;
+		
+		//입력된 btypekor으로 btype가져오기
+		boardTypeDto.setbType(boardDao.changeBoardTypeKorToEng(boardTypeDto.getbTypeKor()));
+		// bType, bId, bIdKor, bIntroduce를 BOARD_TYPE테이블에 insert
+		boardTypeDto.toString();
+		result=boardDao.createBoard(boardTypeDto);
+		
+		if(result!=SUCCESS) {
+			result=FAIL;
+		}
 
 		return result;
 	}
@@ -112,8 +138,40 @@ public class AdminServiceImpl implements AdminService {
 		boardTypeDto = boardDao.getBoardType(boardDto);
 		boardDto.setBoardTypeDto(boardTypeDto);
 		// 해당 테이블의 bIdx글의 blind를 기존과 다르게 변경
-		result=boardDao.blind(boardDto);
+		result = boardDao.blind(boardDto);
 
+		return result;
+	}
+
+	@Override
+	public int createBoardTypePost(BoardTypeDTO boardTypeDto) {
+		// BOARD_TYPE게시판에 새로운 BOARD_TYPE, BOARD_ID, BOARD_INTRODUCE insert
+		// CREATE TABLE, TABLE_INFO, TABLE_COMMENT, TABLE_COMMENT_INFO
+		// with FK설정
+		return 0;
+	}
+
+	@Override
+	public List<String> addBoardCategoryGet() {
+		List<String> bIdKor=null;
+		
+		// SELECT BID FROM BOARD_TYPE
+		bIdKor=boardDao.getBoardIdKorList();
+		
+		return bIdKor;
+	}
+
+	@Override
+	public int addBoardCategoryPost(String bIdKor, String bCategory) {
+		int result=0;
+		BoardCategoryDTO boardCategoryDto=new BoardCategoryDTO();
+		
+		//bIdKor을 bId로 변경
+		boardCategoryDto.setbId(boardDao.changeBoardIdKorToEng(bIdKor));
+		boardCategoryDto.setbCategory(bCategory);
+		// insert into BOARD_CATEGORY values BOARD_ID, BOARD_CATEGORY 
+		result=boardDao.addCategory(boardCategoryDto);
+		
 		return result;
 	}
 

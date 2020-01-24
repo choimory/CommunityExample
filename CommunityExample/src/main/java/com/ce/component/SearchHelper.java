@@ -4,7 +4,19 @@ public class SearchHelper {
 	private String query;
 	private String target;
 	private String orderBy;
+	private String bCategory;
+
+	@Override
+	public String toString() {
+		System.out.println(query + ", " + target + ", " + orderBy + ", " + bCategory);
+		return super.toString();
+	}
 	
+	public SearchHelper() {
+		this.target="both";
+		this.bCategory="all";
+	}	
+
 	public String getQuery() {
 		return query;
 	}
@@ -27,5 +39,13 @@ public class SearchHelper {
 
 	public void setOrderBy(String orderBy) {
 		this.orderBy = orderBy;
+	}
+
+	public String getbCategory() {
+		return bCategory;
+	}
+
+	public void setbCategory(String bCategory) {
+		this.bCategory = bCategory;
 	}
 }

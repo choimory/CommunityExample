@@ -12,6 +12,12 @@ public class MemberInfoDTO implements Serializable {
 	private String mLoginDate;
 	private String mAdmin;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+mExp+", "+mPoint+", "+mEquipItem+", "+mRegDate+", "+mLoginDate+", "+mAdmin);
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

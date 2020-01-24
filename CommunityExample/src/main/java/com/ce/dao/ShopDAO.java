@@ -6,15 +6,17 @@ import java.util.Map;
 import com.ce.component.PageHelper;
 import com.ce.dto.ShopCommentDTO;
 import com.ce.dto.ShopDTO;
+import com.ce.dto.ShopInfoDTO;
 import com.ce.dto.ShopVoteArticleDTO;
 import com.ce.dto.ShopVoteCommentDTO;
 import com.ce.dto.WishlistDTO;
 
 public interface ShopDAO {
 //	public List<ShopDTO> waitingPermissionList(); //select all where permission 
-	public List<ShopDTO> waitingPermissionList(PageHelper pageHelper); //select all where permission 
-	public int permission(int sIdx); // update permission where sIdx 
-	public WishlistDTO getWishlistDTO (String mId); // select all where mId
+	public int getTotalRowWaitingPermission();
+	public List<ShopDTO> waitingPermissionList(PageHelper pageHelper); //select all where permission
+	public int permission(ShopInfoDTO shopInfoDto);
+	public List<WishlistDTO> getWishlistDTO (String mId); // select all where mId
 	
 	//TODO 얘 반환타입 mybatis로 어떻게해야하는지 확인
 	public Map<String,List<ShopDTO>> main(); // select all from 1~10

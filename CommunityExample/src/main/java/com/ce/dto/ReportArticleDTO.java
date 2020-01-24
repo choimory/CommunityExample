@@ -9,6 +9,12 @@ public class ReportArticleDTO implements Serializable {
 	private String bId;
 	private int bIdx;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+bType+", "+bId+", "+bIdx);
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

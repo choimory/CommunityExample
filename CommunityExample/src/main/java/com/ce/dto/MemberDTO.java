@@ -10,7 +10,14 @@ public class MemberDTO implements Serializable {
 	private String mEmail;
 	private MemberInfoDTO memberInfoDto;
 	private MemberBanDTO memberBanDto;
-	
+
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+mPassword+", "+mNickname+", "+mEmail);
+		if(memberInfoDto!=null)System.out.println(memberInfoDto.toString());
+		if(memberBanDto!=null)System.out.println(memberBanDto.toString());
+		return super.toString();
+	}
 
 	public MemberBanDTO getMemberBanDto() {
 		return memberBanDto;

@@ -9,39 +9,47 @@
 
 			<div class="title">
 				<h3 class="pb-5 mb-5">
-					<small>비밀번호 변경</small>
+					<small>회원정보 수정</small>
 				</h3>
 			</div>
 
 			<div class="ce_alert">
 				<c:choose>
-					<c:when test="">
-					</c:when>
-					<c:otherwise>
+					<c:when test="${result eq 1}">
 						<div class="alert alert-warning alert-dismissible fade show"
 							role="alert">
-							<strong>Holy guacamole!</strong> You should check in on some of
-							those fields below.
+							<strong>작업성공</strong> 정상적으로 처리되었습니다.
 							<button type="button" class="close" data-dismiss="alert"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-					</c:otherwise>
+					</c:when>
+					<c:when test="${result eq -1}">
+						<div class="alert alert-warning alert-dismissible fade show"
+							role="alert">
+							<strong>작업실패</strong> 요청한 작업을 처리하는데 실패했습니다.
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</c:when>
 				</c:choose>
 			</div>
 
 			<div class="ce_form">
 				<form action="/communityexample/modify_info" method="post">
-					<div class="ce_pw_now">
-						<label>현재 비밀번호</label><input type="password" class="form-control" name="mPw">
+					<div class="ce_nickname">
+						<label>변경할 닉네임</label><input type="text" class="form-control" name="mNickname">
 					</div>
 					<div class="ce_pw">
-						<label>변경할 비밀번호</label><input type="password" class="form-control" name="changePw">
+						<label>변경할 비밀번호</label><input type="password" class="form-control" name="mPassword">
 					</div>
 					<div class="ce_pw_confirm">
-						<label>변경할 비밀번호 확인</label><input type="password" class="form-control" name="changePw2">
+						<label>변경할 비밀번호 확인</label><input type="password" class="form-control" name="mPassword2">
 					</div>
+					<input type="hidden" name="mId" value="${memberDto.mId}">
 					
 					<div class="ce_btn row mt-5">
 						<div class="col">

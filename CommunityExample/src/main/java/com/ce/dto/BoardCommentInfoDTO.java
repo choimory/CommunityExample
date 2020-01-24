@@ -12,6 +12,12 @@ public class BoardCommentInfoDTO implements Serializable {
 	private int bcNotice;
 	private int bcBest;
 
+	@Override
+	public String toString(){
+		System.out.println(bcIdx+", "+bcUpvote+", "+bcDownvote+", "+bcReportNum+", "+bcBlind+", "+bcNotice+", "+bcBest);
+		return super.toString();
+	}
+
 	public int getBcIdx() {
 		return bcIdx;
 	}

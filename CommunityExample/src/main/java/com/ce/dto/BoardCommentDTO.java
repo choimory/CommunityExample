@@ -20,6 +20,16 @@ public class BoardCommentDTO implements Serializable {
 	private BoardTypeDTO boardTypeDto;
 	private PageHelper pageHelper;
 
+	
+	@Override
+	public String toString() {
+		System.out.println(bcIdx+", "+bIdx+", "+mId+", "+mNickname+", "+bcContent+", "+bcRegDate+", "+bcGroup+", "+bcStep+", "+bcIndent);
+		if(boardCommentInfoDto!=null)System.out.println(boardCommentInfoDto.toString());
+		if(boardTypeDto!=null)System.out.println(boardTypeDto.toString());
+		if(pageHelper!=null)System.out.println(pageHelper.toString());
+		return super.toString();
+	}
+
 	public BoardTypeDTO getBoardTypeDto() {
 		return boardTypeDto;
 	}

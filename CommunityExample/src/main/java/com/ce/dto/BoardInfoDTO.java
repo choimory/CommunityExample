@@ -14,6 +14,12 @@ public class BoardInfoDTO implements Serializable {
 	private int bNotice;
 	private int bBest;
 
+	@Override
+	public String toString() {
+		System.out.println(bIdx+", "+bHit+", "+bUpvote+", "+bDownvote+", "+bCommentNum+", "+bReportNum+", "+bBlind+", "+bNotice+", "+bBest);
+		return super.toString();
+	}
+
 	public int getbIdx() {
 		return bIdx;
 	}

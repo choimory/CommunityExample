@@ -11,6 +11,12 @@ public class VoteArticleDTO implements Serializable {
 	private int vUpDown;
 	
 	
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+bType+", "+bId+", "+bIdx+", "+vUpDown);
+		return super.toString();
+	}
+
 	public int getvUpDown() {
 		return vUpDown;
 	}

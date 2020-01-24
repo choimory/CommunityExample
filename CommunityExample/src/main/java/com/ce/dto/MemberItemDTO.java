@@ -8,6 +8,13 @@ public class MemberItemDTO implements Serializable {
 	private int sIdx;
 	private ShopDTO shopDto;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+sIdx);
+		if(shopDto!=null)System.out.println(shopDto.toString());
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

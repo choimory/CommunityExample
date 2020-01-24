@@ -1,5 +1,7 @@
 package com.ce.dao;
 
+import java.util.List;
+
 import com.ce.dto.BookmarkArticleDTO;
 import com.ce.dto.BookmarkBoardDTO;
 import com.ce.dto.MemberBanDTO;
@@ -19,10 +21,12 @@ public interface MemberDAO {
 	public String getPassword(String mId); // select mPw where mId
 //	public MemberDTO getMemberDto(MemberDTO memberDto); // select all where mId
 	public MemberDTO getMemberDto(String mId); // select all where mId
-	public MemberItemDTO getMemberItem(String mId); // select all where mId
+	public List<MemberItemDTO> getMemberItem(String mId); // select all where mId
 	public BookmarkBoardDTO getBookmarkBoardDTO(String mId); //select all where mId
 	public BookmarkArticleDTO getBookmarkArticleDTO(String mId); //select all where mId
 	public int modify(MemberDTO memberDto); //update where mId
 	public int deleteMember(String mId); //delete where mId
 //	public boolean isAuthCompleted(String mId); // select authcomplete where mId
+	public int unBan(String mId);
+	public String changeNicknameToId(String mNickname);
 }

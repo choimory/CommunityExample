@@ -1,6 +1,10 @@
 package com.ce.controller;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,35 +25,49 @@ import com.ce.service.DmService;
 public class DmController {
 	@Autowired
 	private DmService dmService;
+	private final int SUCCESS=1;
+	private final int FAIL=-1;
 
 	public void setDmService(DmService dmService) {
 		this.dmService = dmService;
 	}
 
 	@RequestMapping(value = { "", "/", "/list" })
-	public String list(Model model, String mId, String mNickname, PageHelper pageHelper) {
+	public String list(Model model, String mId, HttpSession session, PageHelper pageHelper,
+			SearchHelper searchHelper) {
 		String view = "Dm/list";
+		MemberDTO memberDto = (MemberDTO)session.getAttribute("memberDto");
 		List<DmDTO> dmDtoList = null;
 
-//		dmDtoList=dmService.list(mId, dmDto, pageHelper);
+		if (memberDto != null) {
+			dmDtoList=dmService.list(memberDto, pageHelper, searchHelper);
+		} else if(memberDto==null) {
+			view="redirect:main";
+		}
 
-		model.addAttribute("title", mNickname + "님의 쪽지목록");
+		model.addAttribute("title", memberDto.getmNickname() + "님의 쪽지목록");
 		model.addAttribute("dmDtoList", dmDtoList);
 		return view;
 	}
 
 	@RequestMapping(value = "/{dmIdx}")
-	public String content(Model model, @PathVariable("dmIdx") String stringDmIdx) {
+	public String content(Model model, @PathVariable("dmIdx") String stringDmIdx, PageHelper pageHelper) {
 		String view = "Dm/content";
-		DmDTO dmDto = null;
+		Map<String,Object> resultMap=null;
+		DmDTO dmDto=null;
+		List<DmDTO> dmDtoList=null;
+		
+		resultMap=dmService.content(stringDmIdx, pageHelper);
+		if(resultMap==null) {
+			return "redirect:/dm/list";
+		}else {
+			dmDto=(DmDTO)resultMap.get("dmDto");
+			dmDtoList=(List<DmDTO>)resultMap.get("dmDtoList");
+		}
 
-//		dmDto=dmService.content(dmIdx);
-//		if(dmDto==null) {
-//			view="redirect:/dm/list";
-//		}
-
-//		model.addAttribute("title", dmDto.getDmTitle());
+		model.addAttribute("title", dmDto.getDmTitle());
 		model.addAttribute("dmDto", dmDto);
+		model.addAttribute("dmDtoList", dmDtoList);
 		return view;
 	}
 
@@ -66,19 +84,22 @@ public class DmController {
 		String view = "redirect:/dm/list";
 		int result = 0;
 
-//		result=dmService.write(dmDto);
-
+		result=dmService.write(dmDto);
+		if(result!=SUCCESS) {
+			result=FAIL;
+		}
+		
 		model.addAttribute("result", result);
 		return view;
 	}
 
 	@RequestMapping(value = "/search")
-	public String search(Model model,DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
+	public String search(Model model, DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
 		String view = "Dm/list";
 		List<DmDTO> dmDtoList = null;
 
 //		dmDtoList=dmService.search(dmDto, searchHelper, pageHelper);
-		
+
 		model.addAttribute("title", "검색결과");
 		model.addAttribute("dmDtoList", dmDtoList);
 		return view;

@@ -35,6 +35,7 @@
 	crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/b7a5a95aa6.js"
 	crossorigin="anonymous"></script>
+<script src="${jsPath}/ce.script.js"></script>
 
 <!-- title -->
 <link rel="shortcut icon" href="${iconPath}/favicon.png">
@@ -139,19 +140,20 @@
 
 					<div class="ce_info pr-xl-5 mr-xl-5">
 						<c:choose>
-							<c:when test="${id ne null}">
-								<a class="navbar-brand ml-lg-3 ml-xl-5  mr-1" href="#"> <img
+							<c:when test="${memberDto ne null}">
+								<a class="navbar-brand ml-lg-3 ml-xl-5  mr-1" href="/communityexample/member_info"> <img
 									class="rounded-circle"
 									src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1200px-Bootstrap_logo.svg.png"
 									width="30" height="30"> <span class="lead text-white"></span>
 								</a>
 								<a class="far fa-envelope fa-lg text-light mx-1 text-decoration-none" href="/communityexample/dm"></a>
 								<a class="fas fa-shopping-cart fa-lg text-light mx-1 text-decoration-none" href="/communityexample/shop"></a>
+								<a class="fas fa-power-off text-danger fa-lg mx-1 text-decoration-none" href="javascript:logout();"></a>
 							</c:when>
 							<c:otherwise>
 								<a class="navbar-brand ml-lg-3 ml-xl-5  mr-1 lead text-white"
 									href="/communityexample/login"> <span class="lead text-white">Log in</span> <i
-									class="fas fa-sign-in-alt text-success fa-lg mx-1" href=""></i>
+									class="fas fa-sign-in-alt text-success fa-lg mx-1"></i>
 								</a>
 							</c:otherwise>
 						</c:choose>

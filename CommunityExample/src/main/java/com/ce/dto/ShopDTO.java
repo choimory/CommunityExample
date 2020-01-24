@@ -22,6 +22,15 @@ public class ShopDTO implements Serializable {
 	private SearchHelper searchHelper;
 	
 	
+	@Override
+	public String toString() {
+		System.out.println(sIdx+", "+sType+", "+sCategory+", "+mId+", "+mNickname+", "+sTitle+", "+sContent+", "+sFileName+", "+sPrice+", "+sRegDate);
+		if(shopInfoDto!=null)System.out.println(shopInfoDto.toString());
+		if(pageHelper!=null)System.out.println(pageHelper.toString());
+		if(searchHelper!=null)System.out.println(searchHelper.toString());
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

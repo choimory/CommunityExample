@@ -9,6 +9,13 @@ public class WishlistDTO implements Serializable {
 	private String mId;
 	private ShopDTO shopDto;
 
+	@Override
+	public String toString() {
+		System.out.println(wIdx+", "+sIdx+", "+mId);
+		if(shopDto!=null)System.out.println(shopDto.toString());
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

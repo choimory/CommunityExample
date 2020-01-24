@@ -10,6 +10,12 @@ public class VoteCommentDTO implements Serializable {
 	private int bcIdx;
 	private int vUpDown;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+bType+", "+bId+", "+bcIdx+", "+vUpDown);
+		return super.toString();
+	}
+
 	public int getvUpDown() {
 		return vUpDown;
 	}

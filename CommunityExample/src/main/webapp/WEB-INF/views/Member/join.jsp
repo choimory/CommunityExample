@@ -19,24 +19,31 @@
 
 			<div class="ce_alert">
 				<c:choose>
-					<c:when test="">
-					</c:when>
-					<c:otherwise>
+					<c:when test="${result eq 1}">
 						<div class="alert alert-warning alert-dismissible fade show"
 							role="alert">
-							<strong>Holy guacamole!</strong> You should check in on some of
-							those fields below.
+							<strong>작업성공</strong> 정상적으로 처리되었습니다.
 							<button type="button" class="close" data-dismiss="alert"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-					</c:otherwise>
+					</c:when>
+					<c:when test="${result eq -1}">
+						<div class="alert alert-warning alert-dismissible fade show"
+							role="alert">
+							<strong>작업실패</strong> 요청한 작업을 처리하는데 실패했습니다.
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</c:when>
 				</c:choose>
 			</div>
 
 			<div class="ce_form text-left">
-				<form action="" method="post">
+				<form action="/communityexample/join" method="post">
 					<div class="ce_id form-group">
 						<label>ID</label>
 						<div class="input-group mb-3">
@@ -51,11 +58,11 @@
 					</div>
 
 					<div class="ce_pw form-group">
-						<label>비밀번호</label> <input type="password" class="form-control" name="mPw">
+						<label>비밀번호</label> <input type="password" class="form-control" name="mPassword">
 					</div>
 
 					<div class="ce_pw_confirm form-group">
-						<label>비밀번호 확인</label> <input type="password" class="form-control" name="mPw2">
+						<label>비밀번호 확인</label> <input type="password" class="form-control" name="mPasswordCheck">
 					</div>
 
 					<div class="ce_nickname form-group">
@@ -86,7 +93,6 @@
 						<small id="emailHelp" class="form-text text-muted">입력하신
 							이메일로 가입 인증번호가 발송됩니다</small>
 					</div>
-
 					<div class="ce_btn row mt-5">
 						<div class="col">
 							<button type="submit" class="btn btn-success btn-block">회원가입</button>

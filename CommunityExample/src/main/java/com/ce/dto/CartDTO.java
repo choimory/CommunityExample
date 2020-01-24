@@ -10,6 +10,13 @@ public class CartDTO implements Serializable {
 	private String mId;
 	private ShopDTO shopDto;
 
+	@Override
+	public String toString() {
+		System.out.println(cIdx+", "+sIdx+", "+cartCnt);
+		if(shopDto!=null)System.out.println(shopDto.toString());
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

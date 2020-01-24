@@ -33,6 +33,16 @@ public class BoardDTO implements Serializable {
 		this.bIdx = bIdx;
 	}
 
+	@Override
+	public String toString() {
+		System.out.println(bIdx+", "+bId+", "+bCategory+", "+bTitle+", "+bContent+", "+mId+", "+mNickname+", "+bRegDate);
+		if(boardInfoDto!=null)System.out.println(boardInfoDto.toString());
+		if(boardTypeDto!=null)System.out.println(boardTypeDto.toString());
+		if(pageHelper!=null)System.out.println(pageHelper.toString());
+		if(searchHelper!=null)System.out.println(searchHelper.toString());
+		return super.toString();
+	}
+
 	public BoardTypeDTO getBoardTypeDto() {
 		return boardTypeDto;
 	}

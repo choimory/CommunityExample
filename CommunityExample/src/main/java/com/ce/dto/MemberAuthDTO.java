@@ -8,6 +8,12 @@ public class MemberAuthDTO implements Serializable {
 	private String mAuth;
 	private int mAuthComplete;
 
+	@Override
+	public String toString() {
+		System.out.println(mId+", "+mAuth+", "+mAuthComplete);
+		return super.toString();
+	}
+
 	public String getmId() {
 		return mId;
 	}

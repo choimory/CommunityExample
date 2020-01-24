@@ -131,10 +131,10 @@ public class MemberServiceImpl implements MemberService {
 
 		// 세션의 id에 해당하는 회원 정보들 가져오기(회원정보, 보유아이콘, 아이콘 위시리스트, 즐겨찾기한 게시판, 즐겨찾기한 게시물,)
 		dtoMap.put("memberDto", memberDao.getMemberDto(mId));
-		dtoMap.put("memberItemDto", memberDao.getMemberItem(mId));
-		dtoMap.put("wishListDto", shopDao.getWishlistDTO(mId));
-		dtoMap.put("bookmarkBoardDto", memberDao.getBookmarkBoardDTO(mId));
-		dtoMap.put("bookmarkArticleDto", memberDao.getBookmarkArticleDTO(mId));
+		dtoMap.put("memberItemDtoList", memberDao.getMemberItem(mId));
+		dtoMap.put("wishListDtoList", shopDao.getWishlistDTO(mId));
+		dtoMap.put("bookmarkBoardDtoList", memberDao.getBookmarkBoardDTO(mId));
+		dtoMap.put("bookmarkArticleDtoList", memberDao.getBookmarkArticleDTO(mId));
 		// TODO map에 넣은 dto중 null이 있는지 확인하고 하나라도 null이 있으면 map자체를 null로 변경
 //		dtoMap.keySet().iterator();
 

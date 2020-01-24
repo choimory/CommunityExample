@@ -19,7 +19,7 @@
 			<div class="ce_alert">
 				<c:choose>
 					<c:when test="${result eq 1}">
-						<div class="alert alert-warning alert-dismissible fade show"
+						<div class="alert alert-ban alert-dismissible fade show"
 							role="alert">
 							<strong>작업성공</strong> 정상적으로 처리되었습니다.
 							<button type="button" class="close" data-dismiss="alert"
@@ -29,9 +29,9 @@
 						</div>
 					</c:when>
 					<c:when test="${result eq -1}">
-						<div class="alert alert-warning alert-dismissible fade show"
+						<div class="alert alert-danger alert-dismissible fade show"
 							role="alert">
-							<strong>작업실패</strong> 비정상적인 처리로 종료되었습니다.
+							<strong>작업실패</strong> 요청한 작업을 처리하는데 실패했습니다.
 							<button type="button" class="close" data-dismiss="alert"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -45,17 +45,17 @@
 				<form action="/communityexample/admin/ban" method="post">
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio"
-							name="inlineRadioOptions" id="inlineRadio1" name="mBan" value="1">
+							id="inlineRadio1" name="mBan" value=1>
 						<label class="form-check-label" for="inlineRadio1">정지</label>
 					</div>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio"
-							name="inlineRadioOptions" id="inlineRadio2" name="mBan" value="0">
+							id="inlineRadio2" name="mBan" value=0>
 						<label class="form-check-label" for="inlineRadio2">해제</label>
 					</div>
 					<div class="form-group mt-5">
 						<label>아이디</label> <input type="text"
-							class="form-control text-center" name="mId">
+							class="form-control text-center" name="mId" value="${mId}">
 					</div>
 					<div class="form-group">
 						<label>정지사유</label> <input type="text"

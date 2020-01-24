@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: community_example
+-- Host: localhost    Database: communityexample
 -- ------------------------------------------------------
 -- Server version	5.5.62-log
 
@@ -16,6 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `board_category`
+--
+
+DROP TABLE IF EXISTS `board_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `board_category` (
+  `BOARD_ID` varchar(45) NOT NULL,
+  `BOARD_CATEGORY` varchar(45) NOT NULL,
+  KEY `FK_board_category_BOARD_ID_idx` (`BOARD_ID`),
+  CONSTRAINT `FK_board_category_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `board_category`
+--
+
+LOCK TABLES `board_category` WRITE;
+/*!40000 ALTER TABLE `board_category` DISABLE KEYS */;
+INSERT INTO `board_category` VALUES ('humor','감동'),('lol','롤챔스'),('humor','유머'),('overwatch','잡담'),('lol','잡담'),('pubg','잡담');
+/*!40000 ALTER TABLE `board_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `board_type`
 --
 
@@ -23,14 +48,14 @@ DROP TABLE IF EXISTS `board_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `board_type` (
+  `BOARD_TYPE` varchar(10) NOT NULL,
   `BOARD_ID` varchar(45) NOT NULL,
-  `BOARD_TYPE` varchar(100) NOT NULL,
-  `BOARD_CATEGORY` varchar(100) NOT NULL,
-  `BOARD_ID_KOR` varchar(45) NOT NULL,
   `BOARD_TYPE_KOR` varchar(100) NOT NULL,
+  `BOARD_ID_KOR` varchar(45) NOT NULL,
+  `BOARD_INTRODUCE` varchar(255) DEFAULT NULL,
   UNIQUE KEY `BOARD_ID_UNIQUE` (`BOARD_ID`),
   UNIQUE KEY `BOARD_ID_KOR_UNIQUE` (`BOARD_ID_KOR`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +64,7 @@ CREATE TABLE `board_type` (
 
 LOCK TABLES `board_type` WRITE;
 /*!40000 ALTER TABLE `board_type` DISABLE KEYS */;
+INSERT INTO `board_type` VALUES ('humor','humor','유머','유머','유머 게시판 입니다'),('game','lol','게임','리그 오브 레전드','리그 오브 레전드에 관련된 글을 올려주세요'),('game','overwatch','게임','오버워치','오버워치 게시판 입니다'),('game','pubg','게임','배틀그라운드','배틀그라운드 게시판입니다');
 /*!40000 ALTER TABLE `board_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,15 +80,13 @@ CREATE TABLE `bookmark_article` (
   `ID` varchar(45) NOT NULL,
   `BOARD_TYPE` varchar(100) NOT NULL,
   `BOARD_ID` varchar(45) NOT NULL,
-  `BOARD_INDEX` int(11) DEFAULT NULL,
+  `BOARD_INDEX` int(11) NOT NULL,
   PRIMARY KEY (`BOOKMARK_INDEX`),
-  KEY `FK_bookmark_article_ID_idx` (`ID`),
-  KEY `FK_bookmark_article_BOARD_TYPE_idx` (`BOARD_TYPE`),
   KEY `FK_bookmark_article_BOARD_ID_idx` (`BOARD_ID`),
+  KEY `FK_bookmark_article_ID_idx` (`ID`),
   CONSTRAINT `FK_bookmark_article_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_bookmark_article_BOARD_TYPE` FOREIGN KEY (`BOARD_TYPE`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_bookmark_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,13 +109,11 @@ CREATE TABLE `bookmark_board` (
   `ID` varchar(45) NOT NULL,
   `BOARD_TYPE` varchar(100) NOT NULL,
   `BOARD_ID` varchar(45) NOT NULL,
-  KEY `FK_bookmark_board_ID_idx` (`ID`),
-  KEY `FK_bookmark_board_TYPE_idx` (`BOARD_TYPE`),
   KEY `FK_bookmark_board_BOARD_ID_idx` (`BOARD_ID`),
+  KEY `FK_bookmark_board_ID_idx` (`ID`),
   CONSTRAINT `FK_bookmark_board_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_bookmark_board_BOARD_TYPE` FOREIGN KEY (`BOARD_TYPE`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_bookmark_board_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,11 +138,11 @@ CREATE TABLE `cart` (
   `CART_COUNT` int(10) unsigned NOT NULL,
   `ID` varchar(45) NOT NULL,
   PRIMARY KEY (`CART_INDEX`),
-  KEY `FK_cart_SHOP_INDEX_idx` (`SHOP_INDEX`),
   KEY `FK_cart_ID_idx` (`ID`),
-  CONSTRAINT `FK_cart_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_cart_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `FK_cart_SHOP_INDEX_idx` (`SHOP_INDEX`),
+  CONSTRAINT `FK_cart_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_cart_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +162,7 @@ DROP TABLE IF EXISTS `dm`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dm` (
-  `DM_INDEX` int(11) NOT NULL,
+  `DM_INDEX` int(11) NOT NULL AUTO_INCREMENT,
   `DM_SENDER_ID` varchar(45) NOT NULL,
   `DM_SENDER_NICKNAME` varchar(45) NOT NULL,
   `DM_SENDDATE` datetime NOT NULL,
@@ -150,7 +172,7 @@ CREATE TABLE `dm` (
   `DM_TITLE` varchar(255) NOT NULL,
   `DM_CONTENT` text NOT NULL,
   PRIMARY KEY (`DM_INDEX`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,9 +203,11 @@ CREATE TABLE `entertainment` (
   PRIMARY KEY (`BOARD_INDEX`),
   KEY `FK_entertainment_ID_idx` (`ID`),
   KEY `FK_entertainment_NICKNAME_idx` (`NICKNAME`),
-  CONSTRAINT `FK_entertainment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_entertainment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `FK_entertainment_BOARD_ID_idx` (`BOARD_ID`),
+  CONSTRAINT `FK_entertainment_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `FK_entertainment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `FK_entertainment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,17 +233,17 @@ CREATE TABLE `entertainment_comment` (
   `NICKNAME` varchar(45) NOT NULL,
   `COMMENT_CONTENT` varchar(255) NOT NULL,
   `COMMENT_REGDATE` datetime NOT NULL,
-  `COMMENT_GROUP` int(10) unsigned DEFAULT NULL,
-  `COMMENT_STEP` int(10) unsigned DEFAULT NULL,
-  `COMMENT_INDENT` int(10) unsigned DEFAULT NULL,
+  `COMMENT_GROUP` int(10) unsigned NOT NULL,
+  `COMMENT_STEP` int(10) unsigned NOT NULL,
+  `COMMENT_INDENT` int(10) unsigned NOT NULL,
   PRIMARY KEY (`COMMENT_INDEX`),
-  KEY `FK_entertainment_comment_BOARD_INDEX_idx` (`BOARD_INDEX`),
+  KEY `FK_entertainment_comment_BOARD_ID_idx` (`BOARD_INDEX`),
   KEY `FK_entertainment_comment_ID_idx` (`ID`),
   KEY `FK_entertainment_comment_NICKNAME_idx` (`NICKNAME`),
   CONSTRAINT `FK_entertainment_comment_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `entertainment` (`BOARD_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_entertainment_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_entertainment_comment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -240,15 +264,15 @@ DROP TABLE IF EXISTS `entertainment_comment_info`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entertainment_comment_info` (
   `COMMENT_INDEX` int(11) NOT NULL,
-  `COMMENT_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `COMMENT_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
-  `COMMENT_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
-  `COMMENT_BLIND` tinyint(1) NOT NULL DEFAULT '0',
-  `COMMENT_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
-  `COMMENT_BEST` tinyint(1) NOT NULL DEFAULT '0',
+  `COMMENT_UPVOTE` int(10) unsigned NOT NULL,
+  `COMMENT_DOWNVOTE` int(10) unsigned NOT NULL,
+  `COMMENT_REPORTNUM` int(10) unsigned NOT NULL,
+  `COMMENT_BLIND` tinyint(1) NOT NULL,
+  `COMMENT_NOTICE` tinyint(1) NOT NULL,
+  `COMMENT_BEST` tinyint(1) NOT NULL,
   KEY `FK_entertainment_comment_info_COMMENT_INDEX_idx` (`COMMENT_INDEX`),
   CONSTRAINT `FK_entertainment_comment_info_COMMENT_INDEX` FOREIGN KEY (`COMMENT_INDEX`) REFERENCES `entertainment_comment` (`COMMENT_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,17 +293,17 @@ DROP TABLE IF EXISTS `entertainment_info`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entertainment_info` (
   `BOARD_INDEX` int(11) NOT NULL,
-  `BOARD_HIT` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
-  `BOARD_COMMENTNUM` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_BLIND` tinyint(1) NOT NULL DEFAULT '0',
-  `BOARD_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
-  `BOARD_BEST` tinyint(1) NOT NULL DEFAULT '0',
-  KEY `FK_entertainment_info_BOARD_INDEX` (`BOARD_INDEX`),
+  `BOARD_HIT` int(10) unsigned NOT NULL,
+  `BOARD_UPVOTE` int(10) unsigned NOT NULL,
+  `BOARD_DOWNVOTE` int(10) unsigned NOT NULL,
+  `BOARD_COMMENTNUM` int(10) unsigned NOT NULL,
+  `BOARD_REPORTNUM` int(10) unsigned NOT NULL,
+  `BOARD_BLIND` tinyint(1) NOT NULL,
+  `BOARD_NOTICE` tinyint(1) NOT NULL,
+  `BOARD_BEST` tinyint(1) NOT NULL,
+  KEY `FK_entertainment_info_BOARD_INDEX_idx` (`BOARD_INDEX`),
   CONSTRAINT `FK_entertainment_info_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `entertainment` (`BOARD_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,9 +334,11 @@ CREATE TABLE `game` (
   PRIMARY KEY (`BOARD_INDEX`),
   KEY `FK_game_ID_idx` (`ID`),
   KEY `FK_game_NICKNAME_idx` (`NICKNAME`),
+  KEY `FK_game_BOARD_ID_idx` (`BOARD_ID`),
+  CONSTRAINT `FK_game_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_game_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_game_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -321,6 +347,7 @@ CREATE TABLE `game` (
 
 LOCK TABLES `game` WRITE;
 /*!40000 ALTER TABLE `game` DISABLE KEYS */;
+INSERT INTO `game` VALUES (5,'overwatch','잡담','tititle','concontent','choimory','최모리','2020-01-16 19:43:40'),(7,'overwatch','잡담','제목이 길면 어떻게될ㄲ아아ㅏㅏㅏㅏㅏㅏㅏㅏ아아아아','내용없음','choimory','최모리','2020-01-16 20:07:41'),(8,'overwatch','잡담','글을씁니다','네','choimory','최모리','2020-01-16 20:10:47'),(11,'lol','롤챔스','글제목','글내용','choimory','최모리','2020-01-19 09:43:47');
 /*!40000 ALTER TABLE `game` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,17 +365,11 @@ CREATE TABLE `game_comment` (
   `NICKNAME` varchar(45) NOT NULL,
   `COMMENT_CONTENT` varchar(255) NOT NULL,
   `COMMENT_REGDATE` datetime NOT NULL,
-  `COMMENT_GROUP` int(10) unsigned DEFAULT NULL,
-  `COMMENT_STEP` int(10) unsigned DEFAULT NULL,
-  `COMMENT_INDENT` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`COMMENT_INDEX`),
-  KEY `FK_game_comment_BOARD_INDEX_idx` (`BOARD_INDEX`),
-  KEY `FK_game_comment_ID_idx` (`ID`),
-  KEY `FK_game_comment_NICKNAME_idx` (`NICKNAME`),
-  CONSTRAINT `FK_game_comment_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `game` (`BOARD_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_game_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_game_comment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `COMMENT_GROUP` int(10) unsigned NOT NULL,
+  `COMMENT_STEP` int(10) unsigned NOT NULL,
+  `COMMENT_INDENT` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`COMMENT_INDEX`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -357,6 +378,7 @@ CREATE TABLE `game_comment` (
 
 LOCK TABLES `game_comment` WRITE;
 /*!40000 ALTER TABLE `game_comment` DISABLE KEYS */;
+INSERT INTO `game_comment` VALUES (1,8,'abc','abc','[1st] test','2020-01-20 00:00:00',1,0,0),(2,8,'ㄱㄴㄷ','ㄱㄴㄷ','[2nd] abc에게 대댓글1','2020-01-20 00:00:01',1,1,1),(3,8,'zz','zz','[3rd] zz','2020-01-20 00:00:02',3,0,0),(4,8,'ㅋㅋ','ㅋㅋ','[4th] abc에게 대댓글2','2020-01-20 00:00:03',1,2,1),(5,8,'hmm','hmm','[5th] ㄱㄴㄷ에게 대댓글1','2020-01-20 00:00:04',1,1,2),(9,8,'choimory','최모리','write comment','2020-01-20 13:02:01',9,0,0),(10,8,'choimory','최모리','write comment2','2020-01-20 13:10:33',10,0,0);
 /*!40000 ALTER TABLE `game_comment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -370,14 +392,14 @@ DROP TABLE IF EXISTS `game_comment_info`;
 CREATE TABLE `game_comment_info` (
   `COMMENT_INDEX` int(11) NOT NULL,
   `COMMENT_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `COMMENT_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `COMMENT_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `COMMENT_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `COMMENT_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   `COMMENT_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
   `COMMENT_BEST` tinyint(1) NOT NULL DEFAULT '0',
   KEY `FK_game_comment_info_COMMENT_INDEX_idx` (`COMMENT_INDEX`),
   CONSTRAINT `FK_game_comment_info_COMMENT_INDEX` FOREIGN KEY (`COMMENT_INDEX`) REFERENCES `game_comment` (`COMMENT_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -386,6 +408,7 @@ CREATE TABLE `game_comment_info` (
 
 LOCK TABLES `game_comment_info` WRITE;
 /*!40000 ALTER TABLE `game_comment_info` DISABLE KEYS */;
+INSERT INTO `game_comment_info` VALUES (1,0,0,0,0,0,0),(2,0,0,0,0,0,0),(3,0,0,0,0,0,0),(4,0,0,0,0,0,0),(5,0,0,0,0,0,0),(9,0,0,0,0,0,0),(10,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `game_comment_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -400,7 +423,7 @@ CREATE TABLE `game_info` (
   `BOARD_INDEX` int(11) NOT NULL,
   `BOARD_HIT` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `BOARD_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_COMMENTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_BLIND` tinyint(1) NOT NULL DEFAULT '0',
@@ -408,7 +431,7 @@ CREATE TABLE `game_info` (
   `BOARD_BEST` tinyint(1) NOT NULL DEFAULT '0',
   KEY `FK_game_info_BOARD_INDEX_idx` (`BOARD_INDEX`),
   CONSTRAINT `FK_game_info_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `game` (`BOARD_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -417,6 +440,7 @@ CREATE TABLE `game_info` (
 
 LOCK TABLES `game_info` WRITE;
 /*!40000 ALTER TABLE `game_info` DISABLE KEYS */;
+INSERT INTO `game_info` VALUES (5,8,0,0,0,0,0,0,0),(7,6,0,0,0,0,0,0,0),(8,109,0,0,5,0,0,0,0),(11,1,0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `game_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -437,11 +461,13 @@ CREATE TABLE `humor` (
   `NICKNAME` varchar(45) NOT NULL,
   `BOARD_REGDATE` datetime NOT NULL,
   PRIMARY KEY (`BOARD_INDEX`),
-  KEY `ID_idx` (`ID`),
-  KEY `NICKNAME_idx` (`NICKNAME`),
+  KEY `FK_humor_ID_idx` (`ID`),
+  KEY `FK_humor_NICKNAME_idx` (`NICKNAME`),
+  KEY `FK_humor_BOARD_ID_idx` (`BOARD_ID`),
+  CONSTRAINT `FK_humor_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_humor_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_humor_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -467,17 +493,17 @@ CREATE TABLE `humor_comment` (
   `NICKNAME` varchar(45) NOT NULL,
   `COMMENT_CONTENT` varchar(255) NOT NULL,
   `COMMENT_REGDATE` datetime NOT NULL,
-  `COMMENT_GROUP` int(11) DEFAULT NULL,
-  `COMMENT_STEP` int(11) DEFAULT NULL,
-  `COMMENT_INDENT` int(11) DEFAULT NULL,
+  `COMMENT_GROUP` int(10) unsigned NOT NULL,
+  `COMMENT_STEP` int(10) unsigned NOT NULL,
+  `COMMENT_INDENT` int(10) unsigned NOT NULL,
   PRIMARY KEY (`COMMENT_INDEX`),
-  KEY `BOARD_INDEX_idx` (`BOARD_INDEX`),
+  KEY `FK_humor_comment_BOARD_INDEX_idx` (`BOARD_INDEX`),
   KEY `FK_humor_comment_ID_idx` (`ID`),
   KEY `FK_humor_comment_NICKNAME_idx` (`NICKNAME`),
   CONSTRAINT `FK_humor_comment_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `humor` (`BOARD_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_humor_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_humor_comment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -499,14 +525,14 @@ DROP TABLE IF EXISTS `humor_comment_info`;
 CREATE TABLE `humor_comment_info` (
   `COMMENT_INDEX` int(11) NOT NULL,
   `COMMENT_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `COMMENT_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `COMMENT_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `COMMENT_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `COMMENT_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   `COMMENT_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
   `COMMENT_BEST` tinyint(1) NOT NULL DEFAULT '0',
   KEY `FK_humor_comment_info_COMMENT_INDEX_idx` (`COMMENT_INDEX`),
   CONSTRAINT `FK_humor_comment_info_COMMENT_INDEX` FOREIGN KEY (`COMMENT_INDEX`) REFERENCES `humor_comment` (`COMMENT_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -529,15 +555,15 @@ CREATE TABLE `humor_info` (
   `BOARD_INDEX` int(11) NOT NULL,
   `BOARD_HIT` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
-  `BOARD_COMMENTNUM` int(11) unsigned NOT NULL DEFAULT '0',
-  `BOARD_REPORTNUM` int(11) unsigned NOT NULL DEFAULT '0',
+  `BOARD_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
+  `BOARD_COMMENTNUM` int(10) unsigned NOT NULL DEFAULT '0',
+  `BOARD_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   `BOARD_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
   `BOARD_BEST` tinyint(1) NOT NULL DEFAULT '0',
-  KEY `BOARD_INDEX_idx` (`BOARD_INDEX`),
+  KEY `FK_humor_info_BOARD_INDEX_idx` (`BOARD_INDEX`),
   CONSTRAINT `FK_humor_info_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `humor` (`BOARD_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -562,9 +588,9 @@ CREATE TABLE `member` (
   `NICKNAME` varchar(45) NOT NULL,
   `EMAIL` varchar(100) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `NICKNAME_UNIQUE` (`NICKNAME`),
-  UNIQUE KEY `EMAIL_UNIQUE` (`EMAIL`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  UNIQUE KEY `EMAIL_UNIQUE` (`EMAIL`),
+  UNIQUE KEY `NICKNAME_UNIQUE` (`NICKNAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -573,6 +599,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
+INSERT INTO `member` VALUES ('choimory','$2a$10$s032Ie8UkYvWMhp2g23VO.piFSqAzEbt6wQYNLUggK4eXmNjZoXsG','최모리','choimory@naver.com');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -585,12 +612,12 @@ DROP TABLE IF EXISTS `member_ban`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `member_ban` (
   `ID` varchar(45) NOT NULL,
-  `BAN` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `BAN` tinyint(1) NOT NULL DEFAULT '1',
   `REASON` varchar(255) DEFAULT NULL,
   `ENDTOBAN` datetime DEFAULT NULL,
-  KEY `FK_member_ban_ID` (`ID`),
+  KEY `FK_member_ban_ID_idx` (`ID`),
   CONSTRAINT `FK_member_ban_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -617,9 +644,9 @@ CREATE TABLE `member_info` (
   `REGDATE` datetime DEFAULT NULL,
   `LOGINDATE` datetime DEFAULT NULL,
   `ADMIN` varchar(45) DEFAULT NULL,
-  KEY `FK_member_info_ID` (`ID`),
+  KEY `FK_member_info_ID_idx` (`ID`),
   CONSTRAINT `FK_member_info_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -628,6 +655,7 @@ CREATE TABLE `member_info` (
 
 LOCK TABLES `member_info` WRITE;
 /*!40000 ALTER TABLE `member_info` DISABLE KEYS */;
+INSERT INTO `member_info` VALUES ('choimory',1,1,0,'2020-01-16 15:57:28','2020-01-20 16:33:01',NULL);
 /*!40000 ALTER TABLE `member_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -645,7 +673,7 @@ CREATE TABLE `member_item` (
   KEY `FK_member_item_SHOP_INDEX_idx` (`SHOP_INDEX`),
   CONSTRAINT `FK_member_item_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_member_item_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -670,12 +698,10 @@ CREATE TABLE `report_article` (
   `BOARD_ID` varchar(45) NOT NULL,
   `BOARD_INDEX` int(11) NOT NULL,
   KEY `FK_report_article_ID_idx` (`ID`),
-  KEY `FK_report_article_BOARD_TYPE_idx` (`BOARD_TYPE`),
   KEY `FK_report_article_BOARD_ID_idx` (`BOARD_ID`),
-  CONSTRAINT `FK_report_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_report_article_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_report_article_BOARD_TYPE` FOREIGN KEY (`BOARD_TYPE`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_report_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -704,13 +730,13 @@ CREATE TABLE `shop` (
   `SHOP_CONTENT` text NOT NULL,
   `SHOP_FILENAME` varchar(255) NOT NULL,
   `SHOP_PRICE` int(10) unsigned NOT NULL,
-  `SHOP_REGDATE` datetime DEFAULT NULL,
+  `SHOP_REGDATE` datetime NOT NULL,
   PRIMARY KEY (`SHOP_INDEX`),
   KEY `FK_shop_ID_idx` (`ID`),
   KEY `FK_shop_NICKNAME_idx` (`NICKNAME`),
-  CONSTRAINT `FK_shop_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_shop_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_shop_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -735,18 +761,18 @@ CREATE TABLE `shop_comment` (
   `ID` varchar(45) NOT NULL,
   `NICKNAME` varchar(45) NOT NULL,
   `S_COMMENT_CONTENT` varchar(255) NOT NULL,
-  `S_COMMENT_REGDATE` datetime DEFAULT NULL,
-  `S_COMMENT_GROUP` int(10) unsigned DEFAULT NULL,
-  `S_COMMENT_STEP` int(10) unsigned DEFAULT NULL,
-  `S_COMMENT_INDENT` int(10) unsigned DEFAULT NULL,
+  `S_COMMENT_REGDATE` datetime NOT NULL,
+  `S_COMMENT_GROUP` int(10) unsigned NOT NULL,
+  `S_COMMENT_STEP` int(10) unsigned NOT NULL,
+  `S_COMMENT_INDENT` int(10) unsigned NOT NULL,
   PRIMARY KEY (`S_COMMENT_INDEX`),
   KEY `FK_shop_comment_SHOP_INDEX_idx` (`SHOP_INDEX`),
   KEY `FK_shop_comment_NICKNAME_idx` (`NICKNAME`),
   KEY `FK_shop_comment_ID_idx` (`ID`),
-  CONSTRAINT `FK_shop_comment_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_shop_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_shop_comment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_shop_comment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_shop_comment_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -768,14 +794,14 @@ DROP TABLE IF EXISTS `shop_comment_info`;
 CREATE TABLE `shop_comment_info` (
   `S_COMMENT_INDEX` int(11) NOT NULL,
   `S_COMMENT_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `S_COMMENT_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `S_COMMENT_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `S_COMMENT_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `S_COMMENT_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   `S_COMMENT_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
   `S_COMMENT_BEST` tinyint(1) NOT NULL DEFAULT '0',
   KEY `FK_shop_comment_info_S_COMMENT_INDEX_idx` (`S_COMMENT_INDEX`),
   CONSTRAINT `FK_shop_comment_info_S_COMMENT_INDEX` FOREIGN KEY (`S_COMMENT_INDEX`) REFERENCES `shop_comment` (`S_COMMENT_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -798,14 +824,14 @@ CREATE TABLE `shop_info` (
   `SHOP_INDEX` int(11) NOT NULL,
   `SHOP_HIT` int(10) unsigned NOT NULL DEFAULT '0',
   `SHOP_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `SHOP_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `SHOP_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `SHOP_COMMENTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `SHOP_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `SHOP_PERMISSION` tinyint(1) NOT NULL DEFAULT '0',
   `SHOP_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   KEY `FK_shop_info_SHOP_INDEX_idx` (`SHOP_INDEX`),
   CONSTRAINT `FK_shop_info_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -831,7 +857,7 @@ CREATE TABLE `shop_report_article` (
   KEY `FK_shop_report_article_SHOP_INDEX_idx` (`SHOP_INDEX`),
   CONSTRAINT `FK_shop_report_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_shop_report_article_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -858,7 +884,7 @@ CREATE TABLE `shop_vote_article` (
   KEY `FK_shop_vote_article_SHOP_INDEX_idx` (`SHOP_INDEX`),
   CONSTRAINT `FK_shop_vote_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_shop_vote_article_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -888,7 +914,7 @@ CREATE TABLE `shop_vote_comment` (
   CONSTRAINT `FK_shop_vote_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_shop_vote_comment_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_shop_vote_comment_S_COMMENT_INDEX` FOREIGN KEY (`S_COMMENT_INDEX`) REFERENCES `shop_comment` (`S_COMMENT_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -919,9 +945,11 @@ CREATE TABLE `sports` (
   PRIMARY KEY (`BOARD_INDEX`),
   KEY `FK_sports_ID_idx` (`ID`),
   KEY `FK_sports_NICKNAME_idx` (`NICKNAME`),
+  KEY `FK_sports_BOARD_ID_idx` (`BOARD_ID`),
+  CONSTRAINT `FK_sports_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_sports_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_sports_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -947,9 +975,9 @@ CREATE TABLE `sports_comment` (
   `NICKNAME` varchar(45) NOT NULL,
   `COMMENT_CONTENT` varchar(255) NOT NULL,
   `COMMENT_REGDATE` datetime NOT NULL,
-  `COMMENT_GROUP` int(10) unsigned DEFAULT NULL,
-  `COMMENT_STEP` int(10) unsigned DEFAULT NULL,
-  `COMMENT_INDENT` int(10) unsigned DEFAULT NULL,
+  `COMMENT_GROUP` int(10) NOT NULL DEFAULT '0',
+  `COMMENT_STEP` int(10) NOT NULL DEFAULT '0',
+  `COMMENT_INDENT` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`COMMENT_INDEX`),
   KEY `FK_sports_comment_BOARD_INDEX_idx` (`BOARD_INDEX`),
   KEY `FK_sports_comment_ID_idx` (`ID`),
@@ -957,7 +985,7 @@ CREATE TABLE `sports_comment` (
   CONSTRAINT `FK_sports_comment_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `sports` (`BOARD_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_sports_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_sports_comment_NICKNAME` FOREIGN KEY (`NICKNAME`) REFERENCES `member` (`NICKNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -979,14 +1007,14 @@ DROP TABLE IF EXISTS `sports_comment_info`;
 CREATE TABLE `sports_comment_info` (
   `COMMENT_INDEX` int(11) NOT NULL,
   `COMMENT_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `COMMENT_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `COMMENT_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `COMMENT_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `COMMENT_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   `COMMENT_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
   `COMMENT_BEST` tinyint(1) NOT NULL DEFAULT '0',
   KEY `FK_sports_comment_info_COMMENT_INDEX_idx` (`COMMENT_INDEX`),
   CONSTRAINT `FK_sports_comment_info_COMMENT_INDEX` FOREIGN KEY (`COMMENT_INDEX`) REFERENCES `sports_comment` (`COMMENT_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1009,15 +1037,15 @@ CREATE TABLE `sports_info` (
   `BOARD_INDEX` int(11) NOT NULL,
   `BOARD_HIT` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_UPVOTE` int(10) unsigned NOT NULL DEFAULT '0',
-  `BOARD_DOWNVOTE` int(11) NOT NULL DEFAULT '0',
+  `BOARD_DOWNVOTE` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_COMMENTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_REPORTNUM` int(10) unsigned NOT NULL DEFAULT '0',
   `BOARD_BLIND` tinyint(1) NOT NULL DEFAULT '0',
   `BOARD_NOTICE` tinyint(1) NOT NULL DEFAULT '0',
   `BOARD_BEST` tinyint(1) NOT NULL DEFAULT '0',
-  KEY `FK_sports_info_BOARD_INDEX` (`BOARD_INDEX`),
+  KEY `FK_sports_info_BOARD_INDEX_idx` (`BOARD_INDEX`),
   CONSTRAINT `FK_sports_info_BOARD_INDEX` FOREIGN KEY (`BOARD_INDEX`) REFERENCES `sports` (`BOARD_INDEX`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1042,13 +1070,11 @@ CREATE TABLE `vote_article` (
   `BOARD_ID` varchar(45) NOT NULL,
   `BOARD_INDEX` int(11) NOT NULL,
   `UPDOWN` int(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`),
-  KEY `FK_vote_article_BOARD_TYPE_idx` (`BOARD_TYPE`),
   KEY `FK_vote_article_BOARD_ID_idx` (`BOARD_ID`),
-  CONSTRAINT `FK_vote_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `FK_vote_article_ID_idx` (`ID`),
   CONSTRAINT `FK_vote_article_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_vote_article_BOARD_TYPE` FOREIGN KEY (`BOARD_TYPE`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_vote_article_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1073,13 +1099,11 @@ CREATE TABLE `vote_comment` (
   `BOARD_ID` varchar(45) NOT NULL,
   `COMMENT_INDEX` int(11) NOT NULL,
   `UPDOWN` int(1) NOT NULL DEFAULT '0',
-  KEY `FK_vote_comment_ID_idx` (`ID`),
-  KEY `FK_vote_comment_BOARD_TYPE_idx` (`BOARD_TYPE`),
   KEY `FK_vote_comment_BOARD_ID_idx` (`BOARD_ID`),
-  CONSTRAINT `FK_vote_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `FK_vote_comment_ID_idx` (`ID`),
   CONSTRAINT `FK_vote_comment_BOARD_ID` FOREIGN KEY (`BOARD_ID`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_vote_comment_BOARD_TYPE` FOREIGN KEY (`BOARD_TYPE`) REFERENCES `board_type` (`BOARD_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `FK_vote_comment_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1103,11 +1127,11 @@ CREATE TABLE `wishlist` (
   `SHOP_INDEX` int(11) NOT NULL,
   `ID` varchar(45) NOT NULL,
   PRIMARY KEY (`WISHLIST_INDEX`),
-  KEY `FK_wishlist_SHOP_INDEX_idx` (`SHOP_INDEX`),
   KEY `FK_wishlist_ID_idx` (`ID`),
-  CONSTRAINT `FK_wishlist_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `FK_wishlist_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `FK_wishlist_SHOP_INDEX_idx` (`SHOP_INDEX`),
+  CONSTRAINT `FK_wishlist_ID` FOREIGN KEY (`ID`) REFERENCES `member` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_wishlist_SHOP_INDEX` FOREIGN KEY (`SHOP_INDEX`) REFERENCES `shop` (`SHOP_INDEX`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1128,4 +1152,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-09 20:08:09
+-- Dump completed on 2020-01-21 13:04:56

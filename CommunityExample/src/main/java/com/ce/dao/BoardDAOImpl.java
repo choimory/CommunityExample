@@ -13,6 +13,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.ce.component.BoardRowMapper;
 import com.ce.component.PageHelper;
+import com.ce.component.SearchHelper;
+import com.ce.dto.BoardCategoryDTO;
 import com.ce.dto.BoardCommentDTO;
 import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardTypeDTO;
@@ -25,6 +27,23 @@ public class BoardDAOImpl implements BoardDAO {
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	
+	@Override
+	public int getTotalRowReportList() {
+		int result = 0;
+		String sql = "SELECT COUNT(*) " + "FROM HUMOR_INFO, GAME_INFO, SPORTS_INFO, ENTERTAINMENT_INFO "
+				+ "WHERE HUMOR_INFO.BOARD_REPORTNUM>=50 " + "AND GAME_INFO.BOARD_REPORTNUM>=50 "
+				+ "AND SPORTS_INFO.BOARD_REPORTNUM>=50 " + "AND ENTERTAINMENT_INFO.BOARD_REPORTNUM>=50";
+
+		try {
+			result = jdbcTemplate.queryForObject(sql, Integer.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			result = -1;
+		}
+		return result;
 	}
 
 	@Override
@@ -56,9 +75,12 @@ public class BoardDAOImpl implements BoardDAO {
 	public int createBoard(BoardTypeDTO boardTypeDto) {
 		String boardType = null;
 		int result = 0;
-		String sql = "CREATE TABLE +boardType+();";
+		String sql = "INSERT " + "INTO BOARD_TYPE(BOARD_TYPE, BOARD_ID, BOARD_TYPE_KOR, BOARD_ID_KOR, BOARD_INTRODUCE) "
+				+ "VALUES (?,?,?,?,?)";
 
 		try {
+			result = jdbcTemplate.update(sql, new Object[] { boardTypeDto.getbType(), boardTypeDto.getbId(),
+					boardTypeDto.getbTypeKor(), boardTypeDto.getbIdKor(), boardTypeDto.getbIntroduce() });
 		} catch (DataAccessException e) {
 		}
 
@@ -69,9 +91,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int blind(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
 		int result = 0;
-		String sql = "UPDATE " + boardType + " " 
-				+ "SET BOARD_BLIND=? " 
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE " + boardType + " " + "SET BOARD_BLIND=? " + "WHERE BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql,
@@ -86,9 +106,7 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public BoardTypeDTO getBoardType(BoardTypeDTO boardTypeDto) {
-		String sql = "SELECT * " 
-				+ "FROM BOARD_TYPE " 
-				+ "WHERE BOARD_ID=?";
+		String sql = "SELECT * " + "FROM BOARD_TYPE " + "WHERE BOARD_ID=?";
 
 		try {
 			boardTypeDto = jdbcTemplate.queryForObject(sql, new Object[] { boardTypeDto.getbId() },
@@ -96,11 +114,11 @@ public class BoardDAOImpl implements BoardDAO {
 						@Override
 						public BoardTypeDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 							BoardTypeDTO boardTypeDto = new BoardTypeDTO();
-							boardTypeDto.setbId(rs.getString("BOARD_ID"));
 							boardTypeDto.setbType(rs.getString("BOARD_TYPE"));
-							boardTypeDto.setbCategory(rs.getString("BOARD_CATEGORY"));
-							boardTypeDto.setbIdKor(rs.getString("BOARD_ID_KOR"));
+							boardTypeDto.setbId(rs.getString("BOARD_ID"));
 							boardTypeDto.setbTypeKor(rs.getString("BOARD_TYPE_KOR"));
+							boardTypeDto.setbIdKor(rs.getString("BOARD_ID_KOR"));
+							boardTypeDto.setbIntroduce(rs.getString("BOARD_INTRODUCE"));
 							return boardTypeDto;
 						}
 					});
@@ -115,9 +133,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public BoardTypeDTO getBoardType(BoardDTO boardDto) {
 		BoardTypeDTO boardTypeDto = null;
-		String sql = "SELECT * " 
-				+ "FROM BOARD_TYPE " 
-				+ "WHERE BOARD_ID=?";
+		String sql = "SELECT * " + "FROM BOARD_TYPE " + "WHERE BOARD_ID=?";
 
 		try {
 			boardTypeDto = jdbcTemplate.queryForObject(sql, new Object[] { boardDto.getbId() },
@@ -125,11 +141,11 @@ public class BoardDAOImpl implements BoardDAO {
 						@Override
 						public BoardTypeDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 							BoardTypeDTO boardTypeDto = new BoardTypeDTO();
-							boardTypeDto.setbId(rs.getString("BOARD_ID"));
 							boardTypeDto.setbType(rs.getString("BOARD_TYPE"));
-							boardTypeDto.setbCategory(rs.getString("BOARD_CATEGORY"));
-							boardTypeDto.setbIdKor(rs.getString("BOARD_ID_KOR"));
+							boardTypeDto.setbId(rs.getString("BOARD_ID"));
 							boardTypeDto.setbTypeKor(rs.getString("BOARD_TYPE_KOR"));
+							boardTypeDto.setbIdKor(rs.getString("BOARD_ID_KOR"));
+							boardTypeDto.setbIntroduce(rs.getString("BOARD_INTRODUCE"));
 							return boardTypeDto;
 						}
 					});
@@ -144,20 +160,18 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public BoardTypeDTO getBoardType(String bId) {
 		BoardTypeDTO boardTypeDto = null;
-		String sql = "SELECT * " 
-				+ "FROM BOARD_TYPE " 
-				+ "WHERE BOARD_ID";
+		String sql = "SELECT * " + "FROM BOARD_TYPE " + "WHERE BOARD_ID=?";
 
 		try {
-			boardTypeDto = jdbcTemplate.queryForObject(sql, new RowMapper<BoardTypeDTO>() {
+			boardTypeDto = jdbcTemplate.queryForObject(sql, new Object[] { bId }, new RowMapper<BoardTypeDTO>() {
 				@Override
 				public BoardTypeDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 					BoardTypeDTO boardTypeDto = new BoardTypeDTO();
-					boardTypeDto.setbId(rs.getString("BOARD_ID"));
 					boardTypeDto.setbType(rs.getString("BOARD_TYPE"));
-					boardTypeDto.setbCategory(rs.getString("BOARD_CATEGORY"));
-					boardTypeDto.setbIdKor(rs.getString("BOARD_ID_KOR"));
+					boardTypeDto.setbId(rs.getString("BOARD_ID"));
 					boardTypeDto.setbTypeKor(rs.getString("BOARD_TYPE_KOR"));
+					boardTypeDto.setbIdKor(rs.getString("BOARD_ID_KOR"));
+					boardTypeDto.setbIntroduce(rs.getString("BOARD_INTRODUCE"));
 					return boardTypeDto;
 				}
 			});
@@ -170,11 +184,24 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
+	public String changeBoardTypeKorToEng(String boardTypeKor) {
+		String boardType = null;
+		String sql = "SELECT DISTINCT BOARD_TYPE.BOARD_TYPE " + "FROM BOARD_TYPE " + "WHERE BOARD_TYPE.BOARD_TYPE_KOR=?";
+
+		try {
+			boardType=jdbcTemplate.queryForObject(sql, new Object[] {boardTypeKor}, String.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			boardType = null;
+		}
+
+		return boardType;
+	}
+
+	@Override
 	public String getbType(String bId) {
 		String boardType = null;
-		String sql = "SELECT BOARD_TYPE " 
-				+ "FROM BOARD_TYPE " 
-				+ "WHERE BOARD_ID=?";
+		String sql = "SELECT BOARD_TYPE " + "FROM BOARD_TYPE " + "WHERE BOARD_ID=?";
 
 		try {
 			boardType = jdbcTemplate.queryForObject(sql, new Object[] { bId }, String.class);
@@ -188,18 +215,17 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public List<String> getBoardTypeList() {
-		List<String> boardTypeList = null;
-		String sql = "SELECT DISTINCT BOARD_TYPE " 
-				+ "FROM BOARD_TYPE";
+		List<String> boardTypeKorList = null;
+		String sql = "SELECT DISTINCT BOARD_TYPE.BOARD_TYPE_KOR " + "FROM BOARD_TYPE";
 
 		try {
 			// query로는 매개변수에 Class<T>가 안되기때문에 queryForList를 호출하긴 했는데 써본적 없는 메소드이므로 관찰요망
-			boardTypeList = jdbcTemplate.queryForList(sql, String.class);
+			boardTypeKorList = jdbcTemplate.queryForList(sql, String.class);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			boardTypeList = null;
+			boardTypeKorList = null;
 		}
-		return boardTypeList;
+		return boardTypeKorList;
 	}
 
 	@Override
@@ -209,9 +235,7 @@ public class BoardDAOImpl implements BoardDAO {
 
 		try {
 			for (String boardType : boardTypeList) {
-				sql = "SELECT BOARD_ID " 
-						+ "FROM BOARD_TYPE " 
-						+ "WHERE BOARD_TYPE=?";
+				sql = "SELECT BOARD_ID " + "FROM BOARD_TYPE " + "WHERE BOARD_TYPE=?";
 				boardIdMapByType.put(boardType,
 						jdbcTemplate.queryForList(sql, new Object[] { boardType }, String.class));
 			}
@@ -222,14 +246,12 @@ public class BoardDAOImpl implements BoardDAO {
 
 		return boardIdMapByType;
 	}
-	
-	
 
 	@Override
 	public Map<String, List<BoardDTO>> main(Map<String, Object> paramMap) {
 		Map<String, List<BoardDTO>> resultMap = new HashMap<String, List<BoardDTO>>();
 		List<String> boardTypeList = (List<String>) paramMap.put("boardTypeList", paramMap);
-		
+
 		try {
 			resultMap.put("best", jdbcTemplate.query("SELECT BEST", new BoardRowMapper()));
 			for (String boardType : boardTypeList) {
@@ -240,11 +262,9 @@ public class BoardDAOImpl implements BoardDAO {
 		return resultMap;
 	}
 
-	
-	
 	@Override
 	public List<BoardDTO> bestMain(List<String> boardTypeList) {
-		List<BoardDTO> bestMainList=null;
+		List<BoardDTO> bestMainList = null;
 		String sql = "SELECT * FROM HUMOR INNER JOIN HUMOR_INFO ON HUMOR.BOARD_INDEX=HUMOR_INFO.BOARD_INDEX WHERE HUMOR_INFO.BOARD_UPVOTE>=50 "
 				+ "UNION ALL "
 				+ "SELECT * FROM GAME INNER JOIN GAME_INFO ON GAME.BOARD_INDEX=GAME_INFO.BOARD_INDEX WHERE GAME_INFO.BOARD_UPVOTE>=50 "
@@ -252,147 +272,140 @@ public class BoardDAOImpl implements BoardDAO {
 				+ "SELECT * FROM ENTERTAINMENT INNER JOIN ENTERTAINMENT_INFO ON ENTERTAINMENT.BOARD_INDEX=ENTERTAINMENT_INFO.BOARD_INDEX WHERE ENTERTAINMENT_INFO.BOARD_UPVOTE>=50 "
 				+ "UNION ALL "
 				+ "SELECT * FROM SPORTS INNER JOIN SPORTS_INFO ON SPORTS.BOARD_INDEX=SPORTS_INFO.BOARD_INDEX WHERE SPORTS_INFO.BOARD_UPVOTE=50 "
-				+ "ORDER BY BOARD_REGDATE ASC " 
-				+ "LIMIT 1,9";
+				+ "ORDER BY BOARD_REGDATE ASC " + "LIMIT 1,9";
 
 		try {
-			bestMainList=jdbcTemplate.query(sql, new BoardRowMapper());
+			bestMainList = jdbcTemplate.query(sql, new BoardRowMapper());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			bestMainList=null;
+			bestMainList = null;
 		}
-		
+
 		return bestMainList;
 	}
 
 	@Override
 	public Map<String, List<BoardDTO>> otherMain(Map<String, List<String>> paramMap) {
-		Map<String,List<BoardDTO>> resultMap=new HashMap<String,List<BoardDTO>>();
-		List<String> boardTypeList=paramMap.get("boardTypeList");
-		String sql=null;
-		
+		Map<String, List<BoardDTO>> resultMap = new HashMap<String, List<BoardDTO>>();
+		List<String> boardTypeList = paramMap.get("boardTypeList");
+		String sql = null;
+
 		try {
-			for(String boardType:boardTypeList) {
-				sql="SELECT * "
-					+ "FROM "+boardType+" "
-					+ "INNER JOIN "+boardType+"_INFO "
-					+ "ON "+boardType+".BOARD_INDEX="+boardType+"_INFO.BOARD_INDEX "
-					+ "WHERE BOARD_ID=? "
-					+ "ORDER BY "+boardType+".BOARD_INDEX ASC"
-					+ "LIMIT 1,5";
-					List<String> boardIdList=paramMap.get(boardType);
-					for(String boardId:boardIdList) {
-						resultMap.put(boardId, jdbcTemplate.query(sql,new Object[] {boardId},new BoardRowMapper()));
-					}
+			for (String boardType : boardTypeList) {
+				sql = "SELECT * " + "FROM " + boardType + " " + "INNER JOIN " + boardType + "_INFO " + "ON " + boardType
+						+ ".BOARD_INDEX=" + boardType + "_INFO.BOARD_INDEX " + "WHERE BOARD_ID=? " + "ORDER BY "
+						+ boardType + ".BOARD_INDEX ASC" + "LIMIT 1,5";
+				List<String> boardIdList = paramMap.get(boardType);
+				for (String boardId : boardIdList) {
+					resultMap.put(boardId, jdbcTemplate.query(sql, new Object[] { boardId }, new BoardRowMapper()));
+				}
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			resultMap=null;
+			resultMap = null;
 		}
-		
+
 		return resultMap;
 	}
 
 	@Override
 	public List<List<BoardDTO>> humorMain(List<String> boardIdList) {
-		List<List<BoardDTO>> humorMainList=new ArrayList<List<BoardDTO>>();
-		String sql="SELECT * "
-				+ "FROM HUMOR "
-				+ "INNER JOIN HUMOR_INFO "
-				+ "ON HUMOR.BOARD_INDEX=HUMOR_INFO.BOARD_INDEX "
-				+ "WHERE BOARD_ID=? "
-				+ "ORDER BY HUMOR.BOARD_INDEX ASC"
-				+ "LIMIT 1,5";
-		
+		List<List<BoardDTO>> humorMainList = new ArrayList<List<BoardDTO>>();
+		String sql = "SELECT * " + "FROM HUMOR " + "INNER JOIN HUMOR_INFO "
+				+ "ON HUMOR.BOARD_INDEX=HUMOR_INFO.BOARD_INDEX " + "WHERE BOARD_ID=? "
+				+ "ORDER BY HUMOR.BOARD_INDEX ASC" + "LIMIT 1,5";
+
 		try {
-			for(String boardId:boardIdList) {
-				humorMainList.add(jdbcTemplate.query(sql,new Object[] {boardId},new BoardRowMapper()));
+			for (String boardId : boardIdList) {
+				humorMainList.add(jdbcTemplate.query(sql, new Object[] { boardId }, new BoardRowMapper()));
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			humorMainList=null;
+			humorMainList = null;
 		}
-		
+
 		return humorMainList;
 	}
 
 	@Override
 	public List<List<BoardDTO>> sportsMain(List<String> boardIdList) {
-		List<List<BoardDTO>> sportsMainList=new ArrayList<List<BoardDTO>>();;
-		String sql="SELECT * "
-				+ "FROM SPORTS "
-				+ "INNER JOIN SPORTS_INFO "
-				+ "ON SPORTS.BOARD_INDEX=SPORTS_INFO.BOARD_INDEX "
-				+ "WHERE BOARD_ID=? "
-				+ "ORDER BY SPORTS.BOARD_INDEX ASC"
-				+ "LIMIT 1,5";
-		
+		List<List<BoardDTO>> sportsMainList = new ArrayList<List<BoardDTO>>();
+		;
+		String sql = "SELECT * " + "FROM SPORTS " + "INNER JOIN SPORTS_INFO "
+				+ "ON SPORTS.BOARD_INDEX=SPORTS_INFO.BOARD_INDEX " + "WHERE BOARD_ID=? "
+				+ "ORDER BY SPORTS.BOARD_INDEX ASC" + "LIMIT 1,5";
+
 		try {
-			for(String boardId:boardIdList) {
-				sportsMainList.add(jdbcTemplate.query(sql,new Object[] {boardId},new BoardRowMapper()));
+			for (String boardId : boardIdList) {
+				sportsMainList.add(jdbcTemplate.query(sql, new Object[] { boardId }, new BoardRowMapper()));
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			sportsMainList=null;
+			sportsMainList = null;
 		}
-		
+
 		return sportsMainList;
 	}
 
 	@Override
 	public List<List<BoardDTO>> gameMain(List<String> boardIdList) {
-		List<List<BoardDTO>> gameMainList=new ArrayList<List<BoardDTO>>();;
-		String sql="SELECT * "
-				+ "FROM GAME "
-				+ "INNER JOIN GAME_INFO "
-				+ "ON GAME.BOARD_INDEX=GAME_INFO.BOARD_INDEX "
-				+ "WHERE BOARD_ID=? "
-				+ "ORDER BY GAME.BOARD_INDEX ASC"
-				+ "LIMIT 1,5";
-		
+		List<List<BoardDTO>> gameMainList = new ArrayList<List<BoardDTO>>();
+		;
+		String sql = "SELECT * " + "FROM GAME " + "INNER JOIN GAME_INFO " + "ON GAME.BOARD_INDEX=GAME_INFO.BOARD_INDEX "
+				+ "WHERE BOARD_ID=? " + "ORDER BY GAME.BOARD_INDEX ASC" + "LIMIT 1,5";
+
 		try {
-			for(String boardId:boardIdList) {
-				gameMainList.add(jdbcTemplate.query(sql,new Object[] {boardId},new BoardRowMapper()));
+			for (String boardId : boardIdList) {
+				gameMainList.add(jdbcTemplate.query(sql, new Object[] { boardId }, new BoardRowMapper()));
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			gameMainList=null;
+			gameMainList = null;
 		}
-		
+
 		return gameMainList;
 	}
 
 	@Override
 	public List<List<BoardDTO>> entertainmentMain(List<String> boardIdList) {
-		List<List<BoardDTO>> entertainmentMainList=new ArrayList<List<BoardDTO>>();;
-		String sql="SELECT * "
-				+ "FROM ENTERTAINMENT "
-				+ "INNER JOIN ENTERTAINMENT_INFO "
-				+ "ON ENTERTAINMENT.BOARD_INDEX=ENTERTAINMENT_INFO.BOARD_INDEX "
-				+ "WHERE BOARD_ID=? "
-				+ "ORDER BY ENTERTAINMENT.BOARD_INDEX ASC"
-				+ "LIMIT 1,5";
-		
+		List<List<BoardDTO>> entertainmentMainList = new ArrayList<List<BoardDTO>>();
+		;
+		String sql = "SELECT * " + "FROM ENTERTAINMENT " + "INNER JOIN ENTERTAINMENT_INFO "
+				+ "ON ENTERTAINMENT.BOARD_INDEX=ENTERTAINMENT_INFO.BOARD_INDEX " + "WHERE BOARD_ID=? "
+				+ "ORDER BY ENTERTAINMENT.BOARD_INDEX ASC" + "LIMIT 1,5";
+
 		try {
-			for(String boardId:boardIdList) {
-				entertainmentMainList.add(jdbcTemplate.query(sql,new Object[] {boardId},new BoardRowMapper()));
+			for (String boardId : boardIdList) {
+				entertainmentMainList.add(jdbcTemplate.query(sql, new Object[] { boardId }, new BoardRowMapper()));
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-			entertainmentMainList=null;
+			entertainmentMainList = null;
 		}
-		
+
 		return entertainmentMainList;
 	}
 
 	@Override
 	public List<String> getBoardIdList() {
 		List<String> boardIdList = null;
-		String sql = "SELECT BOARD_ID " 
-				+ "FROM BOARD_TYPE";
+		String sql = "SELECT BOARD_ID " + "FROM BOARD_TYPE";
 
 		try {
-			// query로는 매개변수에 Class<T>가 안되기때문에 queryForList를 호출하긴 했는데 써본적 없는 메소드이므로 관찰요망
+			boardIdList = jdbcTemplate.queryForList(sql, String.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			boardIdList = null;
+		}
+
+		return boardIdList;
+	}
+	@Override
+	public List<String> getBoardIdKorList() {
+		List<String> boardIdList = null;
+		String sql = "SELECT BOARD_ID_KOR " + "FROM BOARD_TYPE";
+
+		try {
 			boardIdList = jdbcTemplate.queryForList(sql, String.class);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -405,26 +418,49 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public List<BoardDTO> list(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
+		String query=boardDto.getSearchHelper().getQuery();
+		String target=boardDto.getSearchHelper().getTarget();
 		List<BoardDTO> boardDtoList = null;
 		int limitFirst = boardDto.getPageHelper().getListFirst();
 		int limitLast = boardDto.getPageHelper().getListLast();
-		String sql = null;
-
-		if (boardDto.getbId().equals("BEST")) {
-			sql = "humor union game union ent union sports";
-
-		} else {
-			sql = "SELECT * " 
-					+ "FROM " + boardType + " " 
-					+ "INNER JOIN " + boardType + "_INFO " + "ON " + boardType
-					+ ".BOARD_INDEX=" + boardType + "_INFO.BOARD_INDEX " 
-					+ "WHERE BOARD_INDEX ASC " 
-					+ "LIMIT ?,?";
-		}
-
+		String sql = "SELECT * " 
+				+ "FROM " + boardType + " " 
+				+ "INNER JOIN " + boardType + "_INFO " 
+				+ "ON " + boardType+ ".BOARD_INDEX=" + boardType + "_INFO.BOARD_INDEX ";				
+			
 		try {
-			boardDtoList = jdbcTemplate.query(sql, new Object[] { limitFirst, limitLast }, new BoardRowMapper());
+			if(query==null) {
+				sql+="WHERE BOARD_ID=? "
+					+ "ORDER BY " + boardType+ ".BOARD_INDEX DESC " 
+					+ "LIMIT ?,?";
+				boardDtoList = jdbcTemplate.query(sql, new Object[] { boardDto.getbId(), limitFirst, limitLast }, new BoardRowMapper());
+			}else if(query!=null){
+				if(target.equals("both")) {		
+					query="%"+boardDto.getSearchHelper().getQuery()+"%";
+					sql+="WHERE BOARD_ID=? AND BOARD_TITLE LIKE ? OR BOARD_CONTENT LIKE ? "
+							+ "ORDER BY "+boardType+".BOARD_INDEX DESC "
+							+ "LIMIT ?,?";
+					boardDtoList = jdbcTemplate.query(sql, new Object[] { boardDto.getbId(), query, query, limitFirst, limitLast }, new BoardRowMapper());
+				} else if(target.equals("title")) {
+					query="%"+boardDto.getSearchHelper().getQuery()+"%";
+					sql+="WHERE BOARD_ID=? AND BOARD_TITLE LIKE ? "
+							+ "ORDER BY "+boardType+".BOARD_INDEX DESC "
+							+ "LIMIT ?,?";
+					boardDtoList = jdbcTemplate.query(sql, new Object[] { boardDto.getbId(), query, limitFirst, limitLast }, new BoardRowMapper());
+				} else if(target.equals("content")) {
+					query="%"+boardDto.getSearchHelper().getQuery()+"%";					
+					sql+="WHERE BOARD_ID=? AND BOARD_CONTENT LIKE ? "
+							+ "ORDER BY "+boardType+".BOARD_INDEX DESC "
+							+ "LIMIT ?,?";
+					boardDtoList = jdbcTemplate.query(sql, new Object[] { boardDto.getbId(), query, limitFirst, limitLast }, new BoardRowMapper());
+				} else if(target.equals("nickname")) {					
+					sql+="WHERE BOARD_ID=? AND NICKNAME LIKE ? "
+							+ "ORDER BY "+boardType+".BOARD_INDEX DESC "
+							+ "LIMIT ?,?";
+					boardDtoList = jdbcTemplate.query(sql, new Object[] { boardDto.getbId(), query, limitFirst, limitLast }, new BoardRowMapper());
+				}
+			}
+			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			boardDtoList = null;
@@ -436,12 +472,11 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public BoardDTO content(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
 		String sql = "SELECT * " 
 				+ "FROM " + boardType + " " 
 				+ "INNER JOIN " + boardType + "_INFO " 
-				+ "ON " + boardType+ ".BOARD_INDEX=" + boardType + "_INFO.BOARD_INDEX " 
-				+ "WHERE BOARD_INDEX=?";
+				+ "ON " + boardType + ".BOARD_INDEX=" + boardType + "_INFO.BOARD_INDEX " 
+				+ "WHERE " + boardType + ".BOARD_INDEX=?";
 
 		try {
 			boardDto = jdbcTemplate.queryForObject(sql, new Object[] { boardDto.getbIdx() }, new BoardRowMapper());
@@ -456,11 +491,8 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int increaseHit(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
 		int result = 0;
-		String sql = "UPDATE " + boardType + "_INFO " 
-				+ "SET BOARD_HIT+=1 " 
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE " + boardType + "_INFO " + "SET BOARD_HIT=BOARD_HIT+1 " + "WHERE BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql, new Object[] { boardDto.getbIdx() });
@@ -477,8 +509,8 @@ public class BoardDAOImpl implements BoardDAO {
 		String boardType = boardDto.getBoardTypeDto().getbType();
 		;
 		int result = 0;
-		String sql = "INSERT " 
-				+ "INTO " + boardType+ " (BOARD_INDEX,BOARD_ID,BOARD_CATEGORY,BOARD_TITLE,BOARD_CONTENT,ID,NICKNAME,BOARD_REGDATE) "
+		String sql = "INSERT " + "INTO " + boardType
+				+ " (BOARD_INDEX,BOARD_ID,BOARD_CATEGORY,BOARD_TITLE,BOARD_CONTENT,ID,NICKNAME,BOARD_REGDATE) "
 				+ "VALUES (0,?,?,?,?,?,?,NOW())";
 
 		try {
@@ -493,12 +525,28 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
+	public int getLatestIndex(BoardDTO boardDto) {
+		int result = 0;
+		String boardType = boardDto.getBoardTypeDto().getbType();
+		String sql = "SELECT MAX(BOARD_INDEX)" + "FROM " + boardType + " "
+				+ "WHERE ID=? AND NICKNAME=? AND BOARD_TITLE=? AND BOARD_CONTENT=?";
+
+		try {
+			result = jdbcTemplate.queryForObject(sql, new Object[] { boardDto.getmId(), boardDto.getmNickname(),
+					boardDto.getbTitle(), boardDto.getbContent() }, Integer.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			result = -1;
+		}
+		return result;
+	}
+
+	@Override
 	public int writeInfo(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
 		int result = 0;
-		String sql = "INSERT " 
-				+ "INTO " + boardType+ "_INFO (BOARD_INDEX,BOARD_HIT,BOARD_UPVOTE,BOARD_DOWNVOTE,BOARD_COMMENTNUM,BOARD_REPORTNUM,BOARD_BLIND,BOARD_NOTICE,BOARD_BEST)"
+		String sql = "INSERT " + "INTO " + boardType
+				+ "_INFO (BOARD_INDEX,BOARD_HIT,BOARD_UPVOTE,BOARD_DOWNVOTE,BOARD_COMMENTNUM,BOARD_REPORTNUM,BOARD_BLIND,BOARD_NOTICE,BOARD_BEST)"
 				+ "VALUES (?,0,0,0,0,0,0,?,0)";
 
 		try {
@@ -515,9 +563,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto) {
 		int result = 0;
-		String sql = "INSERT " 
-				+ "INTO BOOKMARK_BOARD (ID,BOARD_TYPE,BOARD_ID) " 
-				+ "VALUES (?,?,?)";
+		String sql = "INSERT " + "INTO BOOKMARK_BOARD (ID,BOARD_TYPE,BOARD_ID) " + "VALUES (?,?,?)";
 
 		try {
 			result = jdbcTemplate.update(sql,
@@ -533,9 +579,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int unBookmarkBoard(BookmarkBoardDTO bookmarkBoardDto) {
 		int result = 0;
-		String sql = "DELETE " 
-				+ "FROM BOOKMARK_BOARD " 
-				+ "WHERE ID=? AND BOARD_ID=?";
+		String sql = "DELETE " + "FROM BOOKMARK_BOARD " + "WHERE ID=? AND BOARD_ID=?";
 
 		try {
 			result = jdbcTemplate.update(sql, new Object[] { bookmarkBoardDto.getmId(), bookmarkBoardDto.getbId() });
@@ -548,14 +592,15 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public List<String> getBoardCategories(BoardDTO boardDto) {
+	public List<String> getBoardCategory(String bId) {
 		List<String> boardCategoryList = null;
 		String sql = "SELECT BOARD_CATEGORY " 
-				+ "FROM BOARD_TYPE " 
-				+ "WHERE BOARD_ID=?";
+				+ "FROM BOARD_CATEGORY " 
+				+ "WHERE BOARD_ID=?"
+				+ "ORDER BY BOARD_CATEGORY ASC";
 
 		try {
-			boardCategoryList = jdbcTemplate.queryForList(sql, new Object[] { boardDto.getbId() }, String.class);
+			boardCategoryList = jdbcTemplate.queryForList(sql, new Object[] { bId }, String.class);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			boardCategoryList = null;
@@ -587,7 +632,6 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int modifyFile(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
 		int result = 0;
 		String sql = "";
 
@@ -603,7 +647,6 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int delete(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
 		int result = 0;
 		String sql = "DELETE FROM " + boardType + " " 
 				+ "WHERE BOARD_INDEX=?";
@@ -621,7 +664,6 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int deleteFile(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
-		;
 		int result = 0;
 		String sql = "";
 
@@ -656,8 +698,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int bookmarkArticle(BookmarkArticleDTO bookmarkArticleDto) {
 		int result = 0;
-		String sql = "INSERT " 
-				+ "INTO BOOKMARK_ARTICLE (BOOKMARK_INDEX,ID,BOARD_TYPE,BOARD_ID,BOARD_INDEX) "
+		String sql = "INSERT " + "INTO BOOKMARK_ARTICLE (BOOKMARK_INDEX,ID,BOARD_TYPE,BOARD_ID,BOARD_INDEX) "
 				+ "VALUES (0,?,?,?,?)";
 
 		try {
@@ -674,9 +715,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int unBookmarkArticle(BookmarkArticleDTO bookmarkArticleDto) {
 		int result = 0;
-		String sql = "DELETE " 
-				+ "FROM BOOKMARK_ARTICLE " 
-				+ "WHERE ID=? AND BOOKMARK_INDEX=?";
+		String sql = "DELETE " + "FROM BOOKMARK_ARTICLE " + "WHERE ID=? AND BOOKMARK_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql,
@@ -692,9 +731,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int checkVoteArticleAlready(VoteArticleDTO voteArticleDto) {
 		int result = 0;
-		String sql = "SELECT COUNT(*) " 
-				+ "FROM VOTE_ARTICLE " 
-				+ "WHERE ID=? AND BOARD_INDEX=?";
+		String sql = "SELECT COUNT(*) " + "FROM VOTE_ARTICLE " + "WHERE ID=? AND BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.queryForObject(sql,
@@ -710,9 +747,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int checkReportAlready(BoardDTO boardDto) {
 		int result = 0;
-		String sql = "SELECT COUNT(*) " 
-				+ "FROM REPORT_ARTICLE " 
-				+ "WHERE ID=? AND BOARD_INDEX=?";
+		String sql = "SELECT COUNT(*) " + "FROM REPORT_ARTICLE " + "WHERE ID=? AND BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.queryForObject(sql, new Object[] { boardDto.getmId(), boardDto.getbIdx() },
@@ -729,9 +764,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int writeReportArticle(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
 		int result = 0;
-		String sql = "INSERT " 
-				+ "INTO REPORT_ARTICLE (ID,BOARD_TYPE,BOARD_ID,BOARD_INDEX) " 
-				+ "VALUES (?,?,?,?)";
+		String sql = "INSERT " + "INTO REPORT_ARTICLE (ID,BOARD_TYPE,BOARD_ID,BOARD_INDEX) " + "VALUES (?,?,?,?)";
 
 		try {
 			result = jdbcTemplate.update(sql,
@@ -748,9 +781,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int thumbsUpContent(VoteArticleDTO voteArticleDto) {
 		String boardType = voteArticleDto.getbType();
 		int result = 0;
-		String sql = "UPDATE " + boardType + "_INFO " 
-				+ "SET BOARD_UPVOTE+=1" 
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE " + boardType + "_INFO " + "SET BOARD_UPVOTE+=1" + "WHERE BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql, new Object[] { voteArticleDto.getbIdx() });
@@ -766,9 +797,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int thumbsDownContent(VoteArticleDTO voteArticleDto) {
 		String boardType = voteArticleDto.getbType();
 		int result = 0;
-		String sql = "UPDATE " + boardType + "_INFO " 
-				+ "SET BOARD_DOWNVOTE+=1" 
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE " + boardType + "_INFO " + "SET BOARD_DOWNVOTE+=1" + "WHERE BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql, new Object[] { voteArticleDto.getbIdx() });
@@ -784,8 +813,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int writeVoteArticle(VoteArticleDTO voteArticleDto) {
 		String boardType = voteArticleDto.getbType();
 		int result = 0;
-		String sql = "INSERT " 
-				+ "INTO VOTE_ARTICLE (ID,BOARD_TYPE,BOARD_ID,BOARD_INDEX,UPDOWN) "
+		String sql = "INSERT " + "INTO VOTE_ARTICLE (ID,BOARD_TYPE,BOARD_ID,BOARD_INDEX,UPDOWN) "
 				+ "VALUES (?,?,?,?,?)";
 
 		try {
@@ -804,9 +832,7 @@ public class BoardDAOImpl implements BoardDAO {
 		String boardType = boardDto.getBoardTypeDto().getbType();
 		;
 		int result = 0;
-		String sql = "UPDATE " + boardType + "_INFO " 
-				+ "SET BOARD_REPORTNUM+=1" 
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE " + boardType + "_INFO " + "SET BOARD_REPORTNUM+=1" + "WHERE BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql, new Object[] { boardDto.getbIdx() });
@@ -822,8 +848,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getTotalRow(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
 		int result = 0;
-		String sql = "SELECT COUNT(*) " 
-				+ "FROM " + boardType;
+		String sql = "SELECT COUNT(*) " + "FROM " + boardType;
 
 		try {
 			result = jdbcTemplate.queryForObject(sql, Integer.class);
@@ -839,9 +864,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public int goBest(VoteArticleDTO voteArticleDto) {
 		String boardType = voteArticleDto.getbType();
 		int result = 0;
-		String sql = "UPDATE " + boardType + "_INFO " 
-				+ "SET BOARD_BEST=1 " 
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE " + boardType + "_INFO " + "SET BOARD_BEST=1 " + "WHERE BOARD_INDEX=?";
 
 		try {
 			result = jdbcTemplate.update(sql, new Object[] { voteArticleDto.getbIdx() });
@@ -850,6 +873,38 @@ public class BoardDAOImpl implements BoardDAO {
 			result = -1;
 		}
 
+		return result;
+	}
+
+	@Override
+	public String changeBoardIdKorToEng(String bIdKor) {
+		String bId=null;
+		String sql="SELECT BOARD_TYPE.BOARD_ID "
+				+ "FROM BOARD_TYPE "
+				+ "WHERE BOARD_TYPE.BOARD_ID_KOR=?";
+		
+		try {
+			bId=jdbcTemplate.queryForObject(sql, new Object[] {bIdKor}, String.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			bId=null;
+		}
+		
+		return bId;
+	}
+
+	@Override
+	public int addCategory(BoardCategoryDTO boardCategoryDto) {
+		int result=0;
+		String sql="INSERT INTO BOARD_CATEGORY (BOARD_ID, BOARD_CATEGORY) VALUES (?, ?)";
+				
+		try {
+			result=jdbcTemplate.update(sql, new Object[] {boardCategoryDto.getbId(),boardCategoryDto.getbCategory()});
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			result=-1;
+		}
+				
 		return result;
 	}
 

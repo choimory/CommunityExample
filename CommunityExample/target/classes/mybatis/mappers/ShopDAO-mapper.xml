@@ -52,6 +52,13 @@
 		<collection property="shopDto" resultMap="shopDto"/>
 	</resultMap>
 	
+	<select id="getTotalRowWaitingPermission" resultType="int">
+		SELECT COUNT(*)
+		FROM SHOP
+		INNER JOIN SHOP_INFO
+		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
+		WHERE SHOP_INFO.SHOP_PERMISSION=0
+	</select>
 	<select id="waitingPermissionList" parameterType="com.ce.component.PageHelper" resultMap="shopDto">
 		SELECT *
 		FROM SHOP
@@ -59,16 +66,18 @@
 		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
 		WHERE SHOP_INFO.SHOP_PERMISSION=0
 		ORDER BY SHOP.SHOP_INDEX ASC
-		LIMIT #{pageHelper.listFirst}, #{pageHelper.listLast}
+		LIMIT #{listFirst}, #{listLast}
 	</select>
-	<update id="permission" parameterType="int">
+	<update id="permission" parameterType="shopInfoDto">
 		UPDATE SHOP_INFO
-		SET SHOP_PERMISSION=1
+		SET SHOP_PERMISSION=#{sPermission}
 		WHERE SHOP_INDEX=#{sIdx}
 	</update>
 	<select id="getWishlistDTO" parameterType="string" resultMap="wishlistDto">
 		SELECT *
 		FROM WISHLIST
+		INNER JOIN SHOP
+		ON WISHLIST.SHOP_INDEX=SHOP.SHOP_INDEX
 		WHERE ID=#{mId}
 	</select>
 	

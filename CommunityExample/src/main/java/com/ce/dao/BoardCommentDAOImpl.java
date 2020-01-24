@@ -26,9 +26,9 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		String sql = "SELECT * " 
 				+ "FROM " + boardType + "_COMMENT " 
 				+ "INNER JOIN " + boardType + "_COMMENT_INFO "
-				+ "ON" + boardType + "_COMMENT.COMMENT_INDEX = " + boardType + "_COMMENT_INFO.COMMENT_INDEX " 
-				+ "WHERE " + boardType + ".BOARD_INDEX=? " 
-				+ "ORDER BY " + boardType + "_COMMENT.COMMENT_GROUP DESC, "	+ boardType + "_COMMENT.COMMENT_STEP ASC " 
+				+ "ON " + boardType + "_COMMENT.COMMENT_INDEX = " + boardType + "_COMMENT_INFO.COMMENT_INDEX " 
+				+ "WHERE " + boardType + "_COMMENT.BOARD_INDEX=? " 
+				+ "ORDER BY " + boardType + "_COMMENT.COMMENT_GROUP ASC, "	+ boardType + "_COMMENT.COMMENT_STEP ASC " 
 				+ "LIMIT ?,?;";
 		
 		try {
@@ -50,9 +50,9 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		String sql = "SELECT * " 
 				+ "FROM " + boardType + "_COMMENT " 
 				+ "INNER JOIN " + boardType + "_COMMENT_INFO "
-				+ "ON" + boardType + "_COMMENT.COMMENT_INDEX = " + boardType + "_COMMENT_INFO.COMMENT_INDEX " 
-				+ "WHERE " + boardType + ".BOARD_INDEX=? " 
-				+ "ORDER BY " + boardType + "_COMMENT.COMMENT_GROUP DESC, "	+ boardType + "_COMMENT.COMMENT_STEP ASC " 
+				+ "ON " + boardType + "_COMMENT.COMMENT_INDEX = " + boardType + "_COMMENT_INFO.COMMENT_INDEX " 
+				+ "WHERE " + boardType + "_COMMENT.BOARD_INDEX=? " 
+				+ "ORDER BY "+boardType+"_COMMENT_INFO.COMMENT_NOTICE DESC, "+boardType+"_COMMENT_INFO.COMMENT_BEST DESC" + boardType + "_COMMENT.COMMENT_GROUP DESC, "	+ boardType + "_COMMENT.COMMENT_STEP ASC " 
 				+ "LIMIT ?,?;";
 
 		try {
@@ -80,6 +80,24 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 			result=-1;
 		}
 
+		return result;
+	}
+
+	@Override
+	public int getLatestIndex(BoardCommentDTO boardCommentDto) {
+		int result=0;
+		String boardType=boardCommentDto.getBoardTypeDto().getbType();
+		String sql="SELECT MAX(COMMENT_INDEX)"
+				+ "FROM "+boardType+"_COMMENT "
+				+ "WHERE ID=? AND NICKNAME=? AND COMMENT_CONTENT=?";
+		
+		try {
+			result=jdbcTemplate.queryForObject(sql, new Object[] {boardCommentDto.getmId(), boardCommentDto.getmNickname(),boardCommentDto.getBcContent()}, Integer.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			result=-1;
+		}
+		
 		return result;
 	}
 
@@ -225,17 +243,33 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 
 		return result;
 	}
+	public int getTotalRow(BoardDTO boardDto) {
+		String boardType = boardDto.getBoardTypeDto().getbType();
+		int result = 0;
+		String sql = "SELECT COUNT(*) " 
+				+ "FROM " + boardType + "_COMMENT "
+				+ "WHERE BOARD_INDEX=?";
+
+		try {
+			result=jdbcTemplate.queryForObject(sql, new Object[] {boardDto.getbIdx()},Integer.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			result=-1;
+		}
+
+		return result;
+	}
 
 	@Override
 	public int commentGrouping(BoardCommentDTO boardCommentDto) {
 		String boardType=boardCommentDto.getBoardTypeDto().getbType();
 		int result = 0;
-		String sql = "SELECT MAX(COMMENT_INDEX) "
-				+ "FROM "+boardType+"_COMMENT "
-				+ "WHERE BOARD_INDEX=?";
+		String sql = "UPDATE "+boardType+"_COMMENT "
+				+ "SET COMMENT_GROUP=COMMENT_INDEX "
+				+ "WHERE ID=? AND NICKNAME=? AND COMMENT_CONTENT=?";
 
 		try {
-			result=jdbcTemplate.queryForObject(sql, new Object[] {boardCommentDto.getbIdx()}, Integer.class);
+			result=jdbcTemplate.update(sql, new Object[] {boardCommentDto.getmId(), boardCommentDto.getmNickname(), boardCommentDto.getBcContent()});
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			result=-1;

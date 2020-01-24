@@ -153,7 +153,9 @@
 	<select id="getMemberItem" parameterType="string" resultMap="memberItemDto">
 		SELECT *
 		FROM MEMBER_ITEM
-		WHERE ID=#{mId}
+		INNER JOIN SHOP
+		ON MEMBER_ITEM.SHOP_INDEX=SHOP.SHOP_INDEX
+		WHERE MEMBER_ITEM.ID=#{mId}
 	</select>
 	<select id="getBookmarkBoardDTO" parameterType="string" resultMap="bookmarkBoardDto">
 		SELECT *
@@ -167,7 +169,8 @@
 	</select>
 	<update id="modify" parameterType="memberDto">
 		UPDATE MEMBER
-		SET PASSWORD=#{mPassword}, NICKNAME=#{mNickname}, EMAIL=#{mEmail}
+		SET PASSWORD=#{mPassword}, NICKNAME=#{mNickname}
+		WHERE ID=#{mId}
 	</update>
 	<delete id="deleteMember" parameterType="memberDto">
 		DELETE 
@@ -179,4 +182,14 @@
 		SET LOGINDATE=now()
 		WHERE ID=#{mId}
 	</update>
+	<delete id="unBan" parameterType="string">
+		DELETE 
+		FROM MEMBER_BAN
+		WHERE ID=#{mId}
+	</delete>
+	<select id="changeNicknameToId" parameterType="string" resultType="string">
+		SELECT ID
+		FROM MEMBER
+		WHERE NICKNAME=#{mNickname}
+	</select>
 </mapper>

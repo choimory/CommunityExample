@@ -11,6 +11,12 @@ public class BoardFileDTO implements Serializable {
 	private String bfPath;
 	private int bfLine;
 
+	@Override
+	public String toString() {
+		System.out.println(bfIdx+", "+bId+", "+bfName+", "+bfPath+", "+bfLine);
+		return super.toString();
+	}
+
 	public int getBfIdx() {
 		return bfIdx;
 	}

@@ -18,6 +18,8 @@ public interface BoardCommentDAO {
 	public int thumbsDownComment(VoteCommentDTO voteCommentDto);
 	public int writeVoteComment(VoteCommentDTO voteCommentDto);
 	public int getTotalRow(BoardCommentDTO boardCommentDto);
+	public int getTotalRow(BoardDTO boardDto);
 	public int commentGrouping(BoardCommentDTO boardCommentDto);
 	public int goBest(VoteCommentDTO voteCommentDto);
+	public int getLatestIndex(BoardCommentDTO boardCommentDto);
 }
