@@ -33,11 +33,10 @@ public class PageHelper {
 
 	@Override
 	public String toString() {
-		System.out.println(displayNum + ", " + page + ", " + totalPage + ", " + listFirst + ", " + listLast + ", "
-				+ groupFirst + ", " + groupLast);
-		if (searchHelper != null)
-			System.out.println(searchHelper.toString());
-		return super.toString();
+		String result="PageHelper[displayNum:"+displayNum + ", page:" + page + ", totalPage:" + totalPage + ", listFirst:" + listFirst + ", listlast:" + listLast + ", groupFirst:"
+				+ groupFirst + ", groupLast:" + groupLast+"]";
+		if (searchHelper != null)result+=searchHelper.toString();
+		return result;
 	}
 
 	public void paging(int totalRow) {

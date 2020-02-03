@@ -22,4 +22,9 @@ public interface BoardCommentDAO {
 	public int commentGrouping(BoardCommentDTO boardCommentDto);
 	public int goBest(VoteCommentDTO voteCommentDto);
 	public int getLatestIndex(BoardCommentDTO boardCommentDto);
+	public int subtractTwoVotes(VoteCommentDTO voteCommentDto);
+	public int countBestComments(BoardCommentDTO boardCommentDto);
+	public BoardCommentDTO getBoardCommentDTO(VoteCommentDTO voteCommentDto);
+	public int getUpvoteNum(VoteCommentDTO voteCommentDto);
+	public int getDownvoteNum(VoteCommentDTO voteCommentDto);
 }

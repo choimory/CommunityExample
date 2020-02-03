@@ -23,11 +23,11 @@ public class BoardCommentDTO implements Serializable {
 	
 	@Override
 	public String toString() {
-		System.out.println(bcIdx+", "+bIdx+", "+mId+", "+mNickname+", "+bcContent+", "+bcRegDate+", "+bcGroup+", "+bcStep+", "+bcIndent);
-		if(boardCommentInfoDto!=null)System.out.println(boardCommentInfoDto.toString());
-		if(boardTypeDto!=null)System.out.println(boardTypeDto.toString());
-		if(pageHelper!=null)System.out.println(pageHelper.toString());
-		return super.toString();
+		String result="BoardCommentDTO[bcIdx:"+bcIdx+", bIdx:"+bIdx+", mId:"+mId+", mNickname:"+mNickname+", bcContent:"+bcContent+", bcRegDate:"+bcRegDate+", bcGroup:"+bcGroup+", bcStep:"+bcStep+", bcIndent:"+bcIndent+"]";
+		if(boardCommentInfoDto!=null)result+=boardCommentInfoDto.toString();
+		if(boardTypeDto!=null)result+=boardTypeDto.toString();
+		if(pageHelper!=null)result+=pageHelper.toString();
+		return result;
 	}
 
 	public BoardTypeDTO getBoardTypeDto() {

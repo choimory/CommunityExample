@@ -11,8 +11,9 @@ public class ReportArticleDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		System.out.println(mId+", "+bType+", "+bId+", "+bIdx);
-		return super.toString();
+		String result="ReportArticleDTO [mId:"+mId+", bType:"+bType+", bId:"+bId+", bIdx:"+bIdx+"]";
+		
+		return result;
 	}
 
 	public String getmId() {

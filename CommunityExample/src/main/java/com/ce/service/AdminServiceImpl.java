@@ -107,7 +107,7 @@ public class AdminServiceImpl implements AdminService {
 		List<String> boardTypeKorList=null;
 		
 		//boardTypeList를 중복제거하고 가져와서 리턴
-		boardTypeKorList=boardDao.getBoardTypeList();
+		boardTypeKorList=boardDao.getBoardTypeListKor();
 		
 		return boardTypeKorList;
 	}
@@ -162,8 +162,10 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int addBoardCategoryPost(String bIdKor, String bCategory) {
+	public Map<String,Object> addBoardCategoryPost(String bIdKor, String bCategory) {
+		Map<String,Object> resultMap=new HashMap<String,Object>();
 		int result=0;
+		List<String> bIdKorList=null;
 		BoardCategoryDTO boardCategoryDto=new BoardCategoryDTO();
 		
 		//bIdKor을 bId로 변경
@@ -171,8 +173,12 @@ public class AdminServiceImpl implements AdminService {
 		boardCategoryDto.setbCategory(bCategory);
 		// insert into BOARD_CATEGORY values BOARD_ID, BOARD_CATEGORY 
 		result=boardDao.addCategory(boardCategoryDto);
+		bIdKorList=boardDao.getBoardIdKorList();
 		
-		return result;
+		resultMap.put("result", result);
+		resultMap.put("bIdKorList", bIdKorList);
+		
+		return resultMap;
 	}
 
 }

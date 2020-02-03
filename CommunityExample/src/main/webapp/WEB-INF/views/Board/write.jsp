@@ -26,7 +26,7 @@
 
 
 	<div class="ce_board_write_form">
-		<form action="/communityexample/${bId}/write" method="post">
+		<form action="/communityexample/${bId}/write" method="post" enctype="multipart/form-data">
 			<div class="row my-2">
 				<div class="col-xl-2 mb-2">
 					<select class="form-control" name="bCategory">
@@ -46,7 +46,7 @@
 			<input type="hidden" name="mId"	value="${memberDto.mId}">
 			<input type="hidden" name="mNickname" value="${memberDto.mNickname}">
 			<div class="form-group my-2">
-				<input type="file" class="form-control-file">
+				<input type="file" name="file" class="form-control-file" multiple="multiple">
 			</div>
 			<div class="form-group my-2 text-right">
 				<button type="submit" class="btn btn-info">작성</button>

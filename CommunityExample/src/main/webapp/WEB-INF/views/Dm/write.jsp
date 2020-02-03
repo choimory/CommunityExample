@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="ce_dm_write_form">
-		<form action="/communityexample/dm/write" method="post">
+		<form action="/communityexample/dm/write" method="post" enctype="multipart/form-data">
 			<div class="form-group my-2">
 				<input type="text" class="form-control" placeholder="받을사람" name="dmReceiverNickname">
 			</div>
@@ -25,7 +25,7 @@
 					rows="10" placeholder="내용" name="dmContent"></textarea>
 			</div>
 			<div class="form-group my-2">
-				<input type="file" class="form-control-file">
+				<input type="file" name="file" class="form-control-file">
 			</div>
 			<input type="hidden" name="dmSenderId" value="${memberDto.mId}">
 			<input type="hidden" name="dmSenderNickname" value="${memberDto.mNickname}">

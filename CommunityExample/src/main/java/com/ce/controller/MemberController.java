@@ -4,11 +4,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -17,10 +22,12 @@ import com.ce.dto.MemberDTO;
 import com.ce.service.MemberService;
 
 @Controller
+@EnableAsync
 @SessionAttributes({"memberDto","bookmarkBoardDtoList","bookmarkArticleDtoList"})
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
+	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;
 
@@ -38,32 +45,36 @@ public class MemberController {
 		return view;
 	}
 
-	@RequestMapping(value = "/idcheck")
-	public String idCheck(Model model, String mId) {
-		String view = ""; // TODO ajax
-		int result = 0;
+	@RequestMapping(value = {"/id_check"}, method = RequestMethod.POST)
+	@ResponseBody
+	public int idCheck(Model model, @RequestBody String mId) {
+		int result = 1;
 
-//		result=memberService.idCheck(mId);
-//		if(result==FAIL) {
-//		}
+		log.debug("idCheck() - mId : "+mId);
+		result=memberService.idCheck(mId);
 		
-		model.addAttribute("title", "");
-		model.addAttribute("result", result);
-		return view;
+		return result;
+	}	
+	@RequestMapping(value = "/nickname_check")
+	@ResponseBody
+	public int nicknameCheck(Model model, @RequestBody String mNickname) {
+		int result=0;
+		
+		log.debug("nicknameCheck() - mNickname : "+mNickname);
+		result=memberService.emailCheck(mNickname);	
+		
+		return result;
 	}
 
-	@RequestMapping(value = "/emailcheck")
-	public String emailCheck(Model model, String mEmail) {
-		String view = ""; // TODO ajax
-		int password=0;
+	@RequestMapping(value = "/email_check")
+	@ResponseBody
+	public int emailCheck(Model model, @RequestBody String mEmail) {
+		int result=0;
 
-//		password=memberService.emailCheck(mEmail);		
-//		if(result==FAIL) {
-//		}
+		log.debug("emailCheck() - mEmail : "+mEmail);
+		result=memberService.emailCheck(mEmail);	
 		
-		model.addAttribute("title", "");
-		model.addAttribute("password", password);
-		return view;
+		return result;
 	}
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -83,19 +94,21 @@ public class MemberController {
 	@RequestMapping(value = "/find_account", method = RequestMethod.GET)
 	public String findAccountForm(Model model) {
 		String view = "Member/find_account";
-
+		
 		model.addAttribute("title", "계정찾기");
 		return view;
 	}
 
 	@RequestMapping(value = "/find_account", method = RequestMethod.POST)
 	public String findAccount(Model model, String mEmail) {
-		String view = "Member/find_account"; 
-		int result = 0;
+		String view = "Member/find_account";
+		int result=0;
+		MemberDTO memberDto=null;
 
-//		result=memberService.findAccount(mEmail);
-//		if(result==FAIL) {
-//		}
+		memberDto=memberService.findAccount(mEmail);
+		if(memberDto!=null) {
+			result=memberService.sendMail(memberDto);
+		}
 		
 		model.addAttribute("title", "계정찾기 결과");
 		model.addAttribute("result", result);
@@ -112,28 +125,40 @@ public class MemberController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(Model model, MemberDTO memberDto, HttpServletRequest req) {
+		log.debug("loginPOST()");
 		String view = "redirect:/main"; // TODO 이전에 접속중이던 페이지로 리다이렉트
 		String beforeUrl = req.getHeader("referer");
-
-		memberDto=memberService.login(memberDto);
-
-		model.addAttribute("memberDto", memberDto);
+		Map<String,Object> resultMap=null;
+		
+		resultMap=memberService.login(memberDto);
+		if(resultMap==null) {			
+		}
+		
+		model.addAttribute("memberDto", resultMap.get("memberDto"));
+		model.addAttribute("bookmarkBoardDtoList", resultMap.get("bookmarkBoardDtoList"));
 		return view;
 	}
 
 	@RequestMapping(value = "/member_info")
 	public String memberInfo(Model model, HttpServletRequest req) {
 		String view = "Member/member_info";
-		MemberDTO memberDto = (MemberDTO) req.getAttribute("memberDto");
+		MemberDTO memberDto = (MemberDTO) req.getSession().getAttribute("memberDto");
 		Map<String, Object> resultMap = null;
 
-//		resultMap=memberService.memberInfo(memberDto.getmId());
-//		if(result<SUCCESS) {
-//		}
+		log.debug("memberInfo();");
+		resultMap=memberService.memberInfo(memberDto.getmId());
+		if(resultMap==null) {
+			return "redirect:/main";
+		}
 
 
-		model.addAttribute("title", "회원정보");
+		model.addAttribute("title", memberDto.getmNickname()+"님의 회원정보");
 		model.addAttribute("resultMap", resultMap);
+//		model.addAttribute("memberDto", resultMap.get("memberDto"));
+//		model.addAttribute("bookmarkBoardDtoList", resultMap.get("bookmarkArticleDtoList"));
+//		model.addAttribute("bookmarkArticleDtoList", resultMap.get("bookmarkArticleDtoList"));
+//		model.addAttribute("memberItemDtoList", resultMap.get("memberItemDtoList"));
+//		model.addAttribute("wishListDtoList", resultMap.get("wishListDtoList"));
 		return view;
 	}
 

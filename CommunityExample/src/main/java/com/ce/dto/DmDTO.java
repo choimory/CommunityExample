@@ -1,6 +1,7 @@
 package com.ce.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
@@ -16,15 +17,24 @@ public class DmDTO implements Serializable {
 	private String dmReceiveDate;
 	private String dmTitle;
 	private String dmContent;
+	private List<DmFileDTO> dmFileDtoList;
 	private PageHelper pageHelper;
 	private SearchHelper searchHelper;
 
 	@Override
 	public String toString() {
-		System.out.println(dmIdx+", "+dmSenderId+", "+dmSenderNickname+", "+dmSendDate+", "+dmReceiverId+", "+dmReceiverNickname+", "+dmReceiveDate+", "+dmTitle+", "+dmContent);
-		if(pageHelper!=null)System.out.println(pageHelper.toString());
-		if(searchHelper!=null)System.out.println(searchHelper.toString());
-		return super.toString();
+		String result="DmDTO[dmIdx:"+dmIdx+", dmSenderId:"+dmSenderId+", dmSenderNickname:"+dmSenderNickname+", dmSendDate:"+dmSendDate+", dmReceiverId:"+dmReceiverId+", dmReceiverNickname:"+dmReceiverNickname+", dmReceiveDate:"+dmReceiveDate+", dmTitle:"+dmTitle+", dmContent:"+dmContent+", dmFileDtoList:"+dmFileDtoList.toString();
+		if(pageHelper!=null)result+=pageHelper.toString();
+		if(searchHelper!=null)result+=searchHelper.toString();
+		return result;
+	}
+
+	public List<DmFileDTO> getDmFileDtoList() {
+		return dmFileDtoList;
+	}
+
+	public void setDmFileDtoList(List<DmFileDTO> dmFileDtoList) {
+		this.dmFileDtoList = dmFileDtoList;
 	}
 
 	public PageHelper getPageHelper() {

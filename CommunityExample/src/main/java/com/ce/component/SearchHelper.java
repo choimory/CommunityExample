@@ -8,8 +8,8 @@ public class SearchHelper {
 
 	@Override
 	public String toString() {
-		System.out.println(query + ", " + target + ", " + orderBy + ", " + bCategory);
-		return super.toString();
+		String result="SearchHelper[query:"+query + ", target:" + target + ", orderBy:" + orderBy + ", bCategory:" + bCategory+"]";
+		return result;
 	}
 	
 	public SearchHelper() {

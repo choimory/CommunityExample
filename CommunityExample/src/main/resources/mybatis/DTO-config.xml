@@ -14,6 +14,7 @@
 		<typeAlias type="com.ce.dto.BookmarkBoardDTO" alias="bookmarkBoardDto"/>
 		<typeAlias type="com.ce.dto.CartDTO" alias="cartDto"/>
 		<typeAlias type="com.ce.dto.DmDTO" alias="dmDto"/>
+		<typeAlias type="com.ce.dto.DmFileDTO" alias="dmFileDto"/>
 		<typeAlias type="com.ce.dto.MemberAuthDTO" alias="memberAuthDto"/>
 		<typeAlias type="com.ce.dto.MemberBanDTO" alias="memberBanDto"/>
 		<typeAlias type="com.ce.dto.MemberDTO" alias="memberDto"/>

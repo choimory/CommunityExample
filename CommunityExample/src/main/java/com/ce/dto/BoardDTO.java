@@ -1,6 +1,7 @@
 package com.ce.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
@@ -17,6 +18,7 @@ public class BoardDTO implements Serializable {
 	private String bRegDate;
 	private BoardInfoDTO boardInfoDto;
 	private BoardTypeDTO boardTypeDto;
+	private List<BoardFileDTO> boardFileDtoList;
 	private PageHelper pageHelper;
 	private SearchHelper searchHelper;
 
@@ -35,12 +37,20 @@ public class BoardDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		System.out.println(bIdx+", "+bId+", "+bCategory+", "+bTitle+", "+bContent+", "+mId+", "+mNickname+", "+bRegDate);
-		if(boardInfoDto!=null)System.out.println(boardInfoDto.toString());
-		if(boardTypeDto!=null)System.out.println(boardTypeDto.toString());
-		if(pageHelper!=null)System.out.println(pageHelper.toString());
-		if(searchHelper!=null)System.out.println(searchHelper.toString());
-		return super.toString();
+		String result="BoardDTO[bIdx: "+bIdx+", bId:"+bId+", bCategory:"+bCategory+", bTitle:"+bTitle+", bContent:"+bContent+", mId:"+mId+", mNickname:"+mNickname+", bRegdate:"+bRegDate+"]";
+		if(boardInfoDto!=null)result+=boardInfoDto.toString();
+		if(boardTypeDto!=null)result+=boardTypeDto.toString();
+		if(pageHelper!=null)result+=pageHelper.toString();
+		if(searchHelper!=null)result+=searchHelper.toString();
+		return result;
+	}
+
+	public List<BoardFileDTO> getBoardFileDtoList() {
+		return boardFileDtoList;
+	}
+
+	public void setBoardFileDtoList(List<BoardFileDTO> boardFileDtoList) {
+		this.boardFileDtoList = boardFileDtoList;
 	}
 
 	public BoardTypeDTO getBoardTypeDto() {

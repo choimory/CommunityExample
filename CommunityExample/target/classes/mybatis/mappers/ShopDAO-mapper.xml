@@ -78,7 +78,7 @@
 		FROM WISHLIST
 		INNER JOIN SHOP
 		ON WISHLIST.SHOP_INDEX=SHOP.SHOP_INDEX
-		WHERE ID=#{mId}
+		WHERE WISHLIST.ID=#{mId}
 	</select>
 	
 	<!-- 얘 반환타입 어떻게 해야하는지 확인 -->

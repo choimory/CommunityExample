@@ -21,8 +21,9 @@ public class BoardTypeDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		System.out.println(bId+", "+bType+", "+bIdKor+", "+bTypeKor+", "+bIntroduce);
-		return super.toString();
+		String result="BoardTypeDTO[bId:"+bId+", bType:"+bType+", bIdKor:"+bIdKor+", bTypeKor:"+bTypeKor+", bIntroduce:"+bIntroduce+"]";
+
+		return result;
 	}
 
 	public String getbId() {

@@ -4,12 +4,17 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.ce.dto.MemberDTO;
 
 /**
  * Handles requests for the application home page.
@@ -35,21 +40,19 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping({"/test","test1"})
-	public String test(Model model) {
-		String view = null;
-
-		model.addAttribute("title", "this is test");
-		view = "test_content";
+	@RequestMapping(value={"/test","test1"})
+	public String test(Model model, HttpServletRequest req) {
+		String view = "test_content";
+		
+		model.addAttribute("title", "this is for test");
 		return view;
 	}
 
-	@RequestMapping("/test2")
+	@RequestMapping("/base")
 	public String test2(Model model) {
-		String view = null;
+		String view = "base";
 
-		model.addAttribute("title", "this is test2");
-		view = "test2";
+		model.addAttribute("title", "폼 기본 골격");
 		return view;
 	}
 }

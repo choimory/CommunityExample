@@ -128,8 +128,6 @@
 			<version>4.3.18.RELEASE</version>
 		</dependency>
 
-		<!-- commons io -->
-
 		<!-- commons dbcp -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>
@@ -137,8 +135,10 @@
 			<version>1.4</version>
 		</dependency>
 
-		<!-- mysql connector --><!-- memory leak의 주범인데 어떻게 설치해야 memoryleak를 안내는지 모르겠음. 프로젝트가 아닌 톰캣 라이브러리에 
+		<!-- mysql connector -->
+		<!-- memory leak의 주범인데 어떻게 설치해야 memoryleak를 안내는지 모르겠음. 프로젝트가 아닌 톰캣 라이브러리에 
 			위치하면 된다는 얘기가 있음 -->
+		<!-- 톰캣 라이브러리에 커넥터.jar를 위치시킨뒤 빌드패스로 라이브러리 등록하니 해결되었음 -->
 
 		<!-- mybatis -->
 		<dependency>
@@ -160,6 +160,44 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>4.2.7.RELEASE</version>
 		</dependency>
+
+		<!-- commons io -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<!-- JSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+
+		<!-- Java Mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>3.2.8.RELEASE</version>
+		</dependency>
+
+
 
 		<!-- lucy filter -->
 		<dependency>

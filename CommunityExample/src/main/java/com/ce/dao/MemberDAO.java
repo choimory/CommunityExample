@@ -13,6 +13,7 @@ public interface MemberDAO {
 	public int updateBan(MemberBanDTO memberBanDto); //update member_ban
 	public int deleteBan(MemberBanDTO memberBanDto); //delete member_ban
 	public int idCheck(String mId); // count where mId
+	public int nicknameCheck(String mNickname);
 	public int emailCheck(String mEmail); // count where mEmail
 	public int join(MemberDTO memberDto); // insert member values memberDto
 	public int insertMemberInfo(String mId); // insert memberInfo values
@@ -21,6 +22,7 @@ public interface MemberDAO {
 	public String getPassword(String mId); // select mPw where mId
 //	public MemberDTO getMemberDto(MemberDTO memberDto); // select all where mId
 	public MemberDTO getMemberDto(String mId); // select all where mId
+	public String getId(String mEmail); // select all where mEmail
 	public List<MemberItemDTO> getMemberItem(String mId); // select all where mId
 	public BookmarkBoardDTO getBookmarkBoardDTO(String mId); //select all where mId
 	public BookmarkArticleDTO getBookmarkArticleDTO(String mId); //select all where mId
@@ -29,4 +31,6 @@ public interface MemberDAO {
 //	public boolean isAuthCompleted(String mId); // select authcomplete where mId
 	public int unBan(String mId);
 	public String changeNicknameToId(String mNickname);
+	public List<BookmarkBoardDTO> bookmarkBoardList(String mId);
+	public List<BookmarkArticleDTO> bookmarkArticleList(String mId);
 }

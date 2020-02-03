@@ -7,11 +7,13 @@ public class BookmarkBoardDTO implements Serializable {
 	private String mId;
 	private String bType;
 	private String bId;
+	private String bTypeKor;
+	private String bIdKor;
 
 	@Override
 	public String toString() {
-		System.out.println(mId+", "+bType+", "+bId);
-		return super.toString();
+		String result="BookmarkBoardDTO[mId:"+mId+", bType:"+bType+", bId:"+bId+", bTypeKor:"+bTypeKor+", bIdKor:"+bIdKor+"]";
+		return result;
 	}
 
 	public String getmId() {
@@ -36,6 +38,22 @@ public class BookmarkBoardDTO implements Serializable {
 
 	public void setbId(String bId) {
 		this.bId = bId;
+	}
+
+	public String getbTypeKor() {
+		return bTypeKor;
+	}
+
+	public void setbTypeKor(String bTypeKor) {
+		this.bTypeKor = bTypeKor;
+	}
+
+	public String getbIdKor() {
+		return bIdKor;
+	}
+
+	public void setbIdKor(String bIdKor) {
+		this.bIdKor = bIdKor;
 	}
 
 }

@@ -20,7 +20,7 @@
 					<c:when test="${result eq 1}">
 						<div class="alert alert-warning alert-dismissible fade show"
 							role="alert">
-							<strong>작업성공</strong> 정상적으로 처리되었습니다.
+							<strong>전송완료</strong>입력하신 이메일로 아이디와 비밀번호가 발송되었습니다.
 							<button type="button" class="close" data-dismiss="alert"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -28,9 +28,9 @@
 						</div>
 					</c:when>
 					<c:when test="${result eq -1}">
-						<div class="alert alert-warning alert-dismissible fade show"
+						<div class="alert alert-danger alert-dismissible fade show"
 							role="alert">
-							<strong>작업실패</strong> 요청한 작업을 처리하는데 실패했습니다.
+							<strong>작업실패</strong>요청한 작업을 처리하는데 실패했습니다.
 							<button type="button" class="close" data-dismiss="alert"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>

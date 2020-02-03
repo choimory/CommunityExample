@@ -4,33 +4,33 @@ import java.io.Serializable;
 
 public class BoardFileDTO implements Serializable {
 	private static final long serialVersionUID = 8660344123434609013L;
-	private int bfIdx;
-	private String bId;
+	private int fIdx;
 	private int bIdx;
-	private String bfName;
-	private String bfPath;
-	private int bfLine;
+	private String fOriginalName;
+	private String fStoredName;
+	private Long fSize;
+	private BoardTypeDTO boardTypeDto;
 
+	public BoardFileDTO () {}
+	public BoardFileDTO(int bIdx, String fOriginalName, String fStoredName, Long fSize) {
+		this.bIdx=bIdx;
+		this.fOriginalName=fOriginalName;
+		this.fStoredName=fStoredName;
+		this.fSize=fSize;
+	}
+	
+	
 	@Override
 	public String toString() {
-		System.out.println(bfIdx+", "+bId+", "+bfName+", "+bfPath+", "+bfLine);
-		return super.toString();
+		return fIdx+", "+bIdx+", "+fOriginalName+", "+fStoredName+", "+fSize;
 	}
 
-	public int getBfIdx() {
-		return bfIdx;
+	public int getfIdx() {
+		return fIdx;
 	}
 
-	public void setBfIdx(int bfIdx) {
-		this.bfIdx = bfIdx;
-	}
-
-	public String getbId() {
-		return bId;
-	}
-
-	public void setbId(String bId) {
-		this.bId = bId;
+	public void setfIdx(int fIdx) {
+		this.fIdx = fIdx;
 	}
 
 	public int getbIdx() {
@@ -41,27 +41,35 @@ public class BoardFileDTO implements Serializable {
 		this.bIdx = bIdx;
 	}
 
-	public String getBfName() {
-		return bfName;
+	public String getfOriginalName() {
+		return fOriginalName;
 	}
 
-	public void setBfName(String bfName) {
-		this.bfName = bfName;
+	public void setfOriginalName(String fOriginalName) {
+		this.fOriginalName = fOriginalName;
 	}
 
-	public String getBfPath() {
-		return bfPath;
+	public String getfStoredName() {
+		return fStoredName;
 	}
 
-	public void setBfPath(String bfPath) {
-		this.bfPath = bfPath;
+	public void setfStoredName(String fStoredName) {
+		this.fStoredName = fStoredName;
 	}
 
-	public int getBfLine() {
-		return bfLine;
+	public Long getfSize() {
+		return fSize;
 	}
 
-	public void setBfLine(int bfLine) {
-		this.bfLine = bfLine;
+	public void setfSize(Long fSize) {
+		this.fSize = fSize;
 	}
+	public BoardTypeDTO getBoardTypeDto() {
+		return boardTypeDto;
+	}
+	public void setBoardTypeDto(BoardTypeDTO boardTypeDto) {
+		this.boardTypeDto = boardTypeDto;
+	}
+
+
 }

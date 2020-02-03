@@ -1,22 +1,34 @@
 package com.ce.service;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
 import com.ce.dao.DmDAO;
 import com.ce.dao.MemberDAO;
 import com.ce.dto.DmDTO;
+import com.ce.dto.DmFileDTO;
 import com.ce.dto.MemberDTO;
 
 public class DmServiceImpl implements DmService {
+	private static final Logger log = LoggerFactory.getLogger(DmServiceImpl.class);
 	private DmDAO dmDao;
 	private MemberDAO memberDao;
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;
-
 
 	public void setDmDao(DmDAO dmDao) {
 		this.dmDao = dmDao;
@@ -36,84 +48,136 @@ public class DmServiceImpl implements DmService {
 		return result;
 	}
 
-	@Override
-	public List<DmDTO> list(MemberDTO memberDto, PageHelper pageHelper, SearchHelper searchHelper) {
-		List<DmDTO> dmDtoList = null;
-		DmDTO dmDto=new DmDTO();
-		
-		pageHelper.list();
-		pageHelper.pagination2(dmDao.getTotalRow(memberDto.getmId()));
-		dmDto.setPageHelper(pageHelper);
-		dmDto.setSearchHelper(searchHelper);
-		dmDto.setDmReceiverId(memberDto.getmId());
-	
-		// dmReceiverId를 대상으로 page를 이용해 최신순 20개 select
-		dmDtoList = dmDao.list(dmDto);
-		
-		return dmDtoList;
+	private int fileUpload(List<MultipartFile> files, int dmIdx) {
+		int result = 0;
+		String filePath = "C:\\choimory_IDE\\Java\\Workspace\\choimory_workspace-CommunityExample\\file repository\\dm\\";
+		DmFileDTO dmFileDto = null;
+		BufferedOutputStream output = null;
+		String fOriginalName = null;
+		String fStoredName = null;
+		byte[] fileBytes = null;
+
+		if (!files.isEmpty()) {
+			for (MultipartFile file : files) {
+				try {
+					fOriginalName = file.getOriginalFilename();
+					fStoredName = dmIdx + "_" + file.getOriginalFilename();
+					fileBytes = file.getBytes();
+
+					output = new BufferedOutputStream(new FileOutputStream(new File(filePath, fStoredName)));
+					output.write(fileBytes);
+					output.close();
+
+					dmFileDto = new DmFileDTO(dmIdx, fOriginalName, fStoredName, file.getSize());
+					dmDao.insertDmFile(dmFileDto);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					result = -1;
+				} catch (IOException e) {
+					e.printStackTrace();
+					result = -1;
+				}
+			}
+		}
+
+		return result;
 	}
 
 	@Override
-	public Map<String,Object> content(String stringDmIdx, PageHelper pageHelper) {
-		Map<String,Object> resultMap=null;
-		List<DmDTO> dmDtoList=null;
+	public Map<String, Object> list(MemberDTO memberDto, PageHelper pageHelper, SearchHelper searchHelper) {
+		Map<String,Object> resultMap=new HashMap<String,Object>();
+		List<DmDTO> dmDtoList = null;
+		DmDTO dmDto = new DmDTO();
+
+		pageHelper.paging(dmDao.getTotalRow(memberDto.getmId()));
+		dmDto.setPageHelper(pageHelper);
+		dmDto.setSearchHelper(searchHelper);
+		dmDto.setDmReceiverId(memberDto.getmId());
+
+		// dmReceiverId를 대상으로 page를 이용해 최신순 20개 select
+		dmDtoList = dmDao.list(dmDto);
+
+		resultMap.put("dmDtoList", dmDtoList);
+		resultMap.put("pageHelper", pageHelper);
+		return resultMap;
+	}
+
+	@Override
+	public Map<String, Object> content(String stringDmIdx, PageHelper pageHelper,SearchHelper searchHelper) {
+		Map<String, Object> resultMap = null;
+		List<DmDTO> dmDtoList = null;
 		DmDTO dmDto = null;
+		List<DmFileDTO> dmFileDtoList = null;
 		int dmIdx = 0;
 
 		if (stringIdxToInteger(stringDmIdx) != FAIL) {
-			dmIdx=stringIdxToInteger(stringDmIdx);
+			dmIdx = stringIdxToInteger(stringDmIdx);
 			dmDto = dmDao.content(dmIdx);
 			// receiveDate값이 없을시 receiveDate를 현재날짜로 수정
 			if (dmDto.getDmReceiveDate().equals(dmDto.getDmSendDate())) {
 				dmDao.firstRead(dmIdx);
 				dmDto = dmDao.content(dmIdx);
 			}
-			resultMap=new HashMap<String,Object>();
+			dmFileDtoList = dmDao.contentFile(dmIdx);
+			dmDto.setDmFileDtoList(dmFileDtoList);
+
+			resultMap = new HashMap<String, Object>();
+			pageHelper.paging(dmDao.getTotalRow(dmDto.getDmReceiverId()));
 			dmDto.setPageHelper(pageHelper);
-			dmDtoList=dmDao.list(dmDto);
+			dmDto.setSearchHelper(searchHelper);
+			dmDtoList = dmDao.list(dmDto);
+			
 			resultMap.put("dmDto", dmDto);
 			resultMap.put("dmDtoList", dmDtoList);
+			resultMap.put("pageHelper", pageHelper);			
 		}
 
 		return resultMap;
 	}
 
 	@Override
-	public int write(DmDTO dmDto) {
-		int result = 0;
+	public FileInputStream download(String fStoredName) {
+		String filePath = "C:\\choimory_IDE\\Java\\Workspace\\choimory_workspace-CommunityExample\\file repository\\dm\\" + fStoredName;
+		File file = new File(filePath);
+		FileInputStream input = null;
 
-		 //회원의 닉네임으로 mId얻기
-		dmDto.setDmReceiverId(memberDao.changeNicknameToId(dmDto.getDmReceiverNickname()));
-		 result=dmDao.write(dmDto);
-		 if(result!=SUCCESS) {
-			 result=FAIL;
-		 }
+		try {
+			input = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			input = null;
+		}
 
-		return result;
+		return input;
 	}
 
 	@Override
-	public List<DmDTO> search(DmDTO dmDto, SearchHelper searchHelper, PageHelper pageHelper) {
-		pageHelper.list();
-		pageHelper.pagination2(dmDao.getTotalRow(dmDto.getDmReceiverId()));
-		dmDto.setSearchHelper(searchHelper);
-		dmDto.setPageHelper(pageHelper);
-		List<DmDTO> dmDtoList = null;
+	public int write(DmDTO dmDto, List<MultipartFile> files) {
+		int result = 0;
 
-		// query와 target과 page를 이용해 검색한 결과 뿌리기
-		 dmDtoList=dmDao.search(dmDto);
+		// 회원의 닉네임으로 mId얻기
+		dmDto.setDmReceiverId(memberDao.changeNicknameToId(dmDto.getDmReceiverNickname()));
+		result = dmDao.write(dmDto);
+		if (result == SUCCESS) {
+			if (files.get(0).getSize() != 0) {
+				result = fileUpload(files, dmDao.getLatestIndex(dmDto));
+			}
+			if (result != SUCCESS) {
+				result = FAIL;
+			}
+		}
 
-		return dmDtoList;
+		return result;
 	}
 
 	@Override
 	public int delete(int dmIdx) {
 		int result = 0;
 
-		 result=dmDao.delete(dmIdx);
-		 if(result!=SUCCESS) {
-			 result=FAIL;
-		 }
+		result = dmDao.delete(dmIdx);
+		if (result != SUCCESS) {
+			result = FAIL;
+		}
 
 		return result;
 	}

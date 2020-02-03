@@ -80,7 +80,7 @@
 	<bean id="shopService" class="com.ce.service.ShopServiceImpl">
 		<property name="shopDao" ref="shopDao"/>
 	</bean>
-
 	
+
 	<!-- Other -->
 </beans>

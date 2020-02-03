@@ -1,7 +1,10 @@
 package com.ce.service;
 
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ce.component.PageHelper;
 import com.ce.component.SearchHelper;
@@ -11,35 +14,35 @@ import com.ce.dto.BoardDTO;
 import com.ce.dto.BoardInfoDTO;
 import com.ce.dto.BoardTypeDTO;
 import com.ce.dto.BookmarkBoardDTO;
+import com.ce.dto.MemberDTO;
+import com.ce.dto.ReportArticleDTO;
 import com.ce.dto.BookmarkArticleDTO;
 import com.ce.dto.VoteCommentDTO;
 import com.ce.dto.VoteArticleDTO;
 
 public interface BoardService {
-	 public Map<String,Object> list(String bId, PageHelper pageHelper, SearchHelper searchHelper);
-	//1. BOARD_TYPE테이블에서 게시판명들 다 가져온다음 bid와 foreach로 대조해보고 일치하는게 있을시 boardExist는 true 아니면 false 
-	//2. bid와 page를 이용해 해당 테이블의 글들 select
-	
-	  public Map<String,Object> content(String bId, String stringBoardIdx, PageHelper pageHelper, SearchHelper searchHelper); 
-	//1. BOARD_TYPE테이블에서 게시판명들 다 가져온다음 bid와 foreach로 대조해보고 일치하는게 있을시 boardExist는 true 아니면 false 
-	//2. bid와 page를 이용해 해당 테이블의 글들 select
-	
+	public Map<String,Object> best(PageHelper pageHelper, SearchHelper searchHelper, MemberDTO memberDto);
+	public Map<String,Object> bestContent(String bId, String stringIdx, PageHelper pageHelper, SearchHelper searchHelper, MemberDTO memberDto);
+	  public Map<String,Object> list(String bId, PageHelper pageHelper, SearchHelper searchHelper,MemberDTO memberDto);	
+	  public Map<String,Object> content(String bId, String stringBoardIdx, PageHelper pageHelper, SearchHelper searchHelper,MemberDTO memberDto); 	
 	  public Map<String,Object> writeForm(String bId);
-	  public BoardDTO write(BoardDTO boardDto, BoardInfoDTO boardInfoDto); //bid를 이용해 알맞은 테이블 검색 후 해당 테이블에 insert
-	  public Map<String,Object> modifyForm(BoardDTO boardDto); //input value를 채우기 위해 bid를 이용해 알맞은 테이블 검색 후 bidx의 해당 글을 가져오기
-	  public BoardDTO modify(BoardDTO boardDto, BoardInfoDTO boardInfoDto); //bid를 이용해 알맞은 테이블 검색 후 bidx의 해당row 컬럼값 변경
-	  public int delete(BoardDTO boardDto); //bid를 이용해 알맞은 테이블 검색 후 bidx의 해당 row 삭제 
-	  public List<BoardDTO> search(BoardDTO boardDto, SearchHelper searchHelper, PageHelper pageHelper);//bid를 이용해 알맞은 테이블 검색 후 query와 target과 page를 이용해 select 
-	  public List<BoardCommentDTO> comment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto, PageHelper pageHelper); //bid를 이용해 알맞은 테이블 검색 후 bidx와 page를 이용해 해당글의 댓글 가져오기
-	  public int writeComment(BoardTypeDTO boardTypeDto, BoardCommentDTO boardCommentDto,BoardCommentInfoDTO boardCommentInfoDto); //bid를 이용해 알맞은 테이블 검색 후  row insert
-	  public int modifyComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색 후 해당 row 수정 , 수정된 댓글은 [댓글수정일자 : yyyy-mm-dd]가 꼬릿말로 붙도록 할것
-	  public int deleteComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색 후 해당 row 수정 혹은 삭제, 수정으로 할거면 댓글내용을 [~~에 의해 삭제된 댓글입니다]로 내용을 변경
-	  public int replyComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto); //bid를 이용해 알맞은 테이블 검색후 bcidx와 연계한 답글row insert
-	  public int bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); //mid와 bid를 이용해 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
-	  public int bookmarkContent(BookmarkArticleDTO bookmarkArticleDto); //mid와 bid와 bidx를 이용해 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
-	  public int thumbsUpContent(VoteArticleDTO voteArticleDto, int upvote, int downvote); //mid와 bid와  bidx를 이용해 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
-	  public int thumbsDownContent(VoteArticleDTO voteArticleDto); //mid와 bid와 bidx를 이용해 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
-	  public int reportContent(BoardDTO boardDto); //mid와 bid와 bidx를 이용해 리포트 컬럼값을 번경
-	  public int thumbsUpComment(VoteCommentDTO voteCommentDto, int upvote, int downvote); //mid와 bid와 bcidx를 이용해 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
-	  public int thumbsDownComment(VoteCommentDTO voteCommentDto); //mid와 bid와 bcidx를 이용해 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
+	  public BoardDTO write(BoardDTO boardDto, BoardInfoDTO boardInfoDto, List<MultipartFile> files); 
+	  public FileInputStream download(String bId, String stringBoardIdx,String stringFileIdx);
+	  public Map<String,Object> modifyForm(BoardDTO boardDto); 
+	  public BoardDTO modify(BoardDTO boardDto, BoardInfoDTO boardInfoDto); 
+	  public int delete(BoardDTO boardDto);   
+	  public Map<String,Object> comment(String bId, int bIdx, PageHelper pageHelper);
+	  public int writeComment(BoardTypeDTO boardTypeDto, BoardCommentDTO boardCommentDto,BoardCommentInfoDTO boardCommentInfoDto); 
+	  public int modifyComment(BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto);
+	  public int deleteComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto);
+	  public int replyComment(BoardCommentDTO boardCommentDto,BoardTypeDTO boardTypeDto);
+	  public Map<String,Object> bookmarkBoard(BookmarkBoardDTO bookmarkBoardDto); 
+	  public Map<String,Object> unBookmarkBoard(BookmarkBoardDTO bookmarkBoardDto);
+	  public int bookmarkContent(BookmarkArticleDTO bookmarkArticleDto); 
+	  public int thumbsUpContent(VoteArticleDTO voteArticleDto); 
+	  public int thumbsDownContent(VoteArticleDTO voteArticleDto); 
+	  public int reportContent(ReportArticleDTO reportArticleDto); 
+	  public int thumbsUpComment(VoteCommentDTO voteCommentDto); 
+	  public int thumbsDownComment(VoteCommentDTO voteCommentDto); 
+	  public int unBookmarkContent(BookmarkArticleDTO bookmarkArticleDto); 
 }

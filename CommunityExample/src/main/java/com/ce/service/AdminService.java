@@ -20,5 +20,5 @@ public interface AdminService {
 	  public Map<String, List> main(); //checkItem 최신글, checkReport 최신글 5개정도 가져오기
 	  public int createBoardTypePost(BoardTypeDTO boardTypeDto);
 	  public List<String> addBoardCategoryGet();
-	  public int addBoardCategoryPost(String bIdKor, String bCategory);
+	  public Map<String,Object> addBoardCategoryPost(String bIdKor, String bCategory);
 }

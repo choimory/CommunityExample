@@ -35,6 +35,8 @@
 		<result property="mId" column="ID"/>
 		<result property="bType" column="BOARD_TYPE"/>
 		<result property="bId" column="BOARD_ID"/>
+		<result property="bTypeKor" column="BOARD_TYPE_KOR"/>
+		<result property="bIdKor" column="BOARD_ID_KOR"/>
 	</resultMap>
 	<resultMap type="bookmarkArticleDto" id="bookmarkArticleDto">
 		<result property="baIdx" column="BOOKMARK_INDEX"/>
@@ -118,6 +120,11 @@
 		FROM MEMBER
 		WHERE ID=#{mId}
 	</select>
+	<select id="nicknameCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE ID=#{mNickname}
+	</select>
 	<select id="emailCheck" parameterType="string" resultType="int">
 		SELECT COUNT(*)
 		FROM MEMBER
@@ -149,6 +156,11 @@
 		INNER JOIN MEMBER_INFO
 		ON MEMBER.ID=MEMBER_INFO.ID
 		WHERE MEMBER.ID=#{mId}
+	</select>
+	<select id="getId" parameterType="string" resultType="string">
+		SELECT ID
+		FROM MEMBER
+		WHERE EMAIL=#{mEmail}
 	</select>
 	<select id="getMemberItem" parameterType="string" resultMap="memberItemDto">
 		SELECT *
@@ -191,5 +203,15 @@
 		SELECT ID
 		FROM MEMBER
 		WHERE NICKNAME=#{mNickname}
+	</select>
+	<select id="bookmarkBoardList" parameterType="string" resultMap="bookmarkBoardDto">
+		SELECT *
+		FROM BOOKMARK_BOARD
+		WHERE ID=#{mId}
+	</select>
+	<select id="bookmarkArticleList" parameterType="string" resultMap="bookmarkArticleDto">
+		SELECT *
+		FROM BOOKMARK_ARTICLE
+		WHERE ID=#{mId}
 	</select>
 </mapper>

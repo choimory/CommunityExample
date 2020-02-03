@@ -186,12 +186,13 @@ public class AdminController {
 	@RequestMapping(value = "/add_board_category", method = RequestMethod.POST)
 	public String addBoardCategoryPost(Model model, String bIdKor, String bCategory) {
 		String view = "Admin/add_board_category";
-		int result=0;
+		Map<String,Object> resultMap=null;
 		
-		result=adminService.addBoardCategoryPost(bIdKor, bCategory);
+		resultMap=adminService.addBoardCategoryPost(bIdKor, bCategory);
 		
 		model.addAttribute("title", "게시판 카테고리 추가");
-		model.addAttribute("result", result);
+		model.addAttribute("result", resultMap.get("result"));
+		model.addAttribute("bIdKorList", resultMap.get("bIdKorList"));
 		return view;
 	}
 }

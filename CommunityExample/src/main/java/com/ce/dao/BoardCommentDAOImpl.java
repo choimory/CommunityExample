@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.ce.component.BoardCommentRowMapper;
 import com.ce.dto.BoardCommentDTO;
 import com.ce.dto.BoardDTO;
+import com.ce.dto.VoteArticleDTO;
 import com.ce.dto.VoteCommentDTO;
 
 public class BoardCommentDAOImpl implements BoardCommentDAO {
@@ -52,8 +53,8 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 				+ "INNER JOIN " + boardType + "_COMMENT_INFO "
 				+ "ON " + boardType + "_COMMENT.COMMENT_INDEX = " + boardType + "_COMMENT_INFO.COMMENT_INDEX " 
 				+ "WHERE " + boardType + "_COMMENT.BOARD_INDEX=? " 
-				+ "ORDER BY "+boardType+"_COMMENT_INFO.COMMENT_NOTICE DESC, "+boardType+"_COMMENT_INFO.COMMENT_BEST DESC" + boardType + "_COMMENT.COMMENT_GROUP DESC, "	+ boardType + "_COMMENT.COMMENT_STEP ASC " 
-				+ "LIMIT ?,?;";
+				+ "ORDER BY "+boardType+"_COMMENT_INFO.COMMENT_NOTICE DESC, "+boardType+"_COMMENT_INFO.COMMENT_BEST DESC, " + boardType + "_COMMENT.COMMENT_GROUP ASC, "	+ boardType + "_COMMENT.COMMENT_STEP ASC, "+boardType+"_COMMENT.COMMENT_REGDATE ASC " 
+				+ "LIMIT ?,?";
 
 		try {
 			boardCommentDtoList=jdbcTemplate.query(sql, new Object[] {boardCommentDto.getbIdx(),listFirst,listLast}, new BoardCommentRowMapper());
@@ -160,11 +161,11 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 	public int checkVoteCommentAlready(VoteCommentDTO voteCommentDto) {
 		int result = 0;
 		String sql = "SELECT COUNT(*) " 
-				+ "FROM VOTE_ARTICLE " 
-				+ "WHERE BOARD_TYPE=? AND BOARD_ID=? AND COMMENT_INDEX=?";
+				+ "FROM VOTE_COMMENT " 
+				+ "WHERE ID=? AND BOARD_ID=? AND COMMENT_INDEX=?";
 
 		try {
-			result=jdbcTemplate.queryForObject(sql, new Object[] {voteCommentDto.getbType(),voteCommentDto.getbId(),voteCommentDto.getBcIdx()}, Integer.class);
+			result=jdbcTemplate.queryForObject(sql, new Object[] {voteCommentDto.getmId(),voteCommentDto.getbId(),voteCommentDto.getBcIdx()}, Integer.class);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			result=-1;
@@ -178,7 +179,7 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		String boardType = voteCommentDto.getbType();
 		int result = 0;
 		String sql = "UPDATE " + boardType + "_COMMENT_INFO " 
-				+ "SET UPVOTE+=1 " 
+				+ "SET COMMENT_UPVOTE=COMMENT_UPVOTE+1 " 
 				+ "WHERE COMMENT_INDEX=?";
 
 		try {
@@ -196,7 +197,7 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		String boardType = voteCommentDto.getbType();
 		int result = 0;
 		String sql = "UPDATE " + boardType + "_COMMENT_INFO " 
-				+ "SET DOWNVOTE+=1 " 
+				+ "SET COMMENT_DOWNVOTE=COMMENT_DOWNVOTE+1 " 
 				+ "WHERE COMMENT_INDEX=?";
 
 		try {
@@ -231,7 +232,7 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		String boardType = boardCommentDto.getBoardTypeDto().getbType();
 		int result = 0;
 		String sql = "SELECT COUNT(*) " 
-				+ "FROM " + boardType + "_COMMENT"
+				+ "FROM " + boardType + "_COMMENT "
 				+ "WHERE BOARD_INDEX=?";
 
 		try {
@@ -266,10 +267,10 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		int result = 0;
 		String sql = "UPDATE "+boardType+"_COMMENT "
 				+ "SET COMMENT_GROUP=COMMENT_INDEX "
-				+ "WHERE ID=? AND NICKNAME=? AND COMMENT_CONTENT=?";
+				+ "WHERE COMMENT_INDEX=?";
 
 		try {
-			result=jdbcTemplate.update(sql, new Object[] {boardCommentDto.getmId(), boardCommentDto.getmNickname(), boardCommentDto.getBcContent()});
+			result=jdbcTemplate.update(sql, new Object[] {boardCommentDto.getBcIdx()});
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			result=-1;
@@ -294,4 +295,96 @@ public class BoardCommentDAOImpl implements BoardCommentDAO {
 		}
 		return result;
 	}
+
+	@Override
+	public int subtractTwoVotes(VoteCommentDTO voteCommentDto) {
+	int result=0;
+	String boardType=voteCommentDto.getbType();
+	String sql="SELECT COMMENT_UPVOTE-COMMENT_DOWNVOTE "
+			+ "FROM "+boardType+"_COMMENT_INFO "
+			+ "WHERE COMMENT_INDEX=?";
+	
+	try {
+		result=jdbcTemplate.queryForObject(sql, new Object[] {voteCommentDto.getBcIdx()},Integer.class);
+	} catch (DataAccessException e) {
+		e.printStackTrace();
+		result=-1;
+	}
+	
+	
+	return result;
+	}
+
+	@Override
+	public int countBestComments(BoardCommentDTO boardCommentDto) {
+		int result=0;
+		String boardType=boardCommentDto.getBoardTypeDto().getbType();
+		String sql="SELECT COUNT(*) FROM "+boardType+"_COMMENT "
+				+ "INNER JOIN "+boardType+"_COMMENT_INFO "
+				+ "ON "+boardType+"_COMMENT.COMMENT_INDEX="+boardType+"_COMMENT_INFO.COMMENT_INDEX "
+				+ "WHERE "+boardType+"_COMMENT.BOARD_INDEX=? AND "+boardType+"_COMMENT_INFO.COMMENT_BEST=1";  
+		
+		try {
+			result=jdbcTemplate.queryForObject(sql, new Object[] {boardCommentDto.getbIdx()}, Integer.class);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			result=-1;
+		}
+		
+		return result;
+	}
+public BoardCommentDTO getBoardCommentDTO(VoteCommentDTO voteCommentDto) {
+	BoardCommentDTO boardCommentDto=null;
+	String boardType=voteCommentDto.getbType();
+	String sql="SELECT * FROM "+boardType+"_COMMENT "
+			+ "INNER JOIN "+boardType+"_COMMENT_INFO "
+			+ "ON "+boardType+"_COMMENT.COMMENT_INDEX="+boardType+"_COMMENT_INFO.COMMENT_INDEX "
+			+ "WHERE "+boardType+"_COMMENT.COMMENT_INDEX=?";
+	
+	try {
+		boardCommentDto=jdbcTemplate.queryForObject(sql, new Object[] {voteCommentDto.getBcIdx()}, new BoardCommentRowMapper());
+	} catch (DataAccessException e) {
+		e.printStackTrace();
+		boardCommentDto=null;
+	}
+	
+	return boardCommentDto;
+}
+
+@Override
+public int getUpvoteNum(VoteCommentDTO voteCommentDto) {
+	int result=0;
+	String boardType=voteCommentDto.getbType();
+	String sql="SELECT COMMENT_UPVOTE "
+			+ "FROM "+boardType+"_COMMENT_INFO "
+			+ "WHERE COMMENT_INDEX=?";
+	
+	try {
+		result=jdbcTemplate.queryForObject(sql, new Object[] {voteCommentDto.getBcIdx()},Integer.class);
+	} catch (DataAccessException e) {
+		e.printStackTrace();
+		result=-1;
+	}
+	
+	return result;
+}
+
+@Override
+public int getDownvoteNum(VoteCommentDTO voteCommentDto) {
+	int result=0;
+	String boardType=voteCommentDto.getbType();
+	String sql="SELECT COMMENT_DOWNVOTE "
+			+ "FROM "+boardType+"_COMMENT_INFO "
+			+ "WHERE COMMENT_INDEX=?";
+	
+	try {
+		result=jdbcTemplate.queryForObject(sql, new Object[] {voteCommentDto.getBcIdx()},Integer.class);
+	} catch (DataAccessException e) {
+		e.printStackTrace();
+		result=-1;
+	}
+	
+	return result;
+}
+
 }
