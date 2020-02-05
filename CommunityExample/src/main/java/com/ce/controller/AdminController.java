@@ -130,7 +130,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/create_board", method = RequestMethod.POST)
 	public String createBoard(Model model, BoardTypeDTO boardTypeDto) {
-		String view = "Admin/create_board";
+		String view = "redirect:/admin/create_board";
 		int result = 0;
 
 		result = adminService.createBoardPost(boardTypeDto);

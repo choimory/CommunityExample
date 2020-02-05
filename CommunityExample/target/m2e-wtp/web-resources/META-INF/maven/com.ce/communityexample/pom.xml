@@ -197,7 +197,19 @@
 			<version>3.2.8.RELEASE</version>
 		</dependency>
 
+		<!-- OAuth (SNS LOGIN API) -->
+		<dependency>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-core</artifactId>
+			<version>2.8.1</version>
+		</dependency>
 
+		<!-- JSON Parse -->
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 
 		<!-- lucy filter -->
 		<dependency>

@@ -5,18 +5,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 
 import com.ce.component.hash.HashHelper;
+import com.ce.component.naver.login.NaverLoginBO;
 import com.ce.dao.MemberDAO;
 import com.ce.dao.ShopDAO;
 import com.ce.dto.BookmarkBoardDTO;
@@ -169,12 +175,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Map<String,Object> login(MemberDTO memberDto) {
+	public Map<String, Object> login(MemberDTO memberDto) {
 		boolean result = false;
-		Map<String,Object> resultMap=null;
+		Map<String, Object> resultMap = null;
 		String hashedPassword = null;
-		List<BookmarkBoardDTO> bookmarkBoardDtoList=null;
-		
+		List<BookmarkBoardDTO> bookmarkBoardDtoList = null;
+
 		// 1.form에서 입력한 mId를 조건으로 db에서 pw만 가져오기
 		hashedPassword = memberDao.getPassword(memberDto.getmId()); // TODO id로 검색한 결과가 없을때 hashedPassword에 반환될 값은??
 		// 2.form에서 넘어온 pw와 db의 pw를 해싱컴포넌트에서 비교
@@ -182,10 +188,10 @@ public class MemberServiceImpl implements MemberService {
 			result = hashHelper.matchByBCrypt(memberDto.getmPassword(), hashedPassword);
 			// 3.비밀번호 일치시 logindate수정, memberDto 가져오기
 			if (result) {
-				resultMap=new HashMap<String,Object>();
+				resultMap = new HashMap<String, Object>();
 				memberDao.login(memberDto.getmId());
 				memberDto = memberDao.getMemberDto(memberDto.getmId());
-				bookmarkBoardDtoList=memberDao.bookmarkBoardList(memberDto.getmId());
+				bookmarkBoardDtoList = memberDao.bookmarkBoardList(memberDto.getmId());
 				resultMap.put("memberDto", memberDto);
 				resultMap.put("bookmarkBoardDtoList", bookmarkBoardDtoList);
 			} else {
@@ -197,10 +203,57 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public MemberDTO callBack(String apiResult) {
+		MemberDTO memberDto = new MemberDTO();
+		JSONParser parser = new JSONParser();
+		JSONObject jsonAll = null;
+		JSONObject jsonResponse = null;
+		String anyPassword = null;
+
+		log.debug("callback();");
+
+		// apiResult JSON Parse
+		try {
+			// 1.형태는 JSON이지만 String타입이였던 데이터를, JSON타입으로 변경
+			jsonAll = (JSONObject) parser.parse(apiResult);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		// 네이버가 보낸 JSON은 [resultcode:.., message:..., response:{id:..., nickname:...}]의 형태
+		// 3.고로 일단 전체 JSON에서 response만 추출
+		jsonResponse = (JSONObject) jsonAll.get("response");
+		// 4.3에서 원하는 값 가져오기
+		if (jsonResponse.get("id") instanceof String) {
+			memberDto.setmId((String) jsonResponse.get("id"));
+		}
+		if (jsonResponse.get("nickname") instanceof String) {
+			memberDto.setmNickname((String) jsonResponse.get("nickname"));
+		}
+		if (jsonResponse.get("email") instanceof String) {
+			memberDto.setmEmail((String) jsonResponse.get("email"));
+		}
+		anyPassword = UUID.randomUUID().toString();
+		memberDto.setmPassword(hashHelper.hashByBCrypt(anyPassword));
+
+		// 존재여부check
+		if (memberDao.getId(memberDto.getmEmail()) == null) {
+			// 없으면 insert
+			int result = memberDao.join(memberDto);
+			if (result != FAIL) {
+				memberDao.insertMemberInfo(memberDto.getmId());
+			}
+		}
+		memberDto=memberDao.getMemberDto(memberDto.getmId());
+
+		return memberDto;
+	}
+
+	@Override
 	public Map<String, Object> memberInfo(String mId) {
 		Map<String, Object> dtoMap = new HashMap<String, Object>();
 		Iterator<String> dtoMapKeyIterator = null;
-		
+
 		log.debug("memberInfo();");
 		// 세션의 id에 해당하는 회원 정보들 가져오기(회원정보, 보유아이콘, 아이콘 위시리스트, 즐겨찾기한 게시판, 즐겨찾기한 게시물,)
 		dtoMap.put("memberDto", memberDao.getMemberDto(mId));
@@ -209,11 +262,11 @@ public class MemberServiceImpl implements MemberService {
 		dtoMap.put("bookmarkBoardDtoList", memberDao.bookmarkBoardList(mId));
 		dtoMap.put("bookmarkArticleDtoList", memberDao.bookmarkArticleList(mId));
 		// map에 넣은 dto중 null이 있는지 확인하고 하나라도 null이 있으면 map자체를 null로 변경
-		dtoMapKeyIterator= dtoMap.keySet().iterator();
-		while(dtoMapKeyIterator.hasNext()) {
-			String key=dtoMapKeyIterator.next();
-			if(dtoMap.get(key)==null) {
-				dtoMap=null;
+		dtoMapKeyIterator = dtoMap.keySet().iterator();
+		while (dtoMapKeyIterator.hasNext()) {
+			String key = dtoMapKeyIterator.next();
+			if (dtoMap.get(key) == null) {
+				dtoMap = null;
 			}
 		}
 

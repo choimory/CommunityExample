@@ -12,7 +12,7 @@
 
 	<!-- start of content -->
 	<div class="userid mt-3 mb-5">
-		<img class="rounded-circle" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1200px-Bootstrap_logo.svg.png" width="40" height="40">
+		<img class="rounded-circle" src="${iconPath}/${memberDto.memberInfoDto.mEquipItem}.png" width="40" height="40">
 		<span class="lead ml-1">${memberDto.mNickname}님의 회원정보</span>
 	</div>
 
@@ -60,11 +60,12 @@
 				<div class="card-body">
 					<blockquote class="blockquote mb-0">
 						<c:forEach items="${resultMap.bookmarkBoardDtoList}" var="bookmarkBoardDto">
-							<small><span class="badge badge-info">${bookmarkBoardDto.bIdKor}</span></small>
+							<a href="/communityexample/${bookmarkBoardDto.bId}" class="text-decoration-none">
+								<small>
+									<span class="badge badge-info">${bookmarkBoardDto.bIdKor}</span>
+								</small>
+							</a>
 						</c:forEach>
-						<footer class="blockquote-footer">
-							<a href="" class="text-decoration-none">자세히 보기</a>
-						</footer>
 					</blockquote>
 				</div>
 			</div>
@@ -76,7 +77,10 @@
 				<div class="card-body">
 					<blockquote class="blockquote mb-0">
 						<c:forEach items="${resultMap.bookmarkArticleDtoList}" var="bookmarkArticleDto" end="4">
-							<small><a href="">${bookmarkArticleDto.bIdx}<br></a></small>
+							<small>
+								<a href="/communityexample/${bookmarkArticleDto.bId}/${bookmarkArticleDto.bIdx}">${bookmarkArticleDto.bIdx}<br>
+								</a>
+							</small>
 						</c:forEach>
 						<footer class="blockquote-footer">
 							<a href="" class="text-decoration-none">자세히 보기</a>
@@ -107,7 +111,8 @@
 					<blockquote class="blockquote mb-0">
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
 						<footer class="blockquote-footer">
-							Someone famous in <cite title="Source Title">Source Title</cite>
+							Someone famous in
+							<cite title="Source Title">Source Title</cite>
 						</footer>
 					</blockquote>
 				</div>

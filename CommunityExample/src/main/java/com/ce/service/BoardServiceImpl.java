@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,7 +209,7 @@ public class BoardServiceImpl implements BoardService {
 		BoardTypeDTO boardTypeDto = null;
 		int bIdx = 0;
 		BoardDTO boardDto = null;
-		List<BoardFileDTO> boardFileDtoList=null;
+		List<BoardFileDTO> boardFileDtoList = null;
 		List<BoardCommentDTO> boardCommentDtoList = null;
 		List<String> boardTypeList = null;
 		List<BoardDTO> boardDtoList = null;
@@ -401,37 +403,37 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public FileInputStream download(String bId, String stringBoardIdx,String stringFileIdx) {
+	public FileInputStream download(String bId, String stringBoardIdx, String stringFileIdx) {
 		String filePath = "C:\\choimory_IDE\\Java\\Workspace\\choimory_workspace-CommunityExample\\file repository\\";
-		String fileName=null;
-		BoardTypeDTO boardTypeDto=null;
-		BoardFileDTO boardFileDto=null;
-		File file=null;
+		String fileName = null;
+		BoardTypeDTO boardTypeDto = null;
+		BoardFileDTO boardFileDto = null;
+		File file = null;
 		FileInputStream input = null;
 
 		if (isBoardIdExists(bId)) {
 			if (stringIdxToInteger(stringBoardIdx) != FAIL) {
-				boardFileDto=new BoardFileDTO();
-				
-				//bId로 bType가져오기
-				boardTypeDto=boardDao.getBoardType(bId);
-				//파일경로 생성
-				filePath=filePath+boardTypeDto.getbType()+"\\";
-				//boardFileDto 세팅
+				boardFileDto = new BoardFileDTO();
+
+				// bId로 bType가져오기
+				boardTypeDto = boardDao.getBoardType(bId);
+				// 파일경로 생성
+				filePath = filePath + boardTypeDto.getbType() + "\\";
+				// boardFileDto 세팅
 				boardFileDto.setBoardTypeDto(boardTypeDto);
-				if(stringIdxToInteger(stringFileIdx)!=FAIL) {
+				if (stringIdxToInteger(stringFileIdx) != FAIL) {
 					boardFileDto.setfIdx(stringIdxToInteger(stringFileIdx));
-				}				
-				//fidx,boardType으로 storedFileName 가져오기
-				fileName=boardDao.getStoredFileName(boardFileDto);
-				//filePath+sotredFileName으로 file객체 생성
-				file=new File(filePath+fileName);
-				//FileInputStream(file)생성
+				}
+				// fidx,boardType으로 storedFileName 가져오기
+				fileName = boardDao.getStoredFileName(boardFileDto);
+				// filePath+sotredFileName으로 file객체 생성
+				file = new File(filePath + fileName);
+				// FileInputStream(file)생성
 				try {
-					input=new FileInputStream(file);
+					input = new FileInputStream(file);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					input=null;
+					input = null;
 				}
 			}
 		}

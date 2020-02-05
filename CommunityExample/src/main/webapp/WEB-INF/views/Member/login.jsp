@@ -29,26 +29,35 @@
 <body>
 	<div class="container col-xl-3 col-md-6 justify-content-center text-center">
 		<div class="ce_logo my-5 py-5">
-			<a href="/communityexample"><img src="${iconPath}/communityexample-logo-black.png" width="300" height="75"></a>
+			<a href="/communityexample">
+				<img src="${iconPath}/communityexample-logo-black.png" width="300" height="75">
+			</a>
 		</div>
 		<div class="ce_form pb-5 mb-5">
 			<form action="login" method="post">
 				<div class="form-group">
-					<input type="text" placeholder="ID" class="form-control" name="mId"><input type="password" placeholder="PASSWORD" class="form-control" name="mPassword">
+					<input type="text" placeholder="ID" class="form-control" name="mId">
+					<input type="password" placeholder="PASSWORD" class="form-control" name="mPassword">
 				</div>
 				<button class="btn btn-block btn-info">로그인</button>
 				<div class="form-check mt-1">
-					<input class="form-check-input" type="checkbox" name="checkCookie" value="yes" id="defaultCheck1"> <label class="form-check-label mr-sm-4 pr-sm-4 text-left" for="defaultCheck1">아이디 저장</label> <a href="/communityexample/find_account" class="ml-sm-3 pl-sm-3 text-right">계정찾기</a> | <a href="/communityexample/join">회원가입</a>
+					<input class="form-check-input" type="checkbox" name="checkCookie" value="yes" id="defaultCheck1">
+					<label class="form-check-label mr-sm-4 pr-sm-4 text-left" for="defaultCheck1">아이디 저장</label>
+					<a href="/communityexample/find_account" class="ml-sm-3 pl-sm-3 text-right">계정찾기</a>
+					|
+					<a href="/communityexample/join">회원가입</a>
 				</div>
 			</form>
 		</div>
 		<div class="ce_snslogin mb-5">
-			<img class="mb-1" src="${imgPath}/naver.PNG" height="50" width="200"> <img src="${imgPath}/google.png" height="50" width="200">
+			<a href="${naverUrl}">
+				<img class="mb-1" src="${imgPath}/naver.PNG" height="50" width="200">
+			</a>
 		</div>
 		<div class="ce_join mb-5">
-			아직 회원이 아니시라면? <a href="/communityexample/join">회원가입</a>
+			아직 회원이 아니시라면?
+			<a href="/communityexample/join">회원가입</a>
 		</div>
-		<div class="ce_footer">this is footer</div>
 	</div>
 </body>
 

@@ -3,6 +3,7 @@ package com.ce.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +14,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.ce.component.naver.login.NaverLoginBO;
 import com.ce.dto.MemberAuthDTO;
 import com.ce.dto.MemberDTO;
 import com.ce.service.MemberService;
+import com.github.scribejava.core.model.OAuth2AccessToken;
 
 @Controller
 @EnableAsync
@@ -30,6 +34,13 @@ public class MemberController {
 	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	private final int SUCCESS = 1;
 	private final int FAIL = -1;
+	@Autowired
+	private NaverLoginBO naverLoginBo;
+	
+
+	public void setNaverLoginBo(NaverLoginBO naverLoginBo) {
+		this.naverLoginBo = naverLoginBo;
+	}
 
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
@@ -66,7 +77,7 @@ public class MemberController {
 		return result;
 	}
 
-	@RequestMapping(value = "/email_check")
+	@RequestMapping(value = "/email_check", method= {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public int emailCheck(Model model, @RequestBody String mEmail) {
 		int result=0;
@@ -115,15 +126,22 @@ public class MemberController {
 		return view;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginForm(Model model) {
+	@RequestMapping(value = {"/login"}, method = {RequestMethod.GET})
+	public String loginForm(Model model, HttpServletRequest req, HttpSession session) {
 		String view = "Member/login";
+		String naverUrl="";
+		
+		log.debug("login GET();");
+		
+		naverUrl=naverLoginBo.getAuthorizationUrl(req.getSession());
+//		naverUrl=naverLoginBo.getAuthorizationUrl(session);
 
 		model.addAttribute("title", "로그인");
+		model.addAttribute("naverUrl", naverUrl);
 		return view;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = {RequestMethod.POST})
 	public String login(Model model, MemberDTO memberDto, HttpServletRequest req) {
 		log.debug("loginPOST()");
 		String view = "redirect:/main"; // TODO 이전에 접속중이던 페이지로 리다이렉트
@@ -136,6 +154,26 @@ public class MemberController {
 		
 		model.addAttribute("memberDto", resultMap.get("memberDto"));
 		model.addAttribute("bookmarkBoardDtoList", resultMap.get("bookmarkBoardDtoList"));
+		return view;
+	}
+	
+	@RequestMapping(value= {"/callback"},method = {RequestMethod.GET,RequestMethod.POST})
+	public String callback(String code, String state, HttpSession session,Model model) {
+		String view="redirect:/main";
+		String apiResult=null;
+		MemberDTO memberDto=null;
+		
+		log.debug("callback();");
+		log.debug("state: "+state+", code: "+code);
+		
+		OAuth2AccessToken oauthToken=naverLoginBo.getAccessToken(session, state, code);
+		apiResult=naverLoginBo.getUserProfile(oauthToken);
+		memberDto=memberService.callBack(apiResult);
+		if(memberDto==null) {
+			
+		}
+		
+		model.addAttribute("memberDto",memberDto);
 		return view;
 	}
 

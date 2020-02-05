@@ -15,4 +15,8 @@
 	<bean id="pbkdf2" class="org.springframework.security.crypto.password.Pbkdf2PasswordEncoder" />
 	<bean id="hashHelper" class="com.ce.component.hash.HashHelper" p:bcrypt-ref="bcrypt" p:pbkdf-ref="pbkdf2" />
 
+	<!-- naver login api -->
+	<bean id="naverLoginBo" class="com.ce.component.naver.login.NaverLoginBO"/>
+	
+
 </beans>
