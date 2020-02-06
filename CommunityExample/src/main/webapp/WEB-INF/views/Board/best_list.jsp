@@ -29,8 +29,8 @@
 
 
 	<div class="ce_board_list my-2 table-responsive text-nowrap" style="font-size: 14px;">
-		<table class="table text-center table-hover">
-			<thead class="thead-dark">
+		<table class="table table-hover">
+			<thead class="thead-dark text-center">
 				<tr>
 					<th scope="col">게시판</th>
 					<th scope="col" class="w-75">제목</th>
@@ -43,31 +43,31 @@
 			<tbody>
 				<c:forEach items="${boardDtoList}" var="boardDto">
 					<tr>
-						<td>${boardDto.boardTypeDto.bIdKor}</td>
+						<td class="text-center">${boardDto.boardTypeDto.bIdKor}</td>
 						<c:choose>
 							<c:when test="${searchHelper.query ne null}">
-								<td>
+								<td class="text-center">
 									<a class="text-dark" href="/communityexample/${boardTypeDto.bId}/${boardDto.bIdx}?bId=${boardDto.bId}&query=${searchHelper.query}&title=${searchHelper.target}">${boardDto.bTitle}
 										<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
 									</a>
 								</td>
 							</c:when>
 							<c:otherwise>
-								<td>
+								<td class="text-center">
 									<a class="text-dark" href="/communityexample/${boardTypeDto.bId}/${boardDto.bIdx}?bId=${boardDto.bId}">${boardDto.bTitle}
 										<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
 									</a>
 								</td>
 							</c:otherwise>
 						</c:choose>
-						<td>
+						<td class="text-center">
 							<a class="text-decoration-none text-dark" href="/communityexample/search?mNickname=">
 								<img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto.mNickname}
 							</a>
 						</td>
-						<td>${boardDto.bRegDate}</td>
-						<td>${boardDto.boardInfoDto.bHit}</td>
-						<td>${boardDto.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
+						<td class="text-center">${boardDto.bRegDate}</td>
+						<td class="text-center">${boardDto.boardInfoDto.bHit}</td>
+						<td class="text-center">${boardDto.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

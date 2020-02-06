@@ -418,7 +418,6 @@ function thumbsUpArticle(mId, bId, bIdx) {
 						} else if (data < -1 || data == 0) {
 							alert("오류가 발생했습니다. (error code:" + data + ")");
 						} else {
-							alert("추천/비추천이 적용되었습니다");
 							$("#board_article_thumbsup")
 									.html(
 											data

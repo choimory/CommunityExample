@@ -783,10 +783,10 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getTotalRow(BoardDTO boardDto) {
 		String boardType = boardDto.getBoardTypeDto().getbType();
 		int result = 0;
-		String sql = "SELECT COUNT(*) " + "FROM " + boardType;
+		String sql = "SELECT COUNT(*) " + "FROM " + boardType+" WHERE BOARD_ID=?";
 
 		try {
-			result = jdbcTemplate.queryForObject(sql, Integer.class);
+			result = jdbcTemplate.queryForObject(sql, new Object[] {boardDto.getbId()},Integer.class);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			result = -1;

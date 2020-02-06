@@ -6,18 +6,24 @@
 
 	<!-- start of content -->
 	<div class="board_info mb-5">
-		<span class="h3 mr-2"> <a href="/communityexample/${boardTypeDto.bId}" class="text-dark text-decoration-none">${boardTypeDto.bIdKor}</a>
-		</span> <span class="ce_bookmark"> <c:choose>
+		<span class="h3 mr-2">
+			<a href="/communityexample/${boardTypeDto.bId}" class="text-dark text-decoration-none">${boardTypeDto.bIdKor}</a>
+		</span>
+		<span class="ce_bookmark">
+			<c:choose>
 				<c:when test="${isBookmarkedBoard eq 1}">
-					<a id="bookmark_board" href="javascript:void(0);" onclick="unBookmarkBoard('${memberDto.mId}','${boardTypeDto.bType}','${boardTypeDto.bId}','${boardTypeDto.bTypeKor}','${boardTypeDto.bIdKor}');" class="text-decoration-none text-warning"> <i class="fas fa-bookmark fa-2x"></i>
+					<a id="bookmark_board" href="javascript:void(0);" onclick="unBookmarkBoard('${memberDto.mId}','${boardTypeDto.bType}','${boardTypeDto.bId}','${boardTypeDto.bTypeKor}','${boardTypeDto.bIdKor}');" class="text-decoration-none text-warning">
+						<i class="fas fa-bookmark fa-2x"></i>
 					</a>
 				</c:when>
 				<c:otherwise>
-					<a id="bookmark_board" href="javascript:void(0);" onclick="bookmarkBoard('${memberDto.mId}','${boardTypeDto.bType}','${boardTypeDto.bId}','${boardTypeDto.bTypeKor}','${boardTypeDto.bIdKor}');" class="text-decoration-none text-warning"> <i class="far fa-bookmark fa-2x"></i>
+					<a id="bookmark_board" href="javascript:void(0);" onclick="bookmarkBoard('${memberDto.mId}','${boardTypeDto.bType}','${boardTypeDto.bId}','${boardTypeDto.bTypeKor}','${boardTypeDto.bIdKor}');" class="text-decoration-none text-warning">
+						<i class="far fa-bookmark fa-2x"></i>
 					</a>
 				</c:otherwise>
 			</c:choose>
-		</span> <span class="blockquote-footer">${boardTypeDto.bIntroduce}</span>
+		</span>
+		<span class="blockquote-footer">${boardTypeDto.bIntroduce}</span>
 	</div>
 
 
@@ -28,9 +34,9 @@
 	</div>
 
 
-	<div class="ce_board_list my-2 table-responsive text-nowrap">
-		<table class="table text-center table-hover">
-			<thead class="thead-dark">
+	<div class="ce_board_list my-2 table-responsive text-nowrap" style="font-size: 14px;">
+		<table class="table table-hover">
+			<thead class="thead-dark text-center">
 				<tr>
 					<th scope="col">분류</th>
 					<th scope="col" class="w-75">제목</th>
@@ -44,35 +50,39 @@
 				<c:forEach items="${boardDtoList}" var="boardDto">
 					<tr>
 						<td>
-							<a class="text-dark" href="/communityexample/${bId}?bCategory=${boardDto.bCategory}">${boardDto.bCategory}</a>
+							<a class="text-dark text-center" href="/communityexample/${bId}?bCategory=${boardDto.bCategory}">${boardDto.bCategory}</a>
 						</td>
 						<c:choose>
 							<c:when test="${searchHelper.query ne null}">
 								<td>
-									<a class="text-dark" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto.bTitle} <span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
+									<a class="text-dark text-center" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto.bTitle}
+										<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
 									</a>
 								</td>
 							</c:when>
 							<c:when test="${searchHelper.bCategory ne 'all'}">
 								<td>
-									<a class="text-dark" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}?bCategory=${searchHelper.bCategory}">${boardDto.bTitle} <span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
+									<a class="text-dark text-center" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}?bCategory=${searchHelper.bCategory}">${boardDto.bTitle}
+										<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
 									</a>
 								</td>
 							</c:when>
 							<c:otherwise>
 								<td>
-									<a class="text-dark" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}">${boardDto.bTitle} <span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
+									<a class="text-dark text-center" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}">${boardDto.bTitle}
+										<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
 									</a>
 								</td>
 							</c:otherwise>
 						</c:choose>
 						<td>
-							<a class="text-decoration-none text-dark" href="/communityexample/search?mNickname="> <img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto.mNickname}
+							<a class="text-decoration-none text-dark" href="/communityexample/search?mNickname=">
+								<img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto.mNickname}
 							</a>
 						</td>
-						<td>${boardDto.bRegDate}</td>
-						<td>${boardDto.boardInfoDto.bHit}</td>
-						<td>${boardDto.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
+						<td class="text-center">${boardDto.bRegDate}</td>
+						<td class="text-center">${boardDto.boardInfoDto.bHit}</td>
+						<td class="text-center">${boardDto.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -115,20 +125,40 @@
 	<div class="ce_board_list_pagination">
 		<nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${pageHelper.page-1}" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+				<li class="page-item">
+					<a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${1}" aria-label="Previous">
+						<span aria-hidden="true">처음</span>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${pageHelper.page-1}" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
 				<c:forEach items="${pageHelper.pageGroup}" var="page">
 					<c:choose>
 						<c:when test="${pageHelper.page eq page}">
-							<li class="page-item active"><a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${page}">${page}</a></li>
+							<li class="page-item active">
+								<a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${page}">${page}</a>
+							</li>
 						</c:when>
 						<c:otherwise>
-							<li class="page-item"><a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${page}">${page}</a></li>
+							<li class="page-item">
+								<a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${page}">${page}</a>
+							</li>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
-				<li class="page-item"><a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${pageHelper.page+1}" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
+				<li class="page-item">
+					<a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${pageHelper.page+1}" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" href="/communityexample/${boardTypeDto.bId}?page=${99999}" aria-label="Previous">
+						<span aria-hidden="true">마지막</span>
+					</a>
+				</li>
 			</ul>
 		</nav>
 	</div>

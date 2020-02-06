@@ -302,33 +302,55 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${boardDtoList}" var="boardDto">
+					<c:forEach items="${boardDtoList}" var="boardDto2">
 						<tr>
-							<td>${boardDto.boardTypeDto.bIdKor}</td>
+							<td>${boardDto2.boardTypeDto.bIdKor}</td>
 							<c:choose>
 								<c:when test="${searchHelper.query ne null}">
-									<td>
-										<a class="text-dark" href="/communityexample/${boardTypeDto.bId}/${boardDto.bIdx}?bId=${boardDto.bId}&query=${searchHelper.query}&title=${searchHelper.target}">${boardDto.bTitle}
-											<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
-										</a>
-									</td>
+									<c:choose>
+										<c:when test="${boardDto.bIdx eq boardDto2.bIdx}">
+											<td>
+												<a class="text-info" href="/communityexample/${boardTypeDto.bId}/${boardDto2.bIdx}?bId=${boardDto2.bId}&query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:when>
+										<c:otherwise>
+											<td>
+												<a class="text-dark" href="/communityexample/${boardTypeDto.bId}/${boardDto2.bIdx}?bId=${boardDto2.bId}&query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:otherwise>
+									</c:choose>
 								</c:when>
 								<c:otherwise>
-									<td>
-										<a class="text-dark" href="/communityexample/${boardTypeDto.bId}/${boardDto.bIdx}?bId=${boardDto.bId}">${boardDto.bTitle}
-											<span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
-										</a>
-									</td>
+									<c:choose>
+										<c:when test="${boardDto.bIdx eq boardDto2.bIdx}">
+											<td>
+												<a class="text-info" href="/communityexample/${boardTypeDto.bId}/${boardDto2.bIdx}?bId=${boardDto2.bId}&query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:when>
+										<c:otherwise>
+											<td>
+												<a class="text-dark" href="/communityexample/${boardTypeDto.bId}/${boardDto2.bIdx}?bId=${boardDto2.bId}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:otherwise>
+									</c:choose>
 								</c:otherwise>
 							</c:choose>
 							<td>
 								<a class="text-decoration-none text-dark" href="/communityexample/search?mNickname=">
-									<img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto.mNickname}
+									<img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto2.mNickname}
 								</a>
 							</td>
-							<td>${boardDto.bRegDate}</td>
-							<td>${boardDto.boardInfoDto.bHit}</td>
-							<td>${boardDto.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
+							<td>${boardDto2.bRegDate}</td>
+							<td>${boardDto2.boardInfoDto.bHit}</td>
+							<td>${boardDto2.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

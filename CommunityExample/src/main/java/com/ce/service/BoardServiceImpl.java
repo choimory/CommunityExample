@@ -190,6 +190,7 @@ public class BoardServiceImpl implements BoardService {
 				isBookmarkedBoard = boardDao.isBookmarkedBoard(bookmarkBoardDto);
 			}
 
+			log.debug(pageHelper.toString());
 			// 6.put
 			resultMap.put("boardTypeDto", boardTypeDto);
 			resultMap.put("boardCategoryList", boardCategoryList);

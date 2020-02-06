@@ -290,56 +290,93 @@
 		</div>
 
 
-		<div class="ce_board_list my-2 table-responsive text-nowrap">
-		<table class="table text-center table-hover">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col">분류</th>
-					<th scope="col" class="w-75">제목</th>
-					<th scope="col">글쓴이</th>
-					<th scope="col">작성일</th>
-					<th scope="col">조회수</th>
-					<th scope="col">추천수</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${boardDtoList}" var="boardDto">
+		<div class="ce_board_list my-2 table-responsive text-nowrap" style="font-size: 14px;">
+			<table class="table table-hover">
+				<thead class="thead-dark text-center">
 					<tr>
-						<td>
-							<a class="text-dark" href="/communityexample/${bId}?bCategory=${boardDto.bCategory}">${boardDto.bCategory}</a>
-						</td>
-						<c:choose>
-							<c:when test="${searchHelper.query ne null}">
-								<td>
-									<a class="text-dark" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto.bTitle} <span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
-									</a>
-								</td>
-							</c:when>
-							<c:when test="${searchHelper.bCategory ne 'all'}">
-								<td>
-									<a class="text-dark" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}?bCategory=${searchHelper.bCategory}">${boardDto.bTitle} <span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
-									</a>
-								</td>
-							</c:when>
-							<c:otherwise>
-								<td>
-									<a class="text-dark" href="/communityexample/${boardDto.bId}/${boardDto.bIdx}">${boardDto.bTitle} <span class="badge badge-info mx-1">${boardDto.boardInfoDto.bCommentNum}</span>
-									</a>
-								</td>
-							</c:otherwise>
-						</c:choose>
-						<td>
-							<a class="text-decoration-none text-dark" href="/communityexample/search?mNickname="> <img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto.mNickname}
-							</a>
-						</td>
-						<td>${boardDto.bRegDate}</td>
-						<td>${boardDto.boardInfoDto.bHit}</td>
-						<td>${boardDto.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
+						<th scope="col">분류</th>
+						<th scope="col" class="w-75">제목</th>
+						<th scope="col">글쓴이</th>
+						<th scope="col">작성일</th>
+						<th scope="col">조회수</th>
+						<th scope="col">추천수</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
+				</thead>
+				<tbody>
+					<c:forEach items="${boardDtoList}" var="boardDto2">
+						<tr>
+							<td>
+								<a class="text-dark text-left" href="/communityexample/${bId}?bCategory=${boardDto2.bCategory}">${boardDto2.bCategory}</a>
+							</td>
+							<c:choose>
+								<c:when test="${searchHelper.query ne null}">
+									<c:choose>
+										<c:when test="${boardDto.bIdx eq boardDto2.bIdx}">
+											<td>
+												<a class="text-info text-left" href="/communityexample/${boardDto2.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:when>
+										<c:otherwise>
+											<td>
+												<a class="text-dark text-left" href="/communityexample/${boardDto2.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+								<c:when test="${searchHelper.bCategory ne 'all'}">
+									<c:choose>
+										<c:when test="${boardDto.bIdx eq boardDto2.bIdx}">
+											<td>
+												<a class="text-info text-left" href="/communityexample/${boardDto2.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:when>
+										<c:otherwise>
+											<td>
+												<a class="text-info text-left" href="/communityexample/${boardDto2.bId}/${boardDto.bIdx}?bCategory=${searchHelper.bCategory}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+								<c:otherwise>
+									<c:choose>
+										<c:when test="${boardDto.bIdx eq boardDto2.bIdx}">
+											<td>
+												<a class="text-info text-left" href="/communityexample/${boardDto2.bId}/${boardDto.bIdx}?query=${searchHelper.query}&title=${searchHelper.target}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:when>
+										<c:otherwise>
+											<td>
+												<a class="text-dark text-left" href="/communityexample/${boardDto2.bId}/${boardDto2.bIdx}">${boardDto2.bTitle}
+													<span class="badge badge-info mx-1">${boardDto2.boardInfoDto.bCommentNum}</span>
+												</a>
+											</td>
+										</c:otherwise>
+									</c:choose>
+								</c:otherwise>
+							</c:choose>
+							<td>
+								<a class="text-decoration-none text-dark" href="/communityexample/search?mNickname=">
+									<img src="${iconPath}/0.png" width="15" height="15" class="mx-1" alt="">${boardDto2.mNickname}
+								</a>
+							</td>
+							<td class="text-center">${boardDto2.bRegDate}</td>
+							<td class="text-center">${boardDto2.boardInfoDto.bHit}</td>
+							<td class="text-center">${boardDto2.boardInfoDto.bUpvote-boardInfoDto.bDownvote}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 
 
 		<div class="ce_board_list_form text-center">

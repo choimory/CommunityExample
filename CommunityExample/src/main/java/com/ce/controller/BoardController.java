@@ -78,8 +78,6 @@ public class BoardController {
 		MemberDTO memberDto = (MemberDTO) req.getSession().getAttribute("memberDto");
 
 		logger.debug("list()");
-		logger.debug(pageHelper.toString());
-		logger.debug(searchHelper.toString());
 		returnMap = boardService.list(bId, pageHelper, searchHelper, memberDto);
 		if (returnMap == null) {
 			return "redirect:main";

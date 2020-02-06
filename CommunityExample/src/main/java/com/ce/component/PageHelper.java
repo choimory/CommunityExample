@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PageHelper {
 	private int displayNum;
-	
+
 	private int listFirst;
 	private int listLast;
 
@@ -14,7 +14,7 @@ public class PageHelper {
 	private int groupFirst;
 	private int groupLast;
 	private List<Integer> pageGroup;
-	
+
 	private SearchHelper searchHelper;
 
 	public PageHelper() {
@@ -33,16 +33,27 @@ public class PageHelper {
 
 	@Override
 	public String toString() {
-		String result="PageHelper[displayNum:"+displayNum + ", page:" + page + ", totalPage:" + totalPage + ", listFirst:" + listFirst + ", listlast:" + listLast + ", groupFirst:"
-				+ groupFirst + ", groupLast:" + groupLast+"]";
-		if (searchHelper != null)result+=searchHelper.toString();
+		String result = "PageHelper[displayNum:" + displayNum + ", page:" + page + ", totalPage:" + totalPage + ", listFirst:" + listFirst
+						+ ", listlast:" + listLast + ", groupFirst:" + groupFirst + ", groupLast:" + groupLast + "]";
+		if (searchHelper != null)
+			result += searchHelper.toString();
 		return result;
 	}
 
 	public void paging(int totalRow) {
 		setTotalPage(totalRow);
+		adjustPage();
 		list();
-		pagination2(totalRow);
+		pagination1(totalRow);
+	}
+
+	private void adjustPage() {
+		if (this.page > this.totalPage) {
+			this.page = this.totalPage;
+		}
+		if (this.page < 1) {
+			this.page = 1;
+		}
 	}
 
 	public void setDisplayNum(int displayNum) {
@@ -93,20 +104,14 @@ public class PageHelper {
 	}
 
 	public void setTotalPage(int totalRow) {
-		if (totalRow > displayNum) {
-			double totalPageDouble = totalRow / displayNum;
-			if (totalRow % displayNum != 0) {
-				totalPageDouble++;
-			}
-			this.totalPage = (int) totalPageDouble;
+		if (totalRow <= displayNum) {
+			totalPage = 1;
 			if (totalPage < page) {
-				page = totalPage;
+				page = 1;
 			}
-		} else {
-			this.totalPage = 1;
-			if (totalPage < page) {
-				page = totalPage;
-			}
+		} else if (displayNum < totalRow) {
+			double totalPageDouble = (double) totalRow / displayNum;
+			totalPage = (int) Math.ceil(totalPageDouble);
 		}
 	}
 
@@ -184,7 +189,7 @@ public class PageHelper {
 
 	public void list() {
 		listFirst = (page - 1) * displayNum;
-		listLast = listFirst + (displayNum - 1);
+		listLast = displayNum;
 	}
 
 	public void list(int displayNum, int page, int totalRow) {

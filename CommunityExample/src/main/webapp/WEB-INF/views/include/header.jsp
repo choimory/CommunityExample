@@ -118,9 +118,9 @@
 					</ul>
 
 					<div class="ce_search">
-						<form class="form-inline my-2 my-lg-0">
-							<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-							<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+						<form class="form-inline my-2 my-lg-0" action="/communityexample/search">
+							<input class="form-control mr-sm-2" type="search" placeholder="통합검색" aria-label="Search">
+							<button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
 						</form>
 					</div>
 
