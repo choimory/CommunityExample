@@ -26,7 +26,7 @@
 
 
 	<div class="ce_board_write_form">
-		<form action="/communityexample/${bId}/write" method="post" enctype="multipart/form-data">
+		<form action="/communityexample/${bId}" method="post" enctype="multipart/form-data">
 			<div class="row my-2">
 				<div class="col-xl-2 mb-2">
 					<select class="form-control" name="bCategory">

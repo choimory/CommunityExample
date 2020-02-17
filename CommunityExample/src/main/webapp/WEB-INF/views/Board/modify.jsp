@@ -53,6 +53,7 @@
 					onclick="location.href='/communityexample/${boardDto.bId}'">취소</</button>
 			</div>
 			<input type="hidden" name="bIdx" value="${boardDto.bIdx}">
+			<input type="hidden" name="_method" value="put">
 		</form>
 	</div>
 	<!-- end of content -->

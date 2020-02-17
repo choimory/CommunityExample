@@ -177,7 +177,7 @@
 										<a href="javascript:void(0);" onclick="replyComment();" id="comment_reply" class="text-decoration-none text-info mx-2">
 											<i class="far fa-comment-dots"></i>
 										</a>
-										<a href="javascript:void(0);" onclick="deleteComment();" id="delete_comment" class="text-decoration-none text-danger">
+										<a href="javascript:void(0);" onclick="deleteComment('${boardDto.bId}','${boardDto.bIdx}','${boardCommentDto.bcIdx}','${memberDto.mId}');" id="delete_comment" class="text-decoration-none text-danger">
 											<i class="far fa-trash-alt"></i>
 										</a>
 									</td>

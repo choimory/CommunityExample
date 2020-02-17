@@ -52,7 +52,7 @@ public class BoardController {
 		this.boardService = boardService;
 	}
 
-	@RequestMapping(value = { "/best" })
+	@RequestMapping(value = { "/best" }, method={RequestMethod.GET})
 	public String best(Model model, PageHelper pageHelper, SearchHelper searchHelper, HttpServletRequest req) {
 		String view = "Board/best_list";
 		Map<String, Object> resultMap = null;
@@ -70,7 +70,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = { "/{bId}" })
+	@RequestMapping(value = { "/{bId}" }, method={RequestMethod.GET})
 	public String list(Model model, @PathVariable("bId") String bId, PageHelper pageHelper, SearchHelper searchHelper, HttpServletRequest req) {
 		String view = null;
 		Map<String, Object> returnMap = null;
@@ -96,7 +96,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = { "/best/{bIdx}" })
+	@RequestMapping(value = { "/best/{bIdx}" }, method={RequestMethod.GET})
 	public String bestContent(Model model, @PathVariable("bIdx") String stringIdx, String bId, PageHelper pageHelper, SearchHelper searchHelper,
 			HttpServletRequest req) {
 		String view = "Board/best_content";
@@ -128,7 +128,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = "/{bId}/{bIdx}")
+	@RequestMapping(value = "/{bId}/{bIdx}", method={RequestMethod.GET})
 	public String content(Model model, @PathVariable("bId") String bId, @PathVariable("bIdx") String stringIdx, PageHelper pageHelper,
 			SearchHelper searchHelper, HttpServletRequest req) {
 		String view = null;
@@ -159,7 +159,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = "/{bId}/write", method = RequestMethod.GET)
+	@RequestMapping(value = "/{bId}/write", method={RequestMethod.GET})
 	public String writeForm(Model model, @PathVariable("bId") String bId) {
 		String view = null;
 		Map<String, Object> returnMap = null;
@@ -177,7 +177,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = "/{bId}/write", method = RequestMethod.POST)
+	@RequestMapping(value = "/{bId}", method={RequestMethod.POST})
 	public String write(Model model, BoardDTO boardDto, BoardInfoDTO boardInfoDto, MultipartHttpServletRequest req,
 			@RequestParam("file") List<MultipartFile> file) {
 		String view = null;
@@ -194,7 +194,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = { "/{bId}/{bIdx}/download" })
+	@RequestMapping(value = { "/{bId}/{bIdx}/download" }, method={RequestMethod.GET})
 	public void download(@PathVariable("bId") String bId, @PathVariable("bIdx") String stringBoardIdx, String fIdx, String fName, HttpServletResponse res) {
 		FileInputStream input = null;
 
@@ -217,7 +217,7 @@ public class BoardController {
 		}
 	}
 
-	@RequestMapping(value = "/{bId}/modify", method = RequestMethod.GET)
+	@RequestMapping(value = "/{bId}/{bIdx}/modify", method={RequestMethod.GET})
 	public String modifyForm(Model model, BoardDTO boardDto) {
 		String view = "Board/modify";
 		Map<String, Object> resultMap = null;
@@ -237,7 +237,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = "/{bId}/modify", method = RequestMethod.POST)
+	@RequestMapping(value = "/{bId}/{bIdx}", method={RequestMethod.PUT})
 	public String modify(Model model, BoardDTO boardDto, BoardInfoDTO boardInfoDto) {
 		String view = null;
 
@@ -247,7 +247,7 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = "/{bId}/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/{bId}/{bIdx}",method= {RequestMethod.DELETE})
 	public String delete(Model model, BoardDTO boardDto) {
 		String view = null;
 		int result = 0;
@@ -302,17 +302,21 @@ public class BoardController {
 		return view;
 	}
 
-	@RequestMapping(value = "/{bId}/comment/delete", method = RequestMethod.POST)
-	public String deleteComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
-		String view = null;
-		int result = 0;
-
-//		result=boardService.deleteComment(boardCommentDto, boardTypeDto);
-
-		view = "Board/content"; // TODO 리다이렉트로 변경
-		model.addAttribute("title", "");
-		return view;
-	}
+	//여기에서 WARN : org.springframework.web.servlet.PageNotFound - Request method 'GET' not supported 문제를 발생시킴. 아마 ReqMapping의 문제. 아마 요청주소의 모든것이 pathVariable이라서?
+//	@RequestMapping(value = {"/{bId}/{bIdx}/{bcIdx}"}, method = {RequestMethod.DELETE})
+//	public String deleteComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
+//		String view = null;
+//		int result = 0;
+//
+//		logger.debug("deleteComment();");
+//		logger.debug(boardCommentDto.toString());
+//		logger.debug(boardTypeDto.toString());
+////		result=boardService.deleteComment(boardCommentDto, boardTypeDto);
+//
+//		view = "redirect:/"+boardTypeDto.getbId()+"/"+boardCommentDto.getbIdx();
+//		model.addAttribute("title", "");
+//		return view;
+//	}
 
 	@RequestMapping(value = "/{bId}/comment/reply")
 	public String replyComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {

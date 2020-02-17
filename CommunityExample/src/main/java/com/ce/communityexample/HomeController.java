@@ -43,13 +43,15 @@ public class HomeController {
 	@RequestMapping(value={"/test","test1"})
 	public String test(Model model, HttpServletRequest req) {
 		String view = "test_content";
-		
+
+		logger.debug("test();");
+
 		model.addAttribute("title", "this is for test");
 		return view;
 	}
 
 	@RequestMapping("/base")
-	public String test2(Model model) {
+	public String base(Model model) {
 		String view = "base";
 
 		model.addAttribute("title", "폼 기본 골격");

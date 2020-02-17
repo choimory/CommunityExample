@@ -172,15 +172,15 @@ function emailCheck() {
 }
 function modifyArticle(memberDtoId, boardDtoId, bId, bIdx) {
 	if (memberDtoId == boardDtoId) {
-		location.href = "/communityexample/" + bId + "/modify?bIdx=" + bIdx;
+		var href = "/communityexample/"+bId+"/"+bIdx+"/modify";
+		location.href=href;
 	} else {
 		location.href = "/communityexample/main";
 	}
 }
 function deleteArticle(bId, bIdx) {
-	var f = createForm("formName", "post", "/communityexample/" + bId
-			+ "/delete")
-	f = createInput(f, "text", "bIdx", bIdx);
+	var f = createForm("formName", "post", "/communityexample/"+bId+"/"+bIdx)
+	f = createInput(f, "hidden", "_method", "delete");
 
 	document.body.appendChild(f);
 	f.submit();
@@ -189,8 +189,12 @@ function deleteArticle(bId, bIdx) {
 function replyComment() {
 	alert();
 }
-function deleteComment() {
-	alert();
+function deleteComment(bId, bIdx, bcIdx, mId) {
+	var f=createForm("formName","post","/communityexample/"+bId+"/"+bIdx+"/"+bcIdx);
+	f=createInput(f,"hidden","_method","delete");
+	document.body.appendChild(f);;
+	f.submit();
+	alert("삭제되었습니다");
 }
 function bookmarkBoard(mId, bType, bId, bTypeKor, bIdKor) {
 	if (mId == null || mId == "") {
