@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<configuration>
+	<typeAliases>		
+		<!-- DTO의 전체경로대신 사용할 별명(alias) 작성 -->
+		<typeAlias type="com.ce.dto.BoardCommentDTO" alias="boardCommentDto"/>
+		<typeAlias type="com.ce.dto.BoardCommentInfoDTO" alias="boardCommentInfoDto"/>
+		<typeAlias type="com.ce.dto.BoardDTO" alias="boardDto"/>
+		<typeAlias type="com.ce.dto.BoardFileDTO" alias="boardFileDto"/>
+		<typeAlias type="com.ce.dto.BoardInfoDTO" alias="boardInfoDto"/>
+		<typeAlias type="com.ce.dto.BoardTypeDTO" alias="boardTypeDto"/>
+		<typeAlias type="com.ce.dto.BookmarkArticleDTO" alias="bookmarkArticleDto"/>
+		<typeAlias type="com.ce.dto.BookmarkBoardDTO" alias="bookmarkBoardDto"/>
+		<typeAlias type="com.ce.dto.CartDTO" alias="cartDto"/>
+		<typeAlias type="com.ce.dto.DmDTO" alias="dmDto"/>
+		<typeAlias type="com.ce.dto.DmFileDTO" alias="dmFileDto"/>
+		<typeAlias type="com.ce.dto.MemberAuthDTO" alias="memberAuthDto"/>
+		<typeAlias type="com.ce.dto.MemberBanDTO" alias="memberBanDto"/>
+		<typeAlias type="com.ce.dto.MemberDTO" alias="memberDto"/>
+		<typeAlias type="com.ce.dto.MemberInfoDTO" alias="memberInfoDto"/>		
+		<typeAlias type="com.ce.dto.MemberItemDTO" alias="memberItemDto"/>
+		<typeAlias type="com.ce.dto.ReportArticleDTO" alias="reportArticleDto"/>
+		<typeAlias type="com.ce.dto.ShopCommentDTO" alias="shopCommentDto"/>
+		<typeAlias type="com.ce.dto.ShopCommentInfoDTO" alias="shopCommentInfoDto"/>
+		<typeAlias type="com.ce.dto.ShopDTO" alias="shopDto"/>
+		<typeAlias type="com.ce.dto.ShopInfoDTO" alias="shopInfoDto"/>
+		<typeAlias type="com.ce.dto.ShopVoteArticleDTO" alias="shopVoteArticleDto"/>
+		<typeAlias type="com.ce.dto.ShopVoteCommentDTO" alias="shopVoteCommentDto"/>
+		<typeAlias type="com.ce.dto.VoteArticleDTO" alias="voteArticleDto"/>
+		<typeAlias type="com.ce.dto.VoteCommentDTO" alias="voteCommentDto"/>
+		<typeAlias type="com.ce.dto.WishlistDTO" alias="wishlistDto"/>		
+		<typeAlias type="com.ce.component.PageHelper" alias="pageHelper"/>
+		<typeAlias type="com.ce.component.SearchHelper" alias="searchHelper"/>
+	</typeAliases>
+	
+</configuration>

@@ -32,6 +32,7 @@
 		crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b7a5a95aa6.js"
 		crossorigin="anonymous"></script>
+		<script src="${jsPath}/ce.script.js"></script>
 	
 	<!-- title -->
 	<link rel="shortcut icon" href="${iconPath}/favicon.png">

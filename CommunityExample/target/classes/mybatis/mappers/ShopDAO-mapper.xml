@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ce.dao.ShopDAO">
+	<resultMap type="shopDto" id="shopDto">
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="sType" column="SHOP_TYPE"/>
+		<result property="sCategory" column="SHOP_CATEGORY"/>
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="sTitle" column="SHOP_TITLE"/>
+		<result property="sContent" column="SHOP_CONTENT"/>
+		<result property="sFileName" column="SHOP_FILENAME"/>
+		<result property="sPrice" column="SHOP_PRICE"/>
+		<result property="sRegDate" column="SHOP_REGDATE"/>
+		<collection property="shopInfoDto" resultMap="shopInfoDto"/>
+	</resultMap>
+	<resultMap type="shopInfoDto" id="shopInfoDto">
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="sHit" column="SHOP_HIT"/>
+		<result property="sUpvote" column="SHOP_UPVOTE"/>
+		<result property="sDownvote" column="SHOP_DOWNVOTE"/>
+		<result property="sCommentNum" column="SHOP_COMMENTNUM"/>
+		<result property="sReportNum" column="SHOP_REPORTNUM"/>
+		<result property="sPermission" column="SHOP_PERMISSION"/>
+		<result property="sBlind" column="SHOP_BLIND"/>
+	</resultMap>
+	<resultMap type="shopCommentDto" id="shopCommentDto">
+		<result property="scIdx" column="S_COMMENT_INDEX"/>
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="mId" column="ID"/>
+		<result property="mNickname" column="NICKNAME"/>
+		<result property="scContent" column="S_COMMENT_CONTENT"/>
+		<result property="scRegDate" column="S_COMMENT_REGDATE"/>
+		<result property="scGroup" column="S_COMMENT_GROUP"/>
+		<result property="scStep" column="S_COMMENT_STEP"/>
+		<result property="scIndent" column="S_COMMENT_INDENT"/>
+		<collection property="shopCommentInfoDto" resultMap="shopCommentInfoDto"/>
+	</resultMap>
+	<resultMap type="shopCommentInfoDto" id="shopCommentInfoDto">
+		<result property="scIdx" column="S_COMMENT_INDEX"/>
+		<result property="sciUpvote" column="S_COMMENT_UPVOTE"/>
+		<result property="sciDownvote" column="S_COMMENT_DOWNVOTE"/>
+		<result property="sciReportNum" column="S_COMMENT_REPORTNUM"/>
+		<result property="sciBlind" column="S_COMMENT_BLIND"/>
+		<result property="sciNotice" column="S_COMMENT_NOTICE"/>
+		<result property="sciBest" column="S_COMMENT_BEST"/>
+	</resultMap>
+	<resultMap type="wishlistDto" id="wishlistDto">
+		<result property="wIdx" column="WISHLIST_INDEX"/>
+		<result property="sIdx" column="SHOP_INDEX"/>
+		<result property="mId" column="ID"/>
+		<collection property="shopDto" resultMap="shopDto"/>
+	</resultMap>
+	
+	<select id="getTotalRowWaitingPermission" resultType="int">
+		SELECT COUNT(*)
+		FROM SHOP
+		INNER JOIN SHOP_INFO
+		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
+		WHERE SHOP_INFO.SHOP_PERMISSION=0
+	</select>
+	<select id="waitingPermissionList" parameterType="com.ce.component.PageHelper" resultMap="shopDto">
+		SELECT *
+		FROM SHOP
+		INNER JOIN SHOP_INFO
+		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
+		WHERE SHOP_INFO.SHOP_PERMISSION=0
+		ORDER BY SHOP.SHOP_INDEX ASC
+		LIMIT #{listFirst}, #{listLast}
+	</select>
+	<update id="permission" parameterType="shopInfoDto">
+		UPDATE SHOP_INFO
+		SET SHOP_PERMISSION=#{sPermission}
+		WHERE SHOP_INDEX=#{sIdx}
+	</update>
+	<select id="getWishlistDTO" parameterType="string" resultMap="wishlistDto">
+		SELECT *
+		FROM WISHLIST
+		INNER JOIN SHOP
+		ON WISHLIST.SHOP_INDEX=SHOP.SHOP_INDEX
+		WHERE WISHLIST.ID=#{mId}
+	</select>
+	
+	<!-- 얘 반환타입 어떻게 해야하는지 확인 -->
+	<select id="main" resultMap="shopDto">
+	</select>
+	
+	<select id="list" parameterType="shopDto" resultMap="shopDto">
+		SELECT *
+		FROM SHOP
+		INNER JOIN SHOP_INFO
+		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
+		WHERE SHOP_INFO.SHOP_PERMISSION=1
+		LIMIT #{pageHelper.listFirst}, #{pageHelper.listLast}
+	</select>
+	<select id="content" parameterType="int" resultMap="shopDto">		
+		SELECT *
+		FROM SHOP
+		INNER JOIN SHOP_INFO
+		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
+		WHERE SHOP.SHOP_INDEX=#{sIdx}  
+	</select>
+	<select id="comment" parameterType="shopCommentDto" resultMap="shopCommentDto">
+		SELECT *
+		FROM SHOP_COMMENT
+		INNER JOIN SHOP_COMMENT_INFO
+		ON SHOP_COMMENT.S_COMMENT_INDEX=SHOP_COMMENT_INFO.S_COMMENT_INDEX
+		WHERE SHOP_COMMENT.SHOP_INDEX=#{sIdx}		
+		ORDER BY SHOP_COMMENT.S_COMMENT_GROUP DESC, SHOP_COMMENT.S_COMMENT_STEP ASC, SHOP_COMMENT.S_COMMENT_INDEX ASC
+		LIMIT #{pageHelper.listFirst}, #{pageHelper.listLast}
+	</select>
+	<insert id="write" parameterType="shopDto">
+		INSERT 
+		INTO SHOP (SHOP_INDEX,SHOP_TYPE,SHOP_CATEGORY,ID,NICKNAME,SHOP_TITLE,SHOP_CONTENT,SHOP_FILENAME,SHOP_PRICE,SHOP_REGDATE)
+		VALUES (0,#{sType},#{sCategory},#{mId},#{mNickname},#{sTitle},#{sContent},#{sFileName},#{sPrice},NOW())
+	</insert>
+	<insert id="writeInfo" parameterType="shopDto">
+		INSERT
+		INTO SHOP_INFO (SHOP_INDEX,SHOP_HIT,SHOP_UPVOTE,SHOP_DOWNVOTE,SHOP_COMMENTNUM,SHOP_REPORTNUM,SHOP_PERMISSION,SHOP_BLIND)
+		VALUES (#{sIdx},0,0,0,0,0,0,0)
+	</insert>
+	<select id="getShopDto" parameterType="int" resultMap="shopDto">
+		SELECT *
+		FROM SHOP
+		INNER JOIN SHOP_INFO
+		ON SHOP.SHOP_INDEX=SHOP_INFO.SHOP_INDEX
+		WHERE SHOP_INDEX=#{sIdx}
+	</select>
+	<update id="modify" parameterType="shopDto">
+		UPDATE SHOP
+		SET SHOP_CATEGORY=#{sCategory},SHOP_TITLE=#{sTitle},SHOP_CONTENT=#{sContent},SHOP_FILENAME=#{sFileName},SHOP_PRICE=#{sPrice}
+		WHERE SHOP_INDEX=#{sIdx}
+	</update>
+	<delete id="delete" parameterType="int">
+		DELETE 
+		FROM SHOP
+		WHERE SHOP_INDEX=#{sIdx}
+	</delete>
+	<insert id="writeComment" parameterType="shopCommentDto">
+		INSERT 
+		INTO SHOP_COMMENT (S_COMMENT_INDEX,SHOP_INDEX,ID,NICKNAME,S_COMMENT_CONTENT,S_COMMENT_REGDATE,S_COMMENT_GROUP,S_COMMENT_STEP,S_COMMENT_INDENT)
+		VALUES (0,#{sIdx},#{mId},#{mNickname},#{scContent},NOW(),#{scGroup},#{scStep},#{scIndent})
+	</insert>
+	<insert id="writeCommmentInfo" parameterType="shopCommentDto">
+		INSERT
+		INTO SHOP_COMMENT_INFO (S_COMMENT_INDEX,S_COMMENT_UPVOTE,S_COMMENT_DOWNVOTE,S_COMMENT_REPORTNUM,S_COMMENT_BLIND,S_COMMENT_NOTICE,S_COMMENT_BEST)
+		VALUES (#{scIdx},0,0,0,0,0,0)
+	</insert>
+	<delete id="deleteComment" parameterType="int">
+		DELETE
+		FROM SHOP_COMMENT
+		WHERE S_COMMENT_INDEX=#{scIdx}
+	</delete>
+	<update id="modifyComment" parameterType="shopCommentDto">
+		UPDATE SHOP_COMMENT
+		SET S_COMMENT_CONTENT=#{scContent}
+		WHERE S_COMMENT_INDEX=#{scIdx}
+	</update>
+	
+	<!-- DYNAMIC SQL 필요 -->
+	<select id="search" parameterType="shopDto" resultMap="shopDto">		
+	</select>
+	
+	<select id="checkReport" parameterType="shopDto" resultType="int">
+		SELECT COUNT(*)
+		FROM SHOP_REPORT_ARTICLE
+		WHERE SHOP_INDEX=#{sIdx} 
+		AND ID=#{mId}		
+	</select>
+	<update id="increaseReport" parameterType="shopDto">
+		UPDATE SHOP_INFO
+		SET SHOP_REPORTNUM+=1
+		WHERE SHOP_INDEX=#{sIdx}
+	</update>
+	<insert id="writeReportArticle" parameterType="shopDto">
+		INSERT
+		INTO SHOP_REPORT_ARTICLE (ID, SHOP_INDEX)
+		VALUES (#{mId}, #{sIdx})
+	</insert>
+	<select id="checkVoteArticle" parameterType="shopVoteArticleDto" resultType="int">
+		SELECT COUNT(*)
+		FROM SHOP_VOTE_ARTICLE
+		WHERE ID=#{mId} 
+		AND SHOP_INDEX=#{sIdx}
+	</select>
+	<update id="thumbsUpArticle" parameterType="shopVoteArticleDTO">
+		UPDATE SHOP_INFO
+		SET SHOP_UPVOTE+=1
+		WHERE SHOP_INDEX=#{sIdx}
+	</update>
+	<update id="thumbsDownArticle" parameterType="shopVoteArticleDTO">
+		UPDATE SHOP_INFO
+		SET SHOP_DOWNVOTE+=1
+		WHERE SHOP_INDEX=#{sIdx}
+	</update>
+	<insert id="writeVoteArticleInfo" parameterType="shopVoteArticleDTO">
+		INSERT
+		INTO SHOP_VOTE_ARTICLE (ID, SHOP_INDEX, UPDOWN)
+		VALUES (#{mId}, #{sIdx}, #{svUpdown})
+	</insert>
+	<select id="checkVoteComment" parameterType="shopVoteCommentDto" resultType="int">
+		SELECT COUNT(*)
+		FROM SHOP_VOTE_COMMENT
+		WHERE ID=#{mId} 
+		AND S_COMMENT_INDEX=#{scIdx}
+	</select>
+	<update id="thumbsUpComment" parameterType="shopVoteCommentDto">
+		UPDATE SHOP_COMMENT_INFO
+		SET S_COMMENT_UPVOTE+=1
+		WHERE S_COMMENT_INDEX=#{sIdx}
+	</update>
+	<update id="thumbsDownComment" parameterType="shopVoteCommentDto">
+		UPDATE SHOP_COMMENT_INFO
+		SET S_COMMENT_DOWNVOTE+=1
+		WHERE S_COMMENT_INDEX=#{sIdx}
+	</update>
+	<insert id="writeVoteCommentInfo" parameterType="shopVoteCommentDTO">
+		INSERT
+		INTO SHOP_VOTE_COMMENT (ID, SHOP_INDEX, S_COMMENT_INDEX UPDOWN)
+		VALUES (#{mId}, #{sIdx},#{scIdx}, #{scvUpdown})
+	</insert>	
+	<select id="getTotalRow" resultType="int">
+		SELECT COUNT(*)
+		FROM SHOP
+	</select>
+	<select id="commentGrouping" parameterType="int" resultType="int">
+		SELECT MAX(COMMENT_INDEX)
+		FROM SHOP_COMMENT
+		WHERE SHOP_INDEX=#{sIdx}
+	</select>
+	<update id="increaseStep" parameterType="map">
+		UPDATE SHOP_COMMENT
+		SET S_COMMENT_STEP+=1
+		WHERE S_COMMENT_GROUP=#{scGroup} AND S_COMMENT_STEP>=#{scStep}
+	</update>
+</mapper>

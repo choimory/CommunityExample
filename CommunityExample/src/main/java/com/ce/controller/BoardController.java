@@ -1,281 +1,440 @@
 package com.ce.controller;
-import java.util.ArrayList;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.ce.component.PageHelper;
+import com.ce.component.SearchHelper;
+import com.ce.dto.BoardCommentDTO;
+import com.ce.dto.BoardCommentInfoDTO;
+import com.ce.dto.BoardDTO;
+import com.ce.dto.BoardInfoDTO;
+import com.ce.dto.BoardTypeDTO;
+import com.ce.dto.BookmarkArticleDTO;
+import com.ce.dto.VoteCommentDTO;
+import com.ce.dto.VoteArticleDTO;
+import com.ce.dto.BookmarkBoardDTO;
+import com.ce.dto.MemberDTO;
+import com.ce.dto.ReportArticleDTO;
 import com.ce.service.BoardService;
 
 @Controller
+@SessionAttributes({ "bookmarkBoardDtoList", "bookmarkArticleDtoList" })
 public class BoardController {
-
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	@Autowired
 	private BoardService boardService;
+	private final int SUCCESS = 1;
+	private final int FAIL = -1;
 
 	public void setBoardService(BoardService boardService) {
 		this.boardService = boardService;
 	}
 
-	@RequestMapping("/{bid}")
-	public String list(Model model, @PathVariable("bid") String bId) {
-		String view = null;
-		boolean boardExist = false;
-		ArrayList<String> boardLineup = null;
+	@RequestMapping(value = { "/best" }, method={RequestMethod.GET})
+	public String best(Model model, PageHelper pageHelper, SearchHelper searchHelper, HttpServletRequest req) {
+		String view = "Board/best_list";
+		Map<String, Object> resultMap = null;
+		MemberDTO memberDto = (MemberDTO) req.getSession().getAttribute("memberDto");
 
-		// TODO BOARD_TYPE 테이블에서 게시판명들 다 가져와서 boardId와 foreach로 대조해보고 맞는게 있을시 boardExist를 true로 돌리는 작업필요
-		// TODO 해당게시판에서 page로 계산해 20개의 글을 가져와 뿌림
-		
-//		for (String tmp : boardLineup) {
-//			if (bId.equals(tmp)) {
-//				boardExist = true;
-//			}
-//		}
-//		if (boardExist) {
+		logger.debug("best();");
+		resultMap = boardService.best(pageHelper, searchHelper, memberDto);
+
+		model.addAttribute("title", "BEST게시판");
+		model.addAttribute("boardTypeDto", resultMap.get("boardTypeDto"));
+		model.addAttribute("boardDtoList", resultMap.get("boardDtoList"));
+		model.addAttribute("searchHelper", searchHelper);
+		model.addAttribute("pageHelper", pageHelper);
+		model.addAttribute("isBookmarkedBoard", resultMap.get("isBookmarkedBoard"));
+		return view;
+	}
+
+	@RequestMapping(value = { "/{bId}" }, method={RequestMethod.GET})
+	public String list(Model model, @PathVariable("bId") String bId, PageHelper pageHelper, SearchHelper searchHelper, HttpServletRequest req) {
+		String view = null;
+		Map<String, Object> returnMap = null;
+		BoardTypeDTO boardTypeDto = null;
+		MemberDTO memberDto = (MemberDTO) req.getSession().getAttribute("memberDto");
+
+		logger.debug("list()");
+		returnMap = boardService.list(bId, pageHelper, searchHelper, memberDto);
+		if (returnMap == null) {
+			return "redirect:main";
+		} else {
 			view = "Board/list";
-//		} else {
-//			view = "Main/main";
-//		}
-			
-		model.addAttribute("title", bId + " 게시판");
-		model.addAttribute("board_id", bId);
+			boardTypeDto = (BoardTypeDTO) returnMap.get("boardTypeDto");
+		}
+
+		model.addAttribute("title", boardTypeDto.getbIdKor() + " 게시판");
+		model.addAttribute("boardTypeDto", boardTypeDto);
+		model.addAttribute("boardCategoryList", returnMap.get("boardCategoryList"));
+		model.addAttribute("boardDtoList", returnMap.get("boardDtoList"));
+		model.addAttribute("searchHelper", searchHelper);
+		model.addAttribute("pageHelper", pageHelper);
+		model.addAttribute("isBookmarkedBoard", returnMap.get("isBookmarkedBoard"));
 		return view;
 	}
 
-	@RequestMapping(value = "/{bid}/{bidx}")
-	public String content(Model model, @PathVariable("bid") String bId,
-			@PathVariable("bidx") int boardIdx) {
+	@RequestMapping(value = { "/best/{bIdx}" }, method={RequestMethod.GET})
+	public String bestContent(Model model, @PathVariable("bIdx") String stringIdx, String bId, PageHelper pageHelper, SearchHelper searchHelper,
+			HttpServletRequest req) {
+		String view = "Board/best_content";
+		BoardTypeDTO boardTypeDto = null;
+		MemberDTO memberDto = (MemberDTO) req.getSession().getAttribute("memberDto");
+		Map<String, Object> resultMap = null;
+
+		logger.debug("bestContent();");
+		if (bId == null) {
+			return "redirect:/main";
+		}
+		resultMap = boardService.bestContent(bId, stringIdx, pageHelper, searchHelper, memberDto);
+		if (resultMap == null) {
+			return "redirect:/main";
+		} else {
+			boardTypeDto = (BoardTypeDTO) resultMap.get("boardTypeDto");
+		}
+
+		model.addAttribute("title", boardTypeDto.getbIdKor());
+		model.addAttribute("boardTypeDto", boardTypeDto);
+		model.addAttribute("boardDto", resultMap.get("boardDto"));
+		model.addAttribute("boardCommentDtoList", resultMap.get("boardCommentDtoList"));
+		model.addAttribute("commentPageHelper", resultMap.get("commentPageHelper"));
+		model.addAttribute("boardDtoList", resultMap.get("boardDtoList"));
+		model.addAttribute("pageHelper", resultMap.get("pageHelper"));
+		model.addAttribute("searchHelper", searchHelper);
+		model.addAttribute("isBookmarkedBoard", resultMap.get("isBookmarkedBoard"));
+		model.addAttribute("isBookmarkedArticle", resultMap.get("isBookmarkedArticle"));
+		return view;
+	}
+
+	@RequestMapping(value = "/{bId}/{bIdx}", method={RequestMethod.GET})
+	public String content(Model model, @PathVariable("bId") String bId, @PathVariable("bIdx") String stringIdx, PageHelper pageHelper,
+			SearchHelper searchHelper, HttpServletRequest req) {
 		String view = null;
-		boolean boardExist = false;
-		ArrayList<String> boardLineup = null;
+		BoardTypeDTO boardTypeDto = null;
+		Map<String, Object> returnMap = null;
+		MemberDTO memberDto = (MemberDTO) req.getSession().getAttribute("memberDto");
 
-		// TODO 게시판명들 다 가져와서 board_id와 foreach로 대조해보고 맞는게 있을시 boardExist를 true로 돌리는 작업필요
-		// TODO + boardId는 true이지만 boardIdx는 false일때 해당 게시판 list로 되돌아가는 작업 필요(redirect:/boardId?page=)
-		// TODO {board_idx}에 int값이 아닌 값이 들어왔을때 생기는 http status 400문제 해결
-
-//		for (String tmp : boardLineup) {
-//			if (bId.equals(tmp)) {
-//				boardExist = true;
-//			}
-//		}
-//		if (boardExist) {
+		logger.debug("content()");
+		returnMap = boardService.content(bId, stringIdx, pageHelper, searchHelper, memberDto);
+		if (returnMap == null) {
+			return "redirect:main";
+		} else {
 			view = "Board/content";
-//		} else {
-//			view = "Main/main";
-//		}
-			
-		model.addAttribute("title", bId + " 게시판");
-		model.addAttribute("board_id", bId);
+			boardTypeDto = (BoardTypeDTO) returnMap.get("boardTypeDto");
+		}
+
+		model.addAttribute("title", boardTypeDto.getbIdKor() + " 게시판");
+		model.addAttribute("boardTypeDto", boardTypeDto);
+		model.addAttribute("boardDto", returnMap.get("boardDto"));
+		model.addAttribute("boardCommentDtoList", returnMap.get("boardCommentDtoList"));
+		model.addAttribute("commentPageHelper", returnMap.get("commentPageHelper"));
+		model.addAttribute("boardCategoryList", returnMap.get("boardCategoryList"));
+		model.addAttribute("boardDtoList", returnMap.get("boardDtoList"));
+		model.addAttribute("searchHelper", searchHelper);
+		model.addAttribute("pageHelper", returnMap.get("pageHelper"));
+		model.addAttribute("isBookmarkedBoard", returnMap.get("isBookmarkedBoard"));
+		model.addAttribute("isBookmarkedArticle", returnMap.get("isBookmarkedArticle"));
 		return view;
 	}
 
-	@RequestMapping(value = "/{bid}/write", method = RequestMethod.GET)
-	public String writeForm(Model model) {
+	@RequestMapping(value = "/{bId}/write", method={RequestMethod.GET})
+	public String writeForm(Model model, @PathVariable("bId") String bId) {
+		String view = null;
+		Map<String, Object> returnMap = null;
+
+		returnMap = boardService.writeForm(bId);
+		if (returnMap == null) {
+			return "redirect:main";
+		} else {
+			view = "Board/write";
+		}
+
+		model.addAttribute("title", "게시물 작성");
+		model.addAttribute("boardTypeDto", returnMap.get("boardTypeDto"));
+		model.addAttribute("boardCategoryList", returnMap.get("boardCategoryList"));
+		return view;
+	}
+
+	@RequestMapping(value = "/{bId}", method={RequestMethod.POST})
+	public String write(Model model, BoardDTO boardDto, BoardInfoDTO boardInfoDto, MultipartHttpServletRequest req,
+			@RequestParam("file") List<MultipartFile> file) {
+		String view = null;
+		boardDto.setBoardInfoDto(boardInfoDto);
+
+		logger.debug("write();");
+
+		boardDto = boardService.write(boardDto, boardInfoDto, file);
+		if (boardDto == null) {
+			return "redirect:main";
+		}
+
+		view = "redirect:/" + boardDto.getbId() + "/" + boardDto.getbIdx();
+		return view;
+	}
+
+	@RequestMapping(value = { "/{bId}/{bIdx}/download" }, method={RequestMethod.GET})
+	public void download(@PathVariable("bId") String bId, @PathVariable("bIdx") String stringBoardIdx, String fIdx, String fName, HttpServletResponse res) {
+		FileInputStream input = null;
+
+		logger.debug("download();");
+		input = boardService.download(bId, stringBoardIdx, fIdx);
+		if (input != null) {
+			res.setHeader("Cache-Control", "no-cache");
+			res.addHeader("Content-disposition", "attachment; fileName="+fName);
+			byte[] buffer = new byte[1024 * 8];
+			try {
+				OutputStream output = res.getOutputStream();
+				while (input.read(buffer) != -1) {
+					output.write(buffer);
+				}
+				input.close();
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@RequestMapping(value = "/{bId}/{bIdx}/modify", method={RequestMethod.GET})
+	public String modifyForm(Model model, BoardDTO boardDto) {
+		String view = "Board/modify";
+		Map<String, Object> resultMap = null;
+
+		logger.debug("modify get()");
+		resultMap = boardService.modifyForm(boardDto);
+		if (resultMap == null) {
+			logger.debug(boardDto.toString());
+			logger.debug("resultmap = null");
+			view = "redirect:main";
+		}
+
+		model.addAttribute("title", "작성글 수정");
+		model.addAttribute("boardDto", resultMap.get("boardDto"));
+		model.addAttribute("boardCategoryList", resultMap.get("boardCategoryList"));
+		model.addAttribute("boardTypeDto", resultMap.get("boardTypeDto"));
+		return view;
+	}
+
+	@RequestMapping(value = "/{bId}/{bIdx}", method={RequestMethod.PUT})
+	public String modify(Model model, BoardDTO boardDto, BoardInfoDTO boardInfoDto) {
 		String view = null;
 
-		view = "Board/write";
-		model.addAttribute("title", "");
+		boardDto = boardService.modify(boardDto, boardInfoDto);
+
+		view = "redirect:/" + boardDto.getbId() + "/" + boardDto.getbIdx();
 		return view;
 	}
 
-	@RequestMapping(value = "/{bid}/write", method = RequestMethod.POST)
-	public String write(Model model, @PathVariable("bid")String bId) {
+	@RequestMapping(value = "/{bId}/{bIdx}",method= {RequestMethod.DELETE})
+	public String delete(Model model, BoardDTO boardDto) {
 		String view = null;
-		
-		// TODO 해당게시판 테이블에 글 작성
-		
-		view = "Board/content";		// TODO 리다이렉트로 변경
-		model.addAttribute("title", "");
+		int result = 0;
+
+		result = boardService.delete(boardDto);
+		if (result == FAIL) {
+		}
+
+		view = "redirect:/" + boardDto.getbId();
 		return view;
 	}
 
-	@RequestMapping(value = "/{bid}/modify", method = RequestMethod.GET)
-	public String modifyForm(Model model) {
+	@RequestMapping(value = "/{bId}/{bIdx}/comment", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> comment(@PathVariable("bId") String bId, @PathVariable("bIdx") int bIdx,
+			@RequestBody PageHelper commentPageHelper) {
+		Map<String, Object> resultMap = null;
+
+		logger.debug("comment();");
+		resultMap = boardService.comment(bId, bIdx, commentPageHelper);
+		if (resultMap == null) {
+		}
+
+		return resultMap;
+	}
+
+	@RequestMapping(value = "/comment/write", method = RequestMethod.POST)
+	public String writeComment(Model model, BoardTypeDTO boardTypeDto, BoardCommentDTO boardCommentDto, BoardCommentInfoDTO boardCommentInfoDto) {
 		String view = null;
+		int result = 0;
 
-		// TODO 해당글의 값을 가져와 폼에 전달해서 input value값이 채워질수 있도록 할것
-		
-		view = "Board/modify";
+		logger.debug("writeComment()");
+		logger.debug(boardCommentDto.toString());
+		logger.debug(boardTypeDto.toString());
+		result = boardService.writeComment(boardTypeDto, boardCommentDto, boardCommentInfoDto);
+		if (result == FAIL) {
+		}
+
+		view = "redirect:/" + boardTypeDto.getbId() + "/" + boardCommentDto.getbIdx();
 		model.addAttribute("title", "");
 		return view;
 	}
 
-	@RequestMapping(value = "/{bid}/modify", method = RequestMethod.POST)
-	public String modify(Model model, @PathVariable("bid") String bId) {
+	@RequestMapping(value = "/{bId}/comment/modify", method = RequestMethod.POST)
+	public String modifyComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
 		String view = null;
-		
-		// TODO 해당글의 컬럼값 변경
+		int result = 0;
 
-		view = "Board/content";		// TODO redirect로 변경
+//		result=boardService.modifyComment(boardCommentDto, boardTypeDto);
+
+		view = "Board/content"; // TODO 리다이렉트로 변경
 		model.addAttribute("title", "");
 		return view;
 	}
-	
-	
-	@RequestMapping(value="/{bid}/delete", method=RequestMethod.POST)
-	public String delete(Model model, @PathVariable("bid")String bId) {
-		String view=null;
-		
-		// TODO 해당 row 삭제
-		
-		view="redirect:"+"/"+bId;		// TODO 리다이렉트로 변경
-		model.addAttribute("title", "");		
-		return view;
-	}
-	
-	
-	@RequestMapping(value="/{bid}/search")
-	public String search(Model model, @PathVariable("bid")String bId, String query, String target) {
-		String view;
-		
-		// TODO 해당 게시판에서 query와 target을 적용한 검색결과를 뿌리기
-		
-		view="Board/list";
-		model.addAttribute("title", "");
-		return view;
-	}
-	
-	@RequestMapping(value="/{bid}/{bidx}/comment", method = RequestMethod.POST)
-	public String commentList(Model model, @PathVariable("bid") String bId, @PathVariable("bidx") int bidx) {
-		String view=null;
-		
-		// TODO 댓글창의 페이지네이션을 사용했을시 bId와 bidx 그리고 page를 이용해 해당글의 댓글 가져오기
-		
-		view="";//TODO ajax
-		model.addAttribute("title", "");
-		return view;
-	}
-	
-	
-	@RequestMapping(value="/{bid}/comment/write", method=RequestMethod.POST)
-	public String writeComment(Model model) {
-		String view=null;
-		
-		// TODO 댓글테이블에 해당글의 idx와 함께 댓글작성
-		
-		view="Board/content";		// TODO 리다이렉트로 변경
-		model.addAttribute("title", "");
-		return view;
-	}
-	
-	
-	@RequestMapping(value="/{bid}/comment/modify", method=RequestMethod.POST)
-	public String modifyComment(Model model) {
-		String view=null;
-		
-		// TODO 댓글수정, 수정된 댓글일시 꼬릿말로 [댓글수정일자 : yyyy-mm-dd]가 붙게
-		
-		view="Board/content";		// TODO 리다이렉트로 변경
-		model.addAttribute("title", "");
-		return view;
-	}
-	
-	
-	@RequestMapping(value="/{bid}/comment/delete",method=RequestMethod.POST)
-	public String deleteComment(Model model) {
-		String view=null;
-		
-		// TODO 댓글삭제, 삭제된 댓글은 row에서 지우지 말고 댓글내용을 [~~에 의해 삭제된 댓글입니다]로 변경
-		
-		view="Board/content";		// TODO 리다이렉트로 변경
-		model.addAttribute("title", "");
-		return view;
-	}
-	
-	
-	@RequestMapping(value="/{bid}/comment/reply")
-	public String replyComment(Model model) {
-		String view=null;
-		
+
+	//여기에서 WARN : org.springframework.web.servlet.PageNotFound - Request method 'GET' not supported 문제를 발생시킴. 아마 ReqMapping의 문제. 아마 요청주소의 모든것이 pathVariable이라서?
+//	@RequestMapping(value = {"/{bId}/{bIdx}/{bcIdx}"}, method = {RequestMethod.DELETE})
+//	public String deleteComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
+//		String view = null;
+//		int result = 0;
+//
+//		logger.debug("deleteComment();");
+//		logger.debug(boardCommentDto.toString());
+//		logger.debug(boardTypeDto.toString());
+////		result=boardService.deleteComment(boardCommentDto, boardTypeDto);
+//
+//		view = "redirect:/"+boardTypeDto.getbId()+"/"+boardCommentDto.getbIdx();
+//		model.addAttribute("title", "");
+//		return view;
+//	}
+
+	@RequestMapping(value = "/{bId}/comment/reply")
+	public String replyComment(Model model, BoardCommentDTO boardCommentDto, BoardTypeDTO boardTypeDto) {
+		String view = null;
+		int result = 0;
+
+//		result=boardService.replyComment(boardCommentDto, boardTypeDto);
+
 		// TODO 댓글 답글. 프론트에선 들여쓰기 최대 한칸만 적용
-		
-		view="Board/content";		// TODO 리다이렉트로 변경
+
+		view = "Board/content"; // TODO 리다이렉트로 변경
 		model.addAttribute("title", "");
 		return view;
 	}
-	
-	
-	@RequestMapping(value="/bookmarkBoard")
-	public String bookmarkBoard(Model model) {
-		String view=null;
-		
-		// TODO 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
-		
-		view=""; 		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/bookmarkBoard", method = RequestMethod.POST)
+	public @ResponseBody int bookmarkBoard(Model model, @RequestBody BookmarkBoardDTO bookmarkBoardDto) {
+		Map<String, Object> resultMap = null;
+		int result = 0;
+
+		logger.debug("bookmarkBoard()");
+		logger.debug(bookmarkBoardDto.toString());
+		resultMap = boardService.bookmarkBoard(bookmarkBoardDto);
+
+		if (resultMap.get("bookmarkBoardDtoList") != null) {
+			model.addAttribute("bookmarkBoardDtoList", resultMap.get("bookmarkBoardDtoList"));
+		}
+		result = (Integer) resultMap.get("result");
+		return result;
 	}
-	
-	
-	@RequestMapping(value="/bookmarkContent")
-	public String bookmarkContent(Model model) {
-		String view=null;
-		
-		// TODO 테이블에 북마크값이 있을시엔 로우 삭제, 없을시엔 로우 추가
-		
-		view="";		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/unBookmarkBoard", method = RequestMethod.POST)
+	public @ResponseBody int unBookmarkBoard(Model model, @RequestBody BookmarkBoardDTO bookmarkBoardDto) {
+		Map<String, Object> resultMap = null;
+		int result = 0;
+
+		logger.debug("unBookmarkBoard()");
+		logger.debug(bookmarkBoardDto.toString());
+		resultMap = boardService.unBookmarkBoard(bookmarkBoardDto);
+
+		if (resultMap.get("bookmarkBoardDtoList") != null) {
+			model.addAttribute("bookmarkBoardDtoList", resultMap.get("bookmarkBoardDtoList"));
+		}
+		result = (Integer) resultMap.get("result");
+		return result;
 	}
-	
-	
-	@RequestMapping(value="/thumbsUpContent")
-	public String thumbsUpContent(Model model) {
-		String view=null;
-		
-		// TODO 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
-		
-		view="";		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/bookmarkContent", method = RequestMethod.POST)
+	public @ResponseBody int bookmarkContent(Model model, @RequestBody BookmarkArticleDTO bookmarkArticleDto) {
+		int result = 0;
+
+		logger.debug("bookmarkContent())");
+		logger.debug(bookmarkArticleDto.toString());
+		result = boardService.bookmarkContent(bookmarkArticleDto);
+
+		return result;
 	}
-	
-	
-	@RequestMapping(value="/thumbsDownContent")	
-	public String thumbsDownContent(Model model) {
-		String view=null;
-		
-		// TODO 테이블에 추천값이 있을시엔 로우 삭제, 없을시엔 추가
-		
-		view="";		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/unBookmarkContent", method = RequestMethod.POST)
+	public @ResponseBody int unBookmarkContent(Model model, @RequestBody BookmarkArticleDTO bookmarkArticleDto) {
+		int result = 0;
+
+		logger.debug("unBookmarkContent()");
+		logger.debug(bookmarkArticleDto.toString());
+		result = boardService.unBookmarkContent(bookmarkArticleDto);
+
+		return result;
 	}
-	
-	
-	@RequestMapping(value="/reportContent")
-	public String reportContent(Model model) {
-		String view=null;
-		
-		// TODO 리포트 컬럼값을 번경
-		
-		view="";		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/thumbsUpContent", method = RequestMethod.POST)
+	public @ResponseBody int thumbsUpContent(Model model, @RequestBody VoteArticleDTO voteArticleDto) {
+		int result = 0;
+
+		logger.debug(voteArticleDto.toString());
+		result = boardService.thumbsUpContent(voteArticleDto);
+
+		return result;
 	}
-	
-	
-	@RequestMapping(value="/thumbsUpComment")
-	public String thumbsUpComment(Model model) {
-		String view=null;
-		
-		// TODO 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
-		
-		view="";		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/thumbsDownContent", method = RequestMethod.POST)
+	public @ResponseBody int thumbsDownContent(Model model, @RequestBody VoteArticleDTO voteArticleDto) {
+		int result = 0;
+
+		result = boardService.thumbsDownContent(voteArticleDto);
+
+		return result;
 	}
-	
-	
-	@RequestMapping(value="/thumbsDownComment")
-	public String thumbsDownComment(Model model) {
-		String view=null;
-		
-		// TODO 테이블에 로우가 있을시엔 삭제, 없을시엔 추가
-		
-		view="";		// TODO ajax
-		model.addAttribute("title", "");
-		return view;
+
+	@RequestMapping(value = "/reportContent")
+	public @ResponseBody int reportContent(Model model, @RequestBody ReportArticleDTO reportArticleDto) {
+		int result = 0;
+
+		logger.debug("reportContent()");
+		logger.debug(reportArticleDto.toString());
+		result = boardService.reportContent(reportArticleDto);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/thumbsUpComment")
+	public @ResponseBody int thumbsUpComment(Model model, @RequestBody VoteCommentDTO voteCommentDto) {
+		int result = 0;
+
+		logger.debug("thumbsUpComment()");
+		logger.debug(voteCommentDto.toString());
+		result = boardService.thumbsUpComment(voteCommentDto);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/thumbsDownComment")
+	public @ResponseBody int thumbsDownComment(Model model, @RequestBody VoteCommentDTO voteCommentDto) {
+		int result = 0;
+
+		logger.debug("thumbsDownComment()");
+		logger.debug(voteCommentDto.toString());
+		result = boardService.thumbsDownComment(voteCommentDto);
+
+		return result;
 	}
 }

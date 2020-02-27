@@ -1,15 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
-	<!-- Scan Package-->
+		
+	<!-- SCAN -->
+	<context:component-scan base-package="com.ce.dao, com.ce.service"/>
+	
+	
 	<!-- DB -->
-	<!-- Service -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/communityexample"/>
+		<property name="username" value="root"/>
+		<property name="password" value="0000"/>
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" p:dataSource-ref="dataSource"/>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:/mybatis/DTO-config.xml" />
+		<property name="mapperLocations" value="classpath:/mybatis/mappers/**" />
+	</bean>	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>	
+	</bean>	
+		
+		
 	<!-- DAO -->
+	<bean id="adminDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+		<property name="mapperInterface" value="com.ce.dao.AdminDAO"/>
+	</bean>
+	<bean id="boardDao" class="com.ce.dao.BoardDAOImpl" p:jdbcTemplate-ref="jdbcTemplate"/>
+	<bean id="boardCommentDao" class="com.ce.dao.BoardCommentDAOImpl" p:jdbcTemplate-ref="jdbcTemplate"/>
+	<bean id="dmDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+		<property name="mapperInterface" value="com.ce.dao.DmDAO"/>
+	</bean>
+	<bean id="memberDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+		<property name="mapperInterface" value="com.ce.dao.MemberDAO"/>
+	</bean>
+	<bean id="shopDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+		<property name="mapperInterface" value="com.ce.dao.ShopDAO"/>
+	</bean>
+	
+	
+	<!-- Service -->
+	<bean id="adminService" class="com.ce.service.AdminServiceImpl">
+		<property name="boardDao" ref="boardDao"/>
+		<property name="memberDao" ref="memberDao"/>
+		<property name="shopDao" ref="shopDao"/>
+	</bean>
+	<bean id="boardService" class="com.ce.service.BoardServiceImpl">
+		<property name="boardDao" ref="boardDao"/>
+		<property name="boardCommentDao" ref="boardCommentDao"/>
+	</bean>
+	<bean id="dmService" class="com.ce.service.DmServiceImpl">
+		<property name="dmDao" ref="dmDao"/>
+		<property name="memberDao" ref="memberDao"/>
+	</bean>
+	<bean id="mainService" class="com.ce.service.MainServiceImpl">
+		<property name="boardDao" ref="boardDao"/>
+	</bean>
+	<bean id="memberService" class="com.ce.service.MemberServiceImpl">
+		<property name="memberDao" ref="memberDao"/>
+		<property name="shopDao" ref="shopDao"/>
+		<property name="hashHelper" ref="hashHelper"/>
+	</bean>
+	<bean id="shopService" class="com.ce.service.ShopServiceImpl">
+		<property name="shopDao" ref="shopDao"/>
+	</bean>
+	
+
 	<!-- Other -->
-		
-		
 </beans>

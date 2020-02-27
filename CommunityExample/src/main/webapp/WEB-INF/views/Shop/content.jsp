@@ -12,9 +12,8 @@
 	<div class="shop_info mb-5">
 		<span class="h3 mr-2"><a href="/communityexample/shop/${sid}"
 			class="text-dark text-decoration-none">{sid}</a></span> <span
-			class="ce_bookmark"> <a href=""
-			class="text-decoration-none text-warning"><i
-				class="fas fa-store-alt fa-2x"></i></a></span> <span class="blockquote-footer">저작자·발명가·과학기술자와
+			class="ce_bookmark"><i
+				class="fas fa-store-alt fa-2x text-warning"></i></span> <span class="blockquote-footer">저작자·발명가·과학기술자와
 			예술가의 권리는 법률로써 보호한다. 법원은 최고법원인 대법원과 각급법원으로 조직된다. 모든 국민은 소급입법에 의하여 참정권의
 			제한을 받거나 재산권을 박탈당하지 아니한다. 국회는 국정을 감사하거나 특정한 국정사안에 대하여 조사할 수 있으며, 이에
 			필요한 서류의 제출 또는 증인의 출석과 증언이나 의견의 진술을 요구할 수 있다.</span>

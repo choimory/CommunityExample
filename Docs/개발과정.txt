@@ -1,0 +1,36 @@
+문서->프론트->백엔드 순서로 진행
+순서대로 내림차순 작성
+
+
+>문서작성
+- 기획
+- 일정수립(WBS)
+- 요구사항 정의서
+- 유스케이스 명세서, 다이어그램
+- 요구사항 추적표
+- 화면 설계서
+- 구조 설계서, 소프트웨어 아키텍처(layer)
+- 테이블 명세서
+- 클래스 정의서, 클래스 다이어그램
+- 시퀀스 다이어그램, 시스템 아키텍처(skill)
+
+
+>클라이언트 페이지
+- servlet-context.xml (component-scan)
+- web.xml (encodingfilter)
+- 레이아웃
+- 페이지 요소(폼, 테이블,버튼 등)
+- 요청주소
+
+
+>서버
+- 컨트롤러
+- 테이블
+- DTO
+- 서비스
+- DAO
+- mybatis-config.xml, mybatis-mapper.xml (mybatis.dtd)
+- root-context.xml, component-context.xml (bean config)
+- web.xml (context.xml 추가)
+- mybatis-config.xml, mybatis-mapper.xml, DAO (query)
+- DTORowMapper(JdbcTemplate)
