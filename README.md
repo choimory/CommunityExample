@@ -1,9 +1,6 @@
 # CommunityExample
 
-
-# 소개 
-
-Spring MVC 모델2 적용 커뮤니티사이트
+Java, JSP, Spring을 활용해 MVC2 패턴을 적용시킨 커뮤니티 사이트입니다.
 
 
 # 목차
