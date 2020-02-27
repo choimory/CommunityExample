@@ -43,7 +43,7 @@ AJAX를 이용한 비동기 추천과 게시판/게시물 북마크,
 ***
 
 # 메인화면
-![text](file%20repository/read%20me/main.png "")
+![text](file%20repository/read%20me/main.png "main")
 메인 화면 입니다.  
 각종 게시판의 최신 글들을 DB로부터 가져옵니다.  
 JdbcTemplate 으로 UNION 쿼리를 활용했습니다.  
@@ -51,7 +51,7 @@ JdbcTemplate 으로 UNION 쿼리를 활용했습니다.
 ***
 
 # 로그인
-
+![text](file%20repository/read%20me/login.png "login")
 로그인 화면 입니다.  
 소셜 로그인 API 기능과 쿠키 기능이 포함되어 있습니다.
 
@@ -63,7 +63,7 @@ JdbcTemplate 으로 UNION 쿼리를 활용했습니다.
 ***
 
 # 계정찾기
-
+![text](file%20repository/read%20me/find%20account.png "find account")
 계정 찾기 페이지입니다.  
 가입시 입력한 고유한 메일 계정으로 변경된 비밀번호를 이메일 전송 합니다.
 
@@ -75,7 +75,7 @@ JdbcTemplate 으로 UNION 쿼리를 활용했습니다.
 ***
 
 # 게시판 목록
-
+![text](file%20repository/read%20me/board%20list.png "list")
 게시판입니다.  
 게시판은 최대한 Restful 하게 작성하여  
 요청 주소와 방법에 따라 유연하게 응답합니다.
@@ -88,7 +88,7 @@ JdbcTemplate 으로 UNION 쿼리를 활용했습니다.
 ***
 
 # 게시판 내용
-
+![text](file%20repository/read%20me/board%20content.png "content")
 게시판 본문 페이지입니다.  
 추천, 북마크 등의 기능은 AJAX 를 이용해 비동기로 이뤄집니다.  
 파일 업/다운로드 기능이 포함되어 있습니다.  
@@ -120,7 +120,7 @@ DTO에 각자 매핑 후 포함 관계를 이용 해 하나의 DTO 에 모아 �
 ***
 
 # 쪽지
-
+![text](file%20repository/read%20me/dm.png "dm")
 쪽지 페이지 입니다.  
 파일 업/다운로드 기능이 포함되어 있습니다.
 
