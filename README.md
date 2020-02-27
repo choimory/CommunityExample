@@ -43,7 +43,7 @@ AJAX를 이용한 비동기 추천과 게시판/게시물 북마크,
 ***
 
 # 메인화면
-(/file repository/read me/이미지 266.png)
+![text](/file repository/read me/이미지 266.png "text2")    
 메인 화면 입니다.  
 각종 게시판의 최신 글들을 DB로부터 가져옵니다.  
 JdbcTemplate 으로 UNION 쿼리를 활용했습니다.  
