@@ -1,7 +1,7 @@
 # CommunityExample
 
 MVC2 패턴을 적용시킨 커뮤니티 사이트입니다.
-
+  
 기술 스택  
 Java, JSP, Spring, MySQL, JdbcTemplate, Mybatis  
 Bootstrap, Javascript, jQuery, AJAX  
